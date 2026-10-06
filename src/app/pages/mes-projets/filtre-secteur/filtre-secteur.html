@@ -1,0 +1,9 @@
+<div class="filter-box">
+  <select #secteurSelect (change)="filterParsecteur(secteurSelect.value)">
+    <option value="">Tous les secteurs</option>
+    @for(secteur of secteurs();track secteur.id ){
+         <option [value]="secteur.secteur">{{secteur.secteur}}</option>
+    }
+  </select>
+  <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+</div>

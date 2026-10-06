@@ -1,80 +1,85 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ProjetService } from '../../core/services/projet-service';
 import { ProjetResponse } from '../../core/model/ProjetResponse';
-
-interface ProjetAffichage {
-  id: number;
-  titre: string;
-  secteur: string;
-  etape: string;
-  progression: number;
-  statut: string;
-  statutClasse: string;
-}
-
+import { NotificationService } from '../../core/services/notification-service';
+import { ProjetFormAdd } from './projet-form-add/projet-form-add';
+import { ProjetFormEdit } from './projet-form-edit/projet-form-edit';
+import { ProjetCard } from './projet-card/projet-card';
+import { BarreRecherche } from './barre-recherche/barre-recherche';
+import { FiltreSecteur } from './filtre-secteur/filtre-secteur';
 @Component({
   selector: 'app-mes-projets',
   standalone: true,
   imports: [
     CommonModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    ProjetFormAdd,
+    ProjetFormEdit,
+    ProjetCard,
+    BarreRecherche,FiltreSecteur
   ],
   templateUrl: './mes-projets.html',
   styleUrl: './mes-projets.css'
 })
-export class MesProjets implements OnInit {
-  
-  private projetService = inject(ProjetService); // Injection de votre service Backend
+export class MesProjets  {
+
+  private projetService = inject(ProjetService);
   private router = inject(Router);
-
-  // Le tableau qui alimente votre HTML avec la boucle *ngFor
-  projets: ProjetAffichage[] = [];
-
-  ngOnInit(): void {
-    this.chargerProjetsDuServeur();
+  projets = signal<ProjetResponse[]>([])
+  formulaireVisible = false
+  formulaireVisibleforEdit = false
+  messageSnackBar = inject(NotificationService)
+  constructor() {
+    this.chargerProjet("","")
   }
+  chargerProjet(secteur: string, titre:string) {
+    this.projetService.getProjetsDuPorteur().subscribe(
+      {
+        next: (response) => {
+          console.log(response)
+          if (secteur === "" ||titre==="") {
+            console.log("lllflf")
+            this.projets.set(response)
 
-  /**
-   * Émet l'appel HTTP vers Spring Boot et transforme le résultat pour votre HTML 📡
-   */
-  chargerProjetsDuServeur(): void {
-    this.projetService.getProjetsDuPorteur().subscribe({
-      next: (donneesBdd: ProjetResponse[]) => {
-        // Transformation (mapping) des données brutes en objets lisibles par votre interface
-        this.projets = donneesBdd.map(p => ({
-          id: p.id,
-          titre: p.titre,
-          secteur: p.secteur,
-          // Données par défaut ou simulées en attendant que vos tables étapes soient raccordées
-          etape: 'Idéation',
-          progression: 25,
-          statut: 'En cours',
-          statutClasse: 'success'
-        }));
-      },
-      error: (err) => {
-        console.error("Impossible de charger vos projets depuis l'API Backend :", err);
+          } else {
+            console.log("diffent")
+
+            this.projets.set(response.filter((projet) => 
+              projet.secteur.toLowerCase().includes(secteur.toLowerCase())||projet.secteur.toLowerCase().includes(titre.toLowerCase())))
+
+          }
+
+        }
       }
-    });
+    )
   }
-
-  /**
-   * Ouvre l'espace projet complet sous la forme dynamique /porteur/projets/:id/dashboard
-   */
-  ouvrirProjet(projet: ProjetAffichage) {
+  //se declenche lors d'un clique le bouton ajouter
+  ouverFermer() {
+    this.formulaireVisible = true
+  }
+  annuler(val: boolean) {
+    this.formulaireVisible = val
+  }
+  //cett fonction met à jour la lsite des conseils et ferme le modal
+  AjoutEffectuer() {
+    this.formulaireVisible = false
+    this.chargerProjet("","")
+    this.messageSnackBar.succes("projet posté avec succes!")
+  }
+  ouvrirProjet(projet: ProjetResponse) {
     localStorage.setItem('activeProjetId', projet.id.toString());
     localStorage.setItem('activeProjetNom', projet.titre);
-    
-    // Redirection automatique vers votre routeur maître
+
     this.router.navigate(['/porteur/projets', projet.id, 'dashboard']);
   }
 
   creerProjet() {
-    this.router.navigate(['/porteur/profil']);
+    this.formulaireVisible=true
   }
+  
 }

@@ -1,0 +1,101 @@
+<div class="modal-overlay">
+    <div class="project-modal" (click)="$event.stopPropagation()">
+
+        <div class="modal-header">
+            <div>
+                <span class="modal-eyebrow">NOUVEAU PROJET</span>
+                <h2>Créer votre projet</h2>
+                <p>
+                    Remplissez les détails ci-dessous pour ajouter votre projet
+                    dans votre incubateur.
+                </p>
+            </div>
+            <button mat-icon-button type="button" class="close-btn" aria-label="Fermer">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        <form class="project-form">
+
+            <!-- Champ Titre (String) -->
+            <div class="form-group">
+                <label for="titre">
+                    Nom du projet
+                    <span>*</span>
+                </label>
+                <div class="input-wrapper">
+                    <mat-icon>business_center</mat-icon>
+                    <input id="titre" type="text" formControlName="titre" placeholder="Ex. Waati Delivery" />
+                </div>
+
+            </div>
+
+            <!-- Champ Secteur ID (Number) -->
+            <div class="form-group">
+                <label for="secteur">
+                    Secteur d'activité
+                    <span>*</span>
+                </label>
+                <div class="input-wrapper select-wrapper">
+                    <mat-icon>category</mat-icon>
+                    <select id="secteur" formControlName="secteur_id">
+                        <option value="" disabled>Sélectionnez un secteur</option>
+                        <option value="1">Agriculture</option>
+                        <option value="2">Technologie</option>
+                        <option value="3">Commerce et e-commerce</option>
+                        <option value="4">Finance et FinTech</option>
+                        <option value="5">Santé</option>
+                        <option value="6">Énergie</option>
+                        <option value="7">Logistique</option>
+                        <option value="8">Artisanat</option>
+                        <option value="9">Éducation</option>
+                        <option value="10">Autre</option>
+                    </select>
+                    <mat-icon class="select-arrow">keyboard_arrow_down</mat-icon>
+                </div>
+
+            </div>
+
+            <!-- Champ Quota Proposé (String) -->
+            <div class="form-group">
+                <label for="quota_propose">Quota proposé</label>
+                <div class="input-wrapper">
+                    <mat-icon>monetization_on</mat-icon>
+                    <input id="quota_propose" type="text" formControlName="quota_propose"
+                        placeholder="Ex. 50 000 € ou 40%" />
+                </div>
+            </div>
+
+            <!-- Champ Pitch URL (String) -->
+            <div class="form-group">
+                <label for="pith_url">Lien du Pitch (URL)</label>
+                <div class="input-wrapper">
+                    <mat-icon>link</mat-icon>
+                    <input id="pith_url" type="url" formControlName="pith_url"
+                        placeholder="Ex. https://youtube.com..." />
+                </div>
+            </div>
+
+            <!-- Champ Description (String) -->
+            <div class="form-group">
+                <label for="description">Description du projet</label>
+                <div class="textarea-wrapper">
+                    <mat-icon>description</mat-icon>
+                    <textarea id="description" formControlName="description"
+                        placeholder="Décrivez brièvement les objectifs du projet..." rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button mat-button type="button" class="cancel-btn">
+                    Annuler
+                </button>
+                <button mat-flat-button type="submit" class="submit-btn">
+                    <mat-icon>add</mat-icon>
+                    Créer le projet
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
