@@ -1,1 +1,52 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --primary: #059669;
+  --primary-dark: #047857;
+  --primary-light: #D1FAE5;
+
+  --secondary: #F59E0B;
+  --secondary-light: #FEF0CD;
+  --secondary-dark: #92610A;
+
+  --dark: #1F2937;
+
+  --background: #FFFBF5;
+  --surface: #FFFFFF;
+
+  --border: #E7DFCE;
+
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+
+  --success: #059669;
+  --error: #DC2626;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--text-primary);
+
+  font-family:
+    'Inter',
+    'Plus Jakarta Sans',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+
+  font-size: 14px;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

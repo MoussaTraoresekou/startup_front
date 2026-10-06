@@ -1,0 +1,106 @@
+<div class="landing-page">
+  <!-- BARRE DE NAVIGATION HAUTE -->
+  <header class="landing-navbar">
+    <div class="nav-container">
+      <div class="brand-logo" routerLink="/">
+        <mat-icon class="brand-icon">stars</mat-icon>
+        <div class="brand-text">
+          <span class="title">Entrepreneur360</span>
+          <span class="subtitle">Votre projet, étape par étape</span>
+        </div>
+      </div>
+
+      <div class="nav-actions">
+        <a mat-button routerLink="/auth/login" class="btn-login">
+          <mat-icon>login</mat-icon> Se connecter
+        </a>
+        <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-signup">
+          Créer un compte
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION HERO (PRÉSENTATION PRINCIPALE) -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <span class="badge-hero">
+        <mat-icon>auto_awesome</mat-icon> Plateforme d'Accompagnement Écosystémique
+      </span>
+      <h1>Transformez votre idée en une <span>entreprise florissante</span></h1>
+      <p class="hero-description">
+        Entrepreneur360 vous guide à chaque étape : de l'idée initiale jusqu'à la formalisation, le mentorat et la recherche de financement.
+      </p>
+
+      <div class="hero-buttons">
+        <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-hero-primary">
+          Commencer mon parcours <mat-icon>arrow_forward</mat-icon>
+        </a>
+        <a mat-stroke-button color="primary" routerLink="/auth/login" class="btn-hero-secondary">
+          Espace membre
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LE PARCOURS EN 4 ÉTAPES -->
+  <section class="workflow-section">
+    <div class="section-title">
+      <h2>Un parcours structuré vers le succès</h2>
+      <p>Chaque étape vous rapproche de la concrétisation de votre vision.</p>
+    </div>
+
+    <div class="workflow-grid">
+      <div class="workflow-card" *ngFor="let step of workflowSteps; let last = last">
+        <div class="step-badge">{{ step.number }}</div>
+        <h3>{{ step.title }}</h3>
+        <p>{{ step.desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SÉLECTION DES PROFILS UTILISATEURS -->
+  <section class="profiles-section">
+    <div class="section-title">
+      <h2>Quel est votre profil ?</h2>
+      <p>Rejoignez la communauté d'innovation et poursuivez votre parcours.</p>
+    </div>
+
+    <div class="profiles-grid">
+      <div class="profile-card" *ngFor="let profile of userProfiles">
+        <div class="profile-icon">
+          <mat-icon>{{ profile.icon }}</mat-icon>
+        </div>
+        <h3>{{ profile.title }}</h3>
+        <p>{{ profile.description }}</p>
+        <a mat-flat-button color="primary" [routerLink]="profile.link" class="btn-profile">
+          {{ profile.actionText }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALL TO ACTION FINAL -->
+  <section class="cta-section">
+    <div class="cta-box">
+      <h2>Prêt à propulser votre entreprise ?</h2>
+      <p>Inscrivez-vous dès aujourd'hui pour structurer votre dossier et accéder aux mentors et investisseurs.</p>
+      <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-cta">
+        Créer mon compte gratuitement
+      </a>
+    </div>
+  </section>
+
+  <!-- PIED DE PAGE -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo">
+          <mat-icon class="brand-icon">stars</mat-icon>
+          <span class="title">Entrepreneur360</span>
+        </div>
+        <p>© 2026 Entrepreneur360. Tous droits réservés.</p>
+      </div>
+    </div>
+  </footer>
+</div>

@@ -1,0 +1,355 @@
+/* ==========================================================================
+   LOGIN — ENTREPRENEUR360
+   Le thème Angular Material est défini dans material-theme.scss.
+   Ici : layout, dimensions, espacements et décoration.
+   ========================================================================== */
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+
+/* ==========================================================================
+   CONTENEUR
+   ========================================================================== */
+
+.login-container {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px 20px;
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(5, 150, 105, 0.08),
+      transparent 45%
+    ),
+    var(--background);
+}
+
+
+/* ==========================================================================
+   CARTE
+   ========================================================================== */
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+
+  box-sizing: border-box;
+
+  padding: 40px 34px;
+
+  background: var(--surface);
+
+  border: 1px solid rgba(31, 41, 55, 0.08);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 50px rgba(31, 41, 55, 0.08),
+    0 4px 12px rgba(31, 41, 55, 0.04);
+}
+
+
+/* ==========================================================================
+   LOGO
+   ========================================================================== */
+
+.login-header {
+  text-align: center;
+
+  margin-bottom: 32px;
+}
+
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 24px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px !important;
+  height: 40px !important;
+
+  font-size: 22px !important;
+
+  border-radius: 11px;
+
+  background: var(--primary);
+
+  color: #ffffff;
+}
+
+.brand-title {
+  color: var(--text-primary);
+
+  font-size: 21px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+
+  line-height: 1;
+}
+
+.brand-title span {
+  color: var(--primary);
+}
+
+
+/* ==========================================================================
+   TITRE
+   ========================================================================== */
+
+.login-header h1 {
+  margin: 0 0 8px;
+
+  color: var(--text-primary);
+
+  font-size: 25px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+.login-header p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+
+  line-height: 1.6;
+}
+
+
+/* ==========================================================================
+   FORMULAIRE
+   ========================================================================== */
+
+.login-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/*
+ * Angular Material gère déjà :
+ * - couleur
+ * - focus
+ * - label
+ * - outline
+ * - hauteur
+ *
+ * On ne redéfinit donc pas ici les couleurs du mat-form-field.
+ */
+
+.form-field {
+  width: 100%;
+}
+
+
+/* ==========================================================================
+   OPTIONS
+   ========================================================================== */
+
+.form-options {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin: 3px 0 10px;
+
+  font-size: 13px;
+}
+
+.remember-me {
+  color: var(--text-secondary);
+}
+
+.forgot-password {
+  color: var(--primary);
+
+  font-weight: 600;
+
+  text-decoration: none;
+
+  transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+  color: var(--primary-dark);
+
+  text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   BOUTON CONNEXION
+   ========================================================================== */
+
+.btn-submit {
+  width: 100%;
+
+  height: 48px;
+
+  margin-top: 5px;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn-submit:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 6px 15px rgba(5, 150, 105, 0.18);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.login-footer {
+  margin-top: 26px;
+
+  padding-top: 21px;
+
+  border-top: 1px solid rgba(31, 41, 55, 0.08);
+
+  text-align: center;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+.login-footer a {
+  margin-left: 4px;
+
+  color: var(--primary);
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  color: var(--primary-dark);
+
+  text-decoration: underline;
+}
+
+
+/* ==========================================================================
+   MESSAGE D'ERREUR
+   ========================================================================== */
+
+.login-error {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 12px;
+
+  padding: 11px 13px;
+
+  border-radius: 9px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  font-size: 13px;
+}
+
+.login-error mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  .login-container {
+    padding: 20px 15px;
+
+    align-items: flex-start;
+
+    padding-top: 50px;
+  }
+
+  .login-card {
+    padding: 32px 22px;
+
+    border-radius: 17px;
+  }
+
+  .login-header {
+    margin-bottom: 28px;
+  }
+
+  .login-header h1 {
+    font-size: 23px;
+  }
+
+  .brand-logo {
+    margin-bottom: 20px;
+  }
+
+  .form-options {
+    font-size: 12px;
+  }
+}

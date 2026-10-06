@@ -1,0 +1,218 @@
+<div class="dashboard-page">
+
+  <!-- =========================================================
+       EN-TÊTE DE BIENVENUE
+       ========================================================= -->
+  <div class="dashboard-header">
+    <div class="welcome-section">
+      <h1>Bonjour Kadiatou 👋</h1>
+      <p>
+        Voici où en est votre projet et les actions à réaliser pour
+        continuer votre parcours.
+      </p>
+    </div>
+
+    <div class="quote-card">
+      <p>
+        « Une idée bien structurée devient un projet prêt à avancer. »
+      </p>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       INFORMATIONS CLÉS (KPI GRID)
+       ========================================================= -->
+  <div class="kpi-grid">
+
+    <!-- Étape actuelle -->
+    <div class="kpi-card">
+      <div class="kpi-icon-wrapper green-light">
+        <mat-icon>route</mat-icon>
+      </div>
+      <div class="kpi-details">
+        <span class="kpi-label">Étape actuelle</span>
+        <h3 class="kpi-title">Formalisation</h3>
+        <span class="kpi-sub">À revoir</span>
+        <a routerLink="/me/parcours" class="kpi-link">Corriger l'étape →</a>
+      </div>
+    </div>
+
+    <!-- Équipe -->
+    <div class="kpi-card">
+      <div class="kpi-icon-wrapper teal-light">
+        <mat-icon>group</mat-icon>
+      </div>
+      <div class="kpi-details">
+        <span class="kpi-label">Équipe du projet</span>
+        <h3 class="kpi-title">2 membres</h3>
+        <span class="kpi-sub">3 candidatures à examiner</span>
+        <a routerLink="/me/equipe" class="kpi-link">Gérer l'équipe →</a>
+      </div>
+    </div>
+
+    <!-- Financement -->
+    <div class="kpi-card">
+      <div class="kpi-icon-wrapper orange-light">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+      <div class="kpi-details">
+        <span class="kpi-label">Financement recherché</span>
+        <h3 class="kpi-title">10 000 000 FCFA</h3>
+        <span class="kpi-sub">Montant recherché pour le projet</span>
+        <a routerLink="/me/financement" class="kpi-link">Voir le financement →</a>
+      </div>
+    </div>
+
+    <!-- Mentor -->
+    <div class="kpi-card">
+      <div class="kpi-icon-wrapper amber-light">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="kpi-details">
+        <span class="kpi-label">Votre mentor</span>
+        <h3 class="kpi-title">Ibrahim T.</h3>
+        <span class="kpi-sub badge-available">Disponible pour un échange</span>
+        <a routerLink="/me/mentor" class="kpi-link">Contacter le mentor →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================================================
+       CONTENU PRINCIPAL (GRID COMPLET)
+       ========================================================= -->
+  <div class="main-content-grid">
+
+    <!-- =======================================================
+         COLONNE GAUCHE : PROGRESSION & LOGISTIQUE
+         ======================================================= -->
+    <div class="left-section">
+      <div class="card timeline-card">
+        
+        <!-- Projet -->
+        <div class="card-header">
+          <div>
+            <h2 class="project-title">Waati Delivery</h2>
+            <span class="project-subtitle">Transport &amp; logistique</span>
+          </div>
+        </div>
+
+        <!-- Progression -->
+        <div class="project-progress">
+          <div class="progress-header">
+            <span>Progression du parcours</span>
+            <strong>2 étapes sur 4 terminées</strong>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-value" style="width: 50%;"></div>
+          </div>
+        </div>
+
+        <!-- Parcours -->
+        <div class="timeline-steps">
+          <!-- Idéation -->
+          <div class="step completed">
+            <div class="step-circle"><mat-icon>check</mat-icon></div>
+            <span class="step-label">Idéation</span>
+            <span class="step-status">Validée</span>
+          </div>
+
+          <div class="step-line active"></div>
+
+          <!-- Business Plan -->
+          <div class="step completed">
+            <div class="step-circle"><mat-icon>check</mat-icon></div>
+            <span class="step-label">Business Plan</span>
+            <span class="step-status">Validé</span>
+          </div>
+
+          <div class="step-line active"></div>
+
+          <!-- Formalisation -->
+          <div class="step current">
+            <div class="step-circle">3</div>
+            <span class="step-label">Formalisation</span>
+            <span class="step-status">À revoir</span>
+          </div>
+
+          <div class="step-line"></div>
+
+          <!-- Lancement -->
+          <div class="step upcoming">
+            <div class="step-circle">4</div>
+            <span class="step-label">Lancement</span>
+            <span class="step-status">À venir</span>
+          </div>
+        </div>
+
+        <!-- Action requise -->
+        <div class="next-action-box">
+          <div class="action-info">
+            <div class="action-tag">
+              <mat-icon>priority_high</mat-icon>
+              <strong>Action requise</strong>
+            </div>
+            <h4>Votre étape de formalisation doit être corrigée</h4>
+            <p>
+              Votre mentor vous demande de préciser le statut
+              juridique envisagé pour votre entreprise
+              (SARL, entreprise individuelle, etc.).
+            </p>
+          </div>
+          <button mat-flat-button class="btn-orange" routerLink="/me/parcours">
+            Corriger maintenant
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =======================================================
+         COLONNE DROITE : ACTUALITÉS & OPPORTUNITÉS
+         ======================================================= -->
+    <div class="right-section">
+      <div class="card news-card">
+        
+        <div class="card-header-flex">
+          <h3>Actualités &amp; opportunités</h3>
+          <a routerLink="/me/actualites" class="see-all">Voir tout →</a>
+        </div>
+
+        <div class="news-list">
+          <!-- Opportunité -->
+          <div class="news-item">
+            <div class="news-icon blue"><mat-icon>campaign</mat-icon></div>
+            <div class="news-content">
+              <strong>Appel à candidatures</strong>
+              <p>Un nouveau programme d'accompagnement est ouvert aux startups maliennes.</p>
+              <span class="news-time">Il y a 2 h</span>
+            </div>
+          </div>
+
+          <!-- Atelier -->
+          <div class="news-item">
+            <div class="news-icon orange"><mat-icon>event</mat-icon></div>
+            <div class="news-content">
+              <strong>Atelier</strong>
+              <p>Atelier « Structurer son pitch » organisé par l'incubateur.</p>
+              <span class="news-time">25 septembre</span>
+            </div>
+          </div>
+
+          <!-- Formation -->
+          <div class="news-item">
+            <div class="news-icon green"><mat-icon>school</mat-icon></div>
+            <div class="news-content">
+              <strong>Formation</strong>
+              <p>Formation en comptabilité et gestion d'entreprise planifiée.</p>
+              <span class="news-time">Samedi 20 septembre</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

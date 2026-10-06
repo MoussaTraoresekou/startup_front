@@ -1,0 +1,115 @@
+<div class="projects-page">
+
+  <!-- ============================================================
+       EN-TÊTE DE LA PAGE
+       ============================================================ -->
+  <header class="page-header">
+    <div class="page-title">
+      <span class="eyebrow">MON ESPACE</span>
+      <h1>Mes projets</h1>
+      <p>
+        Gérez vos projets et poursuivez leur développement
+        étape par étape.
+      </p>
+    </div>
+
+    <button
+      mat-flat-button
+      class="new-project-btn"
+      type="button"
+      (click)="creerProjet()"
+    >
+      <mat-icon>add</mat-icon>
+      Nouveau projet
+    </button>
+  </header>
+
+  <!-- ============================================================
+       COMPTEUR DE PROJETS
+       ============================================================ -->
+  <div class="projects-header">
+    <div>
+      <h2>Vos projets</h2>
+      <span>
+        {{ projets.length }}
+        {{ projets.length > 1 ? 'projets' : 'projet' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       LISTE DES CARTES PROJETS
+       ============================================================ -->
+  <section class="projects-list">
+
+    @for (item of projets; track item.id) {
+      <article
+        class="project-card"
+        (click)="ouvrirProjet(item)"
+      >
+
+        <!-- Identité (Première lettre & Nom/Secteur) -->
+        
+          <div class="project-mark">
+            {{ item.titre.charAt(0) }}
+          </div>
+
+          <div class="project-info">
+            <h3>{{ item.titre }}</h3>
+            <span class="sector">{{ item.secteur }}</span>
+          </div>
+        </div>
+
+        <!-- Étape actuelle -->
+        <div class="project-stage">
+          <span class="label">Étape actuelle</span>
+          <strong>{{ item.etape }}</strong>
+        </div>
+
+        <!-- Barre de jauge de progression -->
+        <div class="project-progress">
+          <div class="progress-top">
+            <span>Progression</span>
+            <strong>{{ item.progression }}%</strong>
+          </div>
+          <div class="progress-bar">
+            <div
+              class="progress-value"
+              [style.width.%]="item.progression"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Badge de Statut coloré -->
+        <div class="project-status">
+          <span
+            class="status"
+            [ngClass]="item.statutClasse"
+          >
+            {{ item.statut }}
+          </span>
+        </div>
+
+        <!-- Bouton d'action -->
+        <div class="project-action">
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="$event.stopPropagation(); ouvrirProjet(item)"
+          >
+            Ouvrir
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+
+      </article>
+    } @empty {
+      <div class="empty-state-box" style="text-align: center; padding: 40px; color: #6B7280; width: 100%;">
+        <mat-icon style="font-size: 48px; width: 48px; height: 48px; margin-bottom: 12px; color: #9CA3AF;">folder_open</mat-icon>
+        <p>Vous n'avez pas encore enregistré de projet dans votre incubateur.</p>
+      </div>
+    }
+
+  </section>
+
+</div>

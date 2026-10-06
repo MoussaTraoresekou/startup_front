@@ -1,0 +1,14 @@
+<div class="layout-wrapper">
+  <!-- 1. Menu latéral fixe sur la gauche -->
+  <app-sidbar-layout></app-sidbar-layout>
+
+  <div class="main-body-zone">
+    <!-- 2. Barre supérieure d'outils -->
+    <app-navbar-layout></app-navbar-layout>
+
+    <!-- 3. Conteneur dynamique où s'injectent vos pages (dashboard, taches...) -->
+    <main class="page-container">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

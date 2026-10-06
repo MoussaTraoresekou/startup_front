@@ -1,0 +1,451 @@
+.projects-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 32px;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 42px;
+}
+
+.page-title {
+  max-width: 680px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 8px;
+
+  color: var(--primary);
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.page-title h1 {
+  margin: 0 0 10px;
+
+  color: var(--text-primary);
+
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.page-title p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* ============================================================
+   BOUTON NOUVEAU PROJET
+   ============================================================ */
+
+.new-project-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 44px;
+
+  padding: 0 18px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.new-project-btn mat-icon {
+  width: 20px;
+  height: 20px;
+
+  margin-right: 6px;
+
+  font-size: 20px;
+}
+
+
+/* ============================================================
+   TITRE DE LA LISTE
+   ============================================================ */
+
+.projects-header {
+  margin-bottom: 14px;
+}
+
+.projects-header h2 {
+  margin: 0 0 4px;
+
+  color: var(--text-primary);
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.projects-header span {
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   LISTE
+   ============================================================ */
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ============================================================
+   CARTE PROJET
+   ============================================================ */
+
+.project-card {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 1.5fr)
+    minmax(150px, 0.8fr)
+    minmax(180px, 1fr)
+    auto
+    auto;
+
+  align-items: center;
+
+  gap: 28px;
+
+  padding: 22px 24px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.project-card:hover {
+  border-color: #cfd8d1;
+
+  box-shadow:
+    0 8px 24px rgba(31, 41, 55, 0.06);
+
+  transform: translateY(-1px);
+}
+
+
+/* ============================================================
+   IDENTITÉ DU PROJET
+   ============================================================ */
+
+.project-identity {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0;
+}
+
+.project-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  background: var(--primary-light);
+
+  color: var(--primary-dark);
+
+  font-size: 17px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.project-info {
+  min-width: 0;
+}
+
+.project-info h3 {
+  overflow: hidden;
+
+  margin: 0 0 5px;
+
+  color: var(--text-primary);
+
+  font-size: 16px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sector {
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+
+/* ============================================================
+   ÉTAPE
+   ============================================================ */
+
+.project-stage {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.label {
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+.project-stage strong {
+  color: var(--text-primary);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   PROGRESSION
+   ============================================================ */
+
+.project-progress {
+  min-width: 160px;
+}
+
+.progress-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 8px;
+}
+
+.progress-top span {
+  color: var(--text-secondary);
+
+  font-size: 12px;
+}
+
+.progress-top strong {
+  color: var(--primary);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background: #eeeae2;
+}
+
+.progress-value {
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: var(--primary);
+
+  transition: width 0.3s ease;
+}
+
+
+/* ============================================================
+   STATUT
+   ============================================================ */
+
+.project-status {
+  display: flex;
+  align-items: center;
+
+  white-space: nowrap;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status.warning {
+  background: var(--secondary-light);
+
+  color: var(--secondary-dark);
+}
+
+.status.success {
+  background: var(--primary-light);
+
+  color: var(--primary-dark);
+}
+
+
+/* ============================================================
+   BOUTON OUVRIR
+   ============================================================ */
+
+.project-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.project-action button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+
+  padding: 0 14px;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.project-action button mat-icon {
+  width: 18px;
+  height: 18px;
+
+  margin-left: 5px;
+
+  font-size: 18px;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1050px) {
+
+  .project-card {
+    grid-template-columns:
+      minmax(240px, 1.4fr)
+      minmax(140px, 0.8fr)
+      minmax(160px, 1fr)
+      auto;
+
+    gap: 20px;
+  }
+
+  .project-status {
+    justify-content: flex-start;
+  }
+
+  .project-action {
+    grid-column: 1 / -1;
+
+    justify-content: flex-end;
+  }
+}
+
+
+@media (max-width: 750px) {
+
+  .projects-page {
+    padding: 28px 18px;
+  }
+
+  .page-header {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    margin-bottom: 32px;
+  }
+
+  .page-title h1 {
+    font-size: 28px;
+  }
+
+  .new-project-btn {
+    width: 100%;
+  }
+
+  .project-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 18px;
+
+    padding: 20px;
+  }
+
+  .project-progress {
+    width: 100%;
+  }
+
+  .project-status {
+    justify-content: flex-start;
+  }
+
+  .project-action {
+    justify-content: stretch;
+  }
+
+  .project-action button {
+    width: 100%;
+  }
+}
