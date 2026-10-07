@@ -1,0 +1,394 @@
+.parcours-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 10px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.parcours-header h1 {
+  margin: 0 0 6px;
+  color: #1F2937;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.parcours-header p {
+  margin: 0;
+  color: #6B7280;
+  font-size: 13px;
+}
+
+/* ============================================================
+   TIMELINE CARD STYLE
+   ============================================================ */
+.timeline-card {
+  background: #FFFFFF;
+  border: 1px solid #ECEFEA;
+  border-radius: 16px;
+  padding: 24px 40px;
+}
+
+.timeline-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.step-container {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.step-container:hover {
+  transform: translateY(-2px);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 2px #E5E7EB;
+}
+
+.step-circle mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #FFFFFF;
+}
+
+.step.completed .step-circle {
+  background: #059669;
+  box-shadow: 0 0 0 2px #059669;
+}
+
+.step.completed .step-label {
+  color: #059669;
+  font-weight: 700;
+}
+
+.step.current .step-circle {
+  background: #F59E0B;
+  box-shadow: 0 0 0 2px #F59E0B;
+  color: #FFFFFF;
+}
+
+.step.current .step-label {
+  color: #F59E0B;
+  font-weight: 700;
+}
+
+.step-label {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 600;
+}
+
+.step-status {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.step-status.success {
+  color: #059669;
+}
+
+.step-status.warning {
+  color: #F59E0B;
+}
+
+.step-line {
+  flex: 1;
+  height: 4px;
+  background: #E5E7EB;
+  margin: 0 -20px;
+  transform: translateY(-22px);
+  z-index: 1;
+}
+
+.step-line.active {
+  background: #059669;
+}
+
+/* ============================================================
+   GRID CENTRALE MULTI-COLONNES
+   ============================================================ */
+.main-parcours-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1.8fr;
+  gap: 24px;
+}
+
+.card {
+  background: #FFFFFF;
+  border: 1px solid #ECEFEA;
+  border-radius: 20px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.questions-card h3 {
+  margin: 0 0 20px;
+  color: #1F2937;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.question-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+}
+
+.question-text {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.question-status-icon mat-icon.icon-valid {
+  color: #059669;
+}
+
+.question-status-icon mat-icon.icon-review {
+  color: #F59E0B;
+}
+
+.question-status-icon mat-icon.icon-empty {
+  color: #D1D5DB;
+}
+
+/* PANNEAU DE COMPLÉTION DROIT */
+.detail-header-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.step-badge-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #F59E0B;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detail-titles h3 {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-titles h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: #1F2937;
+  font-weight: 700;
+}
+
+.detail-titles p {
+  margin: 0;
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.5;
+}
+
+/* COMMENTAIRE DU MENTOR */
+.mentor-comment-box {
+  background: #FFFBF5;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 28px;
+}
+
+.mentor-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.mentor-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+}
+
+.mentor-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.mentor-meta strong {
+  font-size: 13px;
+  color: #1F2937;
+}
+
+.mentor-meta span {
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.comment-text {
+  margin: 0;
+  font-size: 13px;
+  color: #4B5563;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* JAUGE ET ACTIONS ACCÈS */
+.progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress-bar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-bar-wrapper strong {
+  color: #059669;
+  font-size: 14px;
+}
+
+.premium-bar {
+  flex: 1;
+  height: 10px;
+  background: #E5E7EB;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.premium-value {
+  height: 100%;
+  background: #059669;
+  border-radius: inherit;
+}
+
+.btn-continue-action {
+  height: 46px !important;
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
+}
+
+/* ============================================================
+   ZONE BASSE DOCUMENT GÉNÉRÉ
+   ============================================================ */
+.document-download-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.doc-info-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.doc-icon-box {
+  width: 46px;
+  height: 46px;
+  background: #FEF3C7;
+  color: #D97706;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-text-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-text-meta .label {
+  font-size: 11px;
+  color: #9CA3AF;
+  text-transform: uppercase;
+}
+
+.doc-text-meta strong {
+  font-size: 15px;
+  color: #1F2937;
+  margin: 2px 0;
+}
+
+.doc-text-meta p {
+  margin: 0;
+  font-size: 11px;
+  color: #9CA3AF;
+}
+
+.btn-download-premium {
+  height: 42px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  border-color: #059669 !important;
+  color: #059669 !important;
+}
+
+@media (max-width: 950px) {
+  .main-parcours-grid {
+    grid-template-columns: 1fr;
+  }
+}

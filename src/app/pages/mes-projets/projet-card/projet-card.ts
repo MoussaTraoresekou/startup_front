@@ -1,6 +1,7 @@
-import { Component, input, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { ProjetResponse } from '../../../core/model/ProjetResponse';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-projet-card',
@@ -9,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './projet-card.css',
 })
 export class ProjetCard {
+    private router=inject(Router)
     projet=input.required<ProjetResponse>()
     editOnclic=output<number>()
     deleteOnclic=output<number>()
@@ -24,4 +26,9 @@ export class ProjetCard {
     visualiser(id:number){
          this.visaliserOnclic.emit(id)
     }
+    ouvrirProjet(projet: ProjetResponse) {
+    localStorage.setItem('activeProjetId', projet.id.toString());
+    localStorage.setItem('activeProjetNom', projet.titre);
+    this.router.navigate(['/porteur/projets', projet.id, 'dashboard']);
+  }
 }

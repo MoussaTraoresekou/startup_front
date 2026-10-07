@@ -11,6 +11,7 @@ import { ProjetFormEdit } from './projet-form-edit/projet-form-edit';
 import { ProjetCard } from './projet-card/projet-card';
 import { BarreRecherche } from './barre-recherche/barre-recherche';
 import { FiltreSecteur } from './filtre-secteur/filtre-secteur';
+import { ProjetEtapeService } from '../../core/services/ProjetEtape/projet-etape-service';
 @Component({
   selector: 'app-mes-projets',
   standalone: true,
@@ -34,6 +35,7 @@ export class MesProjets  {
   formulaireVisible = false
   formulaireVisibleforEdit = false
   messageSnackBar = inject(NotificationService)
+  private questionService=inject(ProjetEtapeService)
   constructor() {
     this.chargerProjet("","")
   }
@@ -62,7 +64,7 @@ export class MesProjets  {
   ouverFermer() {
     this.formulaireVisible = true
   }
-  annuler(val: boolean) {
+  fermerModal(val: boolean) {
     this.formulaireVisible = val
   }
   //cett fonction met à jour la lsite des conseils et ferme le modal
@@ -71,13 +73,6 @@ export class MesProjets  {
     this.chargerProjet("","")
     this.messageSnackBar.succes("projet posté avec succes!")
   }
-  ouvrirProjet(projet: ProjetResponse) {
-    localStorage.setItem('activeProjetId', projet.id.toString());
-    localStorage.setItem('activeProjetNom', projet.titre);
-
-    this.router.navigate(['/porteur/projets', projet.id, 'dashboard']);
-  }
-
   creerProjet() {
     this.formulaireVisible=true
   }

@@ -8,6 +8,7 @@ import { ProjetRequest } from '../model/ProjetRequest';
   providedIn: 'root'
 })
 export class ProjetService {
+  
 
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/api/porteur';
@@ -16,6 +17,6 @@ export class ProjetService {
     return this.http.get<ProjetResponse[]>(`${this.baseUrl}/projets`);
   }
   ajouterProjet(projet:ProjetRequest){
-     return this.http.post<string>(`${this.baseUrl}/projet`,projet);
+     return this.http.post<ProjetResponse>(`${this.baseUrl}/projet`,projet);
   }
 }

@@ -1,1 +1,111 @@
-<p>parcours works!</p>
+<div class="parcours-page">
+    <header class="parcours-header">
+        <div class="welcome-section">
+            <h1>Parcours du projet – {{ nomProjet }}</h1>
+            <p>Suivez les 4 étapes et complétez les informations requises pour faire avancer votre projet.</p>
+        </div>
+    </header>
+    <div class="timeline-card">
+        <div class="timeline-steps">
+            @for (etape of listeEtapes(); track etape.id; let last = $last) {
+            <div class="step-container">
+
+                <div class="step" (click)="CommencerEtapes(etape.id.toString(),etape.nom_etape)">
+                    <div class="step-circle">
+                        <mat-icon>check</mat-icon>
+
+                    </div>
+                    <span class="step-label">{{ etape.nom_etape}}</span>
+                    <span class="step-status">
+                        {{ etape.statut }}
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="step-line"></div>
+
+            }
+        </div>
+    </div>
+
+    <div class="main-parcours-grid">
+        <div class="card questions-card">
+            <h3>Questions de l'étape</h3>
+            <div class="questions-list">
+                @for (question of listeQuestions(); track question.id) {
+                    <div class="question-item">
+                    <span class="question-text">{{question.libelle}}</span>
+                    <div class="question-status-icon">
+                        <mat-icon class="icon-valid">check_circle</mat-icon>
+                        <mat-icon class="icon-review">error</mat-icon>
+                        <mat-icon class="icon-empty">radio_button_unchecked</mat-icon>
+
+                    </div>
+                </div>
+
+                }
+                
+
+            </div>
+        </div>
+        <div class="card detail-card">
+            <div class="detail-header-block">
+                <div class="step-badge-icon">
+                    <mat-icon>assignment</mat-icon>
+                </div>
+                <div class="detail-titles">
+                    <h3>Détail de l'étape</h3>
+                    <h2>hhfhf</h2>
+                    <p>hfhf</p>
+                </div>
+            </div>
+            <div class="mentor-comment-box">
+                <div class="mentor-profile">
+                    <div class="mentor-avatar">
+                        <mat-icon>person</mat-icon>
+                    </div>
+                    <div class="mentor-meta">
+                        <strong>Commentaire du mentor</strong>
+                        <span>hghghg</span>
+                    </div>
+                </div>
+                <p class="comment-text"> hghgh</p>
+            </div>
+
+
+            <!-- Jauge de complétion au pixel près -->
+            <div class="progress-section">
+                <div class="progress-bar-wrapper">
+                    <div class="premium-bar">
+                        <div class="premium-value"></div>
+                    </div>
+                    <strong>hfhg</strong>
+                </div>
+
+                <button mat-flat-button class="btn-continue-action">
+                    Continuer la <mat-icon>arrow_forward</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3. ZONE BASSE : TÉLÉCHARGEMENT DU DOCUMENT GÉNÉRÉ -->
+    <div class="card document-download-card">
+        <div class="doc-info-block">
+            <div class="doc-icon-box">
+                <mat-icon>description</mat-icon>
+            </div>
+            <div class="doc-text-meta">
+                <span class="label">Document généré</span>
+                <strong>Fiche de formalisation (PDF)</strong>
+                <p>Téléchargé le 18 sept. 2026 à 14:02</p>
+            </div>
+        </div>
+        <button mat-stroked-button class="btn-download-premium">
+            Télécharger
+        </button>
+    </div>
+
+</div>

@@ -31,7 +31,7 @@ export class AuthService {
 
   
   logout(): void {
-    localStorage.clear(); // Efface instantanément toutes les données de session du navigateur
+    localStorage.clear(); 
   }
 
   estConnecte(): boolean {
@@ -41,4 +41,10 @@ export class AuthService {
   getRole(): string | null { return localStorage.getItem('role'); }
   getNomComplet(): string { return `${localStorage.getItem('prenom')} ${localStorage.getItem('nom')}`; }
   getUserId(): number { return parseInt(localStorage.getItem('userId') || '0', 10); }
+  getNom(){
+    return localStorage.getItem("nom")
+  }
+  getPNom(){
+    return localStorage.getItem("prenom")
+  }
 }

@@ -424,3 +424,12 @@
     width: 100%;
   }
 }
+.invalid-feedbacks {
+  display: block;
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 6px;
+  padding-left: 2px;
+  line-height: 1.4;
+}

@@ -1,8 +1,5 @@
 <div class="dashboard-page">
 
-  <!-- =========================================================
-       EN-TÊTE DE BIENVENUE
-       ========================================================= -->
   <div class="dashboard-header">
     <div class="welcome-section">
       <h1>Bonjour Kadiatou 👋</h1>
@@ -18,13 +15,7 @@
       </p>
     </div>
   </div>
-
-  <!-- =========================================================
-       INFORMATIONS CLÉS (KPI GRID)
-       ========================================================= -->
   <div class="kpi-grid">
-
-    <!-- Étape actuelle -->
     <div class="kpi-card">
       <div class="kpi-icon-wrapper green-light">
         <mat-icon>route</mat-icon>
@@ -36,8 +27,6 @@
         <a routerLink="/me/parcours" class="kpi-link">Corriger l'étape →</a>
       </div>
     </div>
-
-    <!-- Équipe -->
     <div class="kpi-card">
       <div class="kpi-icon-wrapper teal-light">
         <mat-icon>group</mat-icon>
@@ -49,8 +38,6 @@
         <a routerLink="/me/equipe" class="kpi-link">Gérer l'équipe →</a>
       </div>
     </div>
-
-    <!-- Financement -->
     <div class="kpi-card">
       <div class="kpi-icon-wrapper orange-light">
         <mat-icon>account_balance_wallet</mat-icon>
@@ -62,8 +49,6 @@
         <a routerLink="/me/financement" class="kpi-link">Voir le financement →</a>
       </div>
     </div>
-
-    <!-- Mentor -->
     <div class="kpi-card">
       <div class="kpi-icon-wrapper amber-light">
         <mat-icon>person</mat-icon>
@@ -77,27 +62,15 @@
     </div>
 
   </div>
-
-  <!-- =========================================================
-       CONTENU PRINCIPAL (GRID COMPLET)
-       ========================================================= -->
   <div class="main-content-grid">
-
-    <!-- =======================================================
-         COLONNE GAUCHE : PROGRESSION & LOGISTIQUE
-         ======================================================= -->
     <div class="left-section">
       <div class="card timeline-card">
-        
-        <!-- Projet -->
-        <div class="card-header">
+                <div class="card-header">
           <div>
             <h2 class="project-title">Waati Delivery</h2>
             <span class="project-subtitle">Transport &amp; logistique</span>
           </div>
         </div>
-
-        <!-- Progression -->
         <div class="project-progress">
           <div class="progress-header">
             <span>Progression du parcours</span>
@@ -107,10 +80,7 @@
             <div class="progress-value" style="width: 50%;"></div>
           </div>
         </div>
-
-        <!-- Parcours -->
         <div class="timeline-steps">
-          <!-- Idéation -->
           <div class="step completed">
             <div class="step-circle"><mat-icon>check</mat-icon></div>
             <span class="step-label">Idéation</span>
@@ -118,8 +88,6 @@
           </div>
 
           <div class="step-line active"></div>
-
-          <!-- Business Plan -->
           <div class="step completed">
             <div class="step-circle"><mat-icon>check</mat-icon></div>
             <span class="step-label">Business Plan</span>
@@ -127,8 +95,6 @@
           </div>
 
           <div class="step-line active"></div>
-
-          <!-- Formalisation -->
           <div class="step current">
             <div class="step-circle">3</div>
             <span class="step-label">Formalisation</span>
@@ -136,16 +102,12 @@
           </div>
 
           <div class="step-line"></div>
-
-          <!-- Lancement -->
           <div class="step upcoming">
             <div class="step-circle">4</div>
             <span class="step-label">Lancement</span>
             <span class="step-status">À venir</span>
           </div>
         </div>
-
-        <!-- Action requise -->
         <div class="next-action-box">
           <div class="action-info">
             <div class="action-tag">
@@ -166,10 +128,6 @@
 
       </div>
     </div>
-
-    <!-- =======================================================
-         COLONNE DROITE : ACTUALITÉS & OPPORTUNITÉS
-         ======================================================= -->
     <div class="right-section">
       <div class="card news-card">
         
@@ -188,8 +146,6 @@
               <span class="news-time">Il y a 2 h</span>
             </div>
           </div>
-
-          <!-- Atelier -->
           <div class="news-item">
             <div class="news-icon orange"><mat-icon>event</mat-icon></div>
             <div class="news-content">
@@ -198,8 +154,6 @@
               <span class="news-time">25 septembre</span>
             </div>
           </div>
-
-          <!-- Formation -->
           <div class="news-item">
             <div class="news-icon green"><mat-icon>school</mat-icon></div>
             <div class="news-content">

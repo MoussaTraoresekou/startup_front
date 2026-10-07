@@ -77,7 +77,7 @@
 </div>
 @if (formulaireVisible) {
 
-<app-projet-form-add></app-projet-form-add>
+<app-projet-form-add (fermerClic)="fermerModal($event)" (ajoutReussiMisAjourClic)="AjoutEffectuer()" />
 
 }
 @if (formulaireVisibleforEdit) {

@@ -1,7 +1,5 @@
 <div class="modal-overlay" (click)="fermerModale()">
   <div class="project-card" (click)="$event.stopPropagation()">
-
-    <!-- EN-TÊTE -->
     <div class="modal-header">
       <div class="brand-logo">
         <mat-icon class="brand-icon">rocket_launch</mat-icon>
@@ -14,33 +12,35 @@
 
     <div class="modal-intro">
       <h1>Propulsez une idée</h1>
-      <p>Renseignez les détails de la startup pour l'incubateur.</p>
+      <p>Renseignez les détails de la startup</p>
     </div>
-
-    <!-- FORMULAIRE RACCORDÉ ÉNERGIQUEMENT -->
     <form [formGroup]="projectForm" (ngSubmit)="soumettreProjet()" class="project-form">
-
-      <!-- Ligne 1 : Nom + Secteur -->
       <div class="form-row">
         <div class="field-group">
           <label for="nomProjet">Nom du projet <span>*</span></label>
           <div class="input-wrapper">
             <mat-icon>business_center</mat-icon>
             <input id="nomProjet" type="text" formControlName="nom" placeholder="Ex. Waati Delivery" />
+            
           </div>
+          @if(projectForm.get("nom")?.invalid&&projectForm.get("nom")?.touched){
+                   <small class="invalid-feedbacks"> le nom est requis</small>
+            }
         </div>
-
         <div class="field-group">
           <label for="secteurProjet">Secteur d'activité <span>*</span></label>
           <div class="input-wrapper">
-            <mat-icon>category</mat-icon>
+            <mat-icon>Secteur Activité</mat-icon>
             <mat-select id="secteurProjet" formControlName="secteur" placeholder="Sélectionner...">
-              <mat-option value="1">Agriculture & Agrotech</mat-option>
-              <mat-option value="2">Fintech & Finance</mat-option>
-              <mat-option value="3">Santé & Biotech</mat-option>
-              <mat-option value="4">Énergie & Tech</mat-option>
+                @for (secteur of listeSecteurs(); track secteur.id) {
+                    <mat-option [value]="secteur.id">{{secteur.secteur}}</mat-option>
+                }
             </mat-select>
+            
           </div>
+          @if(projectForm.get("secteur")?.invalid&&projectForm.get("secteur")?.touched){
+                   <small class="invalid-feedbacks"> le secteur est requis</small>
+            }
         </div>
       </div>
 
@@ -51,16 +51,13 @@
           <mat-icon>monetization_on</mat-icon>
           <input id="quotaPropose" type="text" formControlName="quota" placeholder="Ex. 15% du capital cédé contre un accompagnement de 10M FCFA" />
         </div>
+         @if(projectForm.get("quota")?.invalid&&projectForm.get("quota")?.touched){
+                   <small class="invalid-feedbacks"> le quota est requis</small>
+            }
       </div>
-
-      <!-- Ligne 3 : Import du Pitch (Vidéo ou Document) -->
       <div class="field-group">
-        <label for="pitchFile">Document ou Vidéo du Pitch (PDF, PPTX, MP4, etc.)</label>
-
-        <!-- Input réel masqué -->
+        <label for="pitchFile">Document ou Vidéo du Pitch (PDF)</label>
         <input id="pitchFile" type="file" accept=".pdf,.ppt,.pptx,.mp4,.mov,.avi,video/*" class="hidden-file-input" [disabled]="chargement" (change)="onFileSelected($event)" />
-
-        <!-- Zone d'upload dynamique avec prévisualisation -->
         <label for="pitchFile" class="file-upload-zone" [class.has-file]="fichierPitch">
           <div class="upload-content">
             <div class="upload-icon">
@@ -84,21 +81,21 @@
           }
         </label>
       </div>
-
-      <!-- Ligne 4 : Description -->
       <div class="field-group">
         <label for="descriptionProjet">Description du projet</label>
         <div class="input-wrapper textarea-wrapper">
           <mat-icon>description</mat-icon>
           <textarea id="descriptionProjet" formControlName="description" placeholder="Objectifs majeurs et vision de la startup..." rows="3"></textarea>
+           
         </div>
+        @if(projectForm.get("description")?.invalid&&projectForm.get("description")?.touched){
+                   <small class="invalid-feedbacks"> la description est requise</small>
+            }
       </div>
-
-      <!-- ACTIONS AVEC PROTECTION CONTRE LES DOUBLES CLICS -->
       <div class="modal-actions">
         <button type="button" class="btn-cancel" [disabled]="chargement" (click)="fermerModale()">Annuler</button>
         <button type="submit" class="btn-submit" [disabled]="projectForm.invalid || chargement">
-          {{ chargement ? 'Traitement en cours...' : 'Initialiser le dossier' }}
+          {{ chargement ? 'Traitement en cours...' : 'Créer' }}
         </button>
       </div>
 
