@@ -1,12 +1,16 @@
+/* ==========================================================================
+   LAYOUT GÉNÉRAL DE LA PAGE
+   ========================================================================== */
 .parcours-page {
   width: 100%;
-  max-width: 1400px;
+  max-width: 1450px;
   margin: 0 auto;
   padding: 10px 10px 30px;
   display: flex;
   flex-direction: column;
   gap: 24px;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .parcours-header h1 {
@@ -23,9 +27,9 @@
   font-size: 13px;
 }
 
-/* ============================================================
-   TIMELINE CARD STYLE
-   ============================================================ */
+/* ==========================================================================
+   FRISE CHRONOLOGIQUE DES ÉTAPES (TIMELINE CARD)
+   ========================================================================== */
 .timeline-card {
   background: #FFFFFF;
   border: 1px solid #ECEFEA;
@@ -72,6 +76,7 @@
   font-size: 14px;
   border: 2px solid #FFFFFF;
   box-shadow: 0 0 0 2px #E5E7EB;
+  transition: all 0.2s ease;
 }
 
 .step-circle mat-icon {
@@ -81,25 +86,16 @@
   color: #FFFFFF;
 }
 
-.step.completed .step-circle {
+/* États dynamiques des cercles */
+.step-circle.completed {
   background: #059669;
   box-shadow: 0 0 0 2px #059669;
 }
 
-.step.completed .step-label {
-  color: #059669;
-  font-weight: 700;
-}
-
-.step.current .step-circle {
+.step-circle.current {
   background: #F59E0B;
   box-shadow: 0 0 0 2px #F59E0B;
   color: #FFFFFF;
-}
-
-.step.current .step-label {
-  color: #F59E0B;
-  font-weight: 700;
 }
 
 .step-label {
@@ -113,14 +109,7 @@
   color: #9CA3AF;
 }
 
-.step-status.success {
-  color: #059669;
-}
-
-.step-status.warning {
-  color: #F59E0B;
-}
-
+/* Ligne de liaison entre les bulles */
 .step-line {
   flex: 1;
   height: 4px;
@@ -128,15 +117,16 @@
   margin: 0 -20px;
   transform: translateY(-22px);
   z-index: 1;
+  transition: background 0.2s ease;
 }
 
 .step-line.active {
   background: #059669;
 }
 
-/* ============================================================
-   GRID CENTRALE MULTI-COLONNES
-   ============================================================ */
+/* ==========================================================================
+   GRILLE CENTRALE (QUESTIONS VS DÉTAILS)
+   ========================================================================== */
 .main-parcours-grid {
   display: grid;
   grid-template-columns: 1.2fr 1.8fr;
@@ -151,6 +141,9 @@
   box-sizing: border-box;
 }
 
+/* ==========================================================================
+   COLONNE DE GAUCHE : LISTE DES QUESTIONS
+   ========================================================================== */
 .questions-card h3 {
   margin: 0 0 20px;
   color: #1F2937;
@@ -161,7 +154,7 @@
 .questions-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .question-item {
@@ -172,27 +165,141 @@
   background: #F9FAFB;
   border-radius: 12px;
   border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.question-item:hover {
+  border-color: #059669;
+  background: #F3FBF7;
+}
+
+/* État mis en valeur quand la question est sélectionnée */
+.question-item.selected {
+  border-color: #059669;
+  background: #F3FBF7;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.05);
 }
 
 .question-text {
   font-size: 13px;
   color: #374151;
   font-weight: 500;
+  line-height: 1.4;
+  padding-right: 10px;
 }
 
-.question-status-icon mat-icon.icon-valid {
-  color: #059669;
+.question-status-icon mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
-.question-status-icon mat-icon.icon-review {
-  color: #F59E0B;
+.question-status-icon mat-icon.icon-valid { color: #059669; }
+.question-status-icon mat-icon.icon-review { color: #F59E0B; }
+.question-status-icon mat-icon.icon-empty { color: #D1D5DB; }
+
+.empty-hint {
+  color: #9CA3AF;
+  font-size: 13px;
+  text-align: center;
+  padding: 20px 0;
+  margin: 0;
 }
 
-.question-status-icon mat-icon.icon-empty {
-  color: #D1D5DB;
+/* ==========================================================================
+   COLONNE DE DROITE : FORMULAIRE DE RÉPONSE CONTEXTUEL
+   ========================================================================== */
+.response-form-container {
+  display: flex;
+  flex-direction: column;
 }
 
-/* PANNEAU DE COMPLÉTION DROIT */
+.form-eyebrow {
+  display: inline-block;
+  padding: 4px 8px;
+  background: #FEF3C7;
+  color: #D97706;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  align-self: flex-start;
+}
+
+.question-title-highlight {
+  font-size: 16px;
+  color: #1F2937;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 4px 0 20px 0;
+}
+
+/* Zone d'écriture textuelle */
+.textarea-wrapper {
+  display: flex;
+  align-items: flex-start;
+  padding: 14px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.textarea-wrapper:focus-within {
+  border-color: #059669;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.06);
+}
+
+.textarea-wrapper mat-icon {
+  color: #9CA3AF;
+  margin-right: 10px;
+  margin-top: 2px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.textarea-wrapper textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1F2937;
+  resize: none;
+  line-height: 1.5;
+}
+
+.form-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-cancel-reply {
+  color: #4B5563 !important;
+  font-weight: 600 !important;
+}
+
+.btn-submit-reply {
+  background-color: #059669 !important; /* Vert émeraude */
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  padding: 0 16px !important;
+  height: 40px !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+}
+
+/* ==========================================================================
+   PANNEAU DE GESTION PAR DÉFAUT (ÉTAPE COMMENCÉE / MENTOR)
+   ========================================================================== */
 .detail-header-block {
   display: flex;
   align-items: flex-start;
@@ -209,11 +316,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.step-badge-icon mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 .detail-titles h3 {
   margin: 0 0 2px;
-  font-size: 12px;
+  font-size: 11px;
   color: #9CA3AF;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -233,9 +347,9 @@
   line-height: 1.5;
 }
 
-/* COMMENTAIRE DU MENTOR */
+/* Boîte de révision mentor */
 .mentor-comment-box {
-  background: #FFFBF5;
+  background: #FFFBF5; /* Votre fond crème */
   border: 1px solid rgba(245, 158, 11, 0.2);
   border-radius: 14px;
   padding: 16px;
@@ -284,7 +398,7 @@
   font-weight: 500;
 }
 
-/* JAUGE ET ACTIONS ACCÈS */
+/* Jauge de complétion interactive */
 .progress-section {
   display: flex;
   flex-direction: column;
@@ -314,6 +428,7 @@
   height: 100%;
   background: #059669;
   border-radius: inherit;
+  transition: width 0.3s ease;
 }
 
 .btn-continue-action {
@@ -329,14 +444,15 @@
   box-shadow: 0 4px 14px rgba(5, 150, 105, 0.2);
 }
 
-/* ============================================================
-   ZONE BASSE DOCUMENT GÉNÉRÉ
-   ============================================================ */
+/* ==========================================================================
+   ZONE BASSE : TELECHARGEMENT DU LIVRABLE AUTOMATIQUE
+   ========================================================================== */
 .document-download-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  margin-top: 10px;
 }
 
 .doc-info-block {
@@ -348,12 +464,19 @@
 .doc-icon-box {
   width: 46px;
   height: 46px;
-  background: #FEF3C7;
-  color: #D97706;
+  background: #FEF3C7; /* Fond jaune clair */
+  color: #D97706; /* Icône ambre */
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.doc-icon-box mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 .doc-text-meta {
@@ -385,10 +508,34 @@
   font-weight: 600 !important;
   border-color: #059669 !important;
   color: #059669 !important;
+  padding: 0 20px !important;
 }
 
+/* ==========================================================================
+   RESPONSIVE DESIGN ADAPTATIF
+========================================================================== /
 @media (max-width: 950px) {
-  .main-parcours-grid {
-    grid-template-columns: 1fr;
-  }
+.main-parcours-grid {
+grid-template-columns: 1fr; / Bascule en une colonne sur tablette/mobile */
+
+
+@media (max-width: 640px) {
+.timeline-card {
+padding: 16px 20px;
+}
+.step-line {
+display: none; /* Masque les barres de jonction si l'écran est trop étroit */
+}
+.timeline-steps {
+flex-direction: column;
+align-items: flex-start;
+gap: 16px;
+}
+.document-download-card {
+flex-direction: column;
+align-items: stretch;
+}
+.btn-download-premium {
+width: 100%;
+}
 }
