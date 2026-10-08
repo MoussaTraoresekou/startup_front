@@ -77,6 +77,55 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'admin',
+    component: MainLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ADMIN' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then((m) => m.AdminDashboard),
+      },
+      {
+        path: 'projets',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'utilisateurs',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'mentors',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'evenements',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'formations',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'financements',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'actualites',
+        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+      },
+      {
+        path: 'profil',
+        loadComponent: () => import('./pages/profil/profil').then((m) => m.Profil),
+      },
+    ],
+  },
+  {
     path: '**',
     redirectTo: '',
   },

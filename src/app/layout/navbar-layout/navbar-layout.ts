@@ -22,6 +22,8 @@ import { AuthService } from '../../core/services/auth-service';
 export class NavbarLayout {
    authService = inject(AuthService);
   private router = inject(Router);
+  role=this.authService.getRole();
+
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

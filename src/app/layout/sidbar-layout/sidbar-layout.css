@@ -15,10 +15,8 @@
   height: 100%;
   padding: 24px 16px 20px;
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
-
   overflow: hidden;
 }
 
@@ -26,11 +24,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-
   padding: 0 4px 28px;
-
   flex-shrink: 0;
-
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 20px;
 }
@@ -38,20 +33,19 @@
 .brand-icon {
   width: 40px;
   height: 40px;
-
   border-radius: 10px;
   background: var(--secondary);
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
 }
 
-.brand-icon .material-icons {
+.brand-icon mat-icon {
   color: #ffffff;
   font-size: 22px;
+  width: 22px;
+  height: 22px;
 }
 
 .brand-text {
@@ -61,9 +55,7 @@
 
 .brand-text h1 {
   margin: 0;
-
   color: #ffffff;
-
   font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -71,24 +63,20 @@
 
 .brand-text span {
   display: block;
-
   margin-top: 2px;
-
   color: rgba(255, 255, 255, 0.7);
-
   font-size: 10px;
 }
 
 .sidebar-nav {
   flex: 1;
   min-height: 0;
-
   overflow-y: auto;
   overflow-x: hidden;
-
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-bottom: 16px;
 }
 
 .sidebar-nav::-webkit-scrollbar {
@@ -103,29 +91,24 @@
 .nav-item {
   width: 100%;
   height: 40px;
-
   padding: 0 12px;
-
   border-radius: 8px;
-
   display: flex;
   align-items: center;
   gap: 12px;
-
   color: rgba(255, 255, 255, 0.8);
-
   text-decoration: none;
-
   font-size: 13px;
   font-weight: 500;
-
   transition: all 0.15s ease;
-
   box-sizing: border-box;
+  cursor: pointer;
 }
 
-.nav-item .material-icons {
+.nav-item mat-icon {
   font-size: 20px;
+  width: 20px;
+  height: 20px;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -134,7 +117,7 @@
   color: #ffffff;
 }
 
-.nav-item:hover .material-icons {
+.nav-item:hover mat-icon {
   color: #ffffff;
 }
 
@@ -144,33 +127,120 @@
   font-weight: 600;
 }
 
-.nav-item.active .material-icons {
+.nav-item.active mat-icon {
   color: #ffffff;
 }
 
+/* ==========================================================================
+   BLOCK PROFIL UTILISATEUR & FOOTER (SIDEBAR-BOTTOM)
+   ========================================================================== */
 .sidebar-footer {
   flex-shrink: 0;
-
   margin-top: auto;
   padding: 16px 4px 0;
-
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
+.user-profile-widget {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px;
+}
+
+.user-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.user-profile-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.user-profile-meta strong {
+  font-size: 13px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-profile-meta span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-sidebar-logout {
+  width: 100%;
+  height: 38px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.btn-sidebar-logout:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.btn-sidebar-logout:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-sidebar-logout mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Zone d'attente / fallback si la session n'est pas chargée */
+.sidebar-fallback-footer {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.sidebar-footer .material-icons {
+.sidebar-fallback-footer mat-icon {
   color: var(--secondary);
   font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
-.sidebar-footer p {
+.sidebar-fallback-footer p {
   margin: 0;
-
   color: rgba(255, 255, 255, 0.6);
-
   font-size: 11px;
   line-height: 1.3;
 }

@@ -1,70 +1,131 @@
-<aside class="sidebar-inner">
+<aside class="sidebar">
+  
+  <!-- ENTÊTE DE LA SIDEBAR AVEC LE LOGO ENTRE360 -->
   <div class="sidebar-header">
     <div class="brand-icon">
-      <span class="material-icons">rocket_launch</span>
+      <mat-icon>rocket_launch</mat-icon>
     </div>
-
     <div class="brand-text">
       <h1>Entrepreneur360</h1>
       <span>Votre projet, étape par étape</span>
     </div>
   </div>
 
+  <!-- ZONE DE NAVIGATION INTERACTIVE DU MENU -->
   <nav class="sidebar-nav">
-    <!-- CORRECTION : Liens relatifs pour conserver automatiquement l'ID du projet actif -->
-    <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">dashboard</span>
-      <span>Tableau de bord</span>
-    </a>
+    
+    <!-- 1. VUE EXCLUSIVE : PROFILE ADMINISTRATEUR (Calqué au pixel près sur votre maquette verte) -->
+    @if (authService.getRole() === 'ADMIN') {
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Tableau de bord</span>
+      </a>
 
-    <a routerLink="parcours" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">route</span>
-      <span>Parcours du projet</span>
-    </a>
+      <a routerLink="/admin/projets" routerLinkActive="active" class="nav-item">
+        <mat-icon>business_center</mat-icon>
+        <span>Projets</span>
+      </a>
 
-    <a routerLink="mentor" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">support_agent</span>
-      <span>Mentors</span>
-    </a>
+      <a routerLink="/admin/utilisateurs" routerLinkActive="active" class="nav-item">
+        <mat-icon>people</mat-icon>
+        <span>Utilisateurs</span>
+      </a>
 
-    <a routerLink="equipe" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">groups</span>
-      <span>Équipe</span>
-    </a>
+      <a routerLink="/admin/mentors" routerLinkActive="active" class="nav-item">
+        <mat-icon>support_agent</mat-icon>
+        <span>Mentors / Formateurs</span>
+      </a>
 
-    <a routerLink="taches" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">task_alt</span>
-      <span>Tâches</span>
-    </a>
+      <a routerLink="/admin/evenements" routerLinkActive="active" class="nav-item">
+        <mat-icon>event</mat-icon>
+        <span>Événements</span>
+      </a>
 
-    <a routerLink="financement" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">account_balance_wallet</span>
-      <span>Financement</span>
-    </a>
+      <a routerLink="/admin/formations" routerLinkActive="active" class="nav-item">
+        <mat-icon>school</mat-icon>
+        <span>Formations</span>
+      </a>
 
-    <a routerLink="discussion" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">forum</span>
-      <span>Discussion</span>
-    </a>
+      <a routerLink="/admin/financements" routerLinkActive="active" class="nav-item">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Financements</span>
+      </a>
 
-    <a routerLink="formations" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">school</span>
-      <span>Formations</span>
-    </a>
+      <a routerLink="/admin/actualites" routerLinkActive="active" class="nav-item">
+        <mat-icon>newspaper</mat-icon>
+        <span>Actualités</span>
+      </a>
+    }
 
-    <a routerLink="actualites" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">newspaper</span>
-      <span>Actualités</span>
-    </a>
+    <!-- 2. VUE EXCLUSIVE : PORTAIL COLLABORATIF DU PORTEUR DE PROJET CONNECTÉ -->
+    @if (authService.getRole() === 'PORTEUR') {
+      <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Tableau de bord</span>
+      </a>
 
+      <a routerLink="parcours" routerLinkActive="active" class="nav-item">
+        <mat-icon>route</mat-icon>
+        <span>Parcours du projet</span>
+      </a>
+
+      <a routerLink="mentor" routerLinkActive="active" class="nav-item">
+        <mat-icon>support_agent</mat-icon>
+        <span>Mentors</span>
+      </a>
+
+      <a routerLink="equipe" routerLinkActive="active" class="nav-item">
+        <mat-icon>groups</mat-icon>
+        <span>Équipe</span>
+      </a>
+
+      <a routerLink="taches" routerLinkActive="active" class="nav-item">
+        <mat-icon>task_alt</mat-icon>
+        <span>Tâches</span>
+      </a>
+
+      <a routerLink="financement" routerLinkActive="active" class="nav-item">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <span>Financement</span>
+      </a>
+
+      <a routerLink="discussion" routerLinkActive="active" class="nav-item">
+        <mat-icon>forum</mat-icon>
+        <span>Discussion</span>
+      </a>
+
+      <a routerLink="formations" routerLinkActive="active" class="nav-item">
+        <mat-icon>school</mat-icon>
+        <span>Formations</span>
+      </a>
+
+      <a routerLink="actualites" routerLinkActive="active" class="nav-item">
+        <mat-icon>newspaper</mat-icon>
+        <span>Actualités</span>
+      </a>
+    }
+
+    <!-- LIEN DE PROFIL COMMUN AUX ROLES (Ajustable) -->
     <a routerLink="profil" routerLinkActive="active" class="nav-item">
-      <span class="material-icons">person</span>
-      <span>Profil</span>
+      <mat-icon>person</mat-icon>
+      <span>Mon Profil</span>
     </a>
+
   </nav>
 
-  <div class="sidebar-footer">
-    <span class="material-icons">lightbulb</span>
-    <p>Ensemble, faisons grandir vos idées !</p>
+  <!-- PIED DE LA BARRE : AFFICHAGE DU COMPTE ACTIF ET DÉCONNEXION -->
+  <div class="sidebar-footer-profile">
+    @if (authService.estConnecte()) {
+      <button type="button" class="btn-sidebar-logout" [disabled]="deconnexionEnCours" (click)="deconnexion()">
+        <mat-icon>logout</mat-icon>
+        <span>{{ deconnexionEnCours ? 'Sortie...' : 'Déconnexion' }}</span>
+      </button>
+    } @else {
+      <div class="sidebar-fallback-footer">
+        <mat-icon>lightbulb</mat-icon>
+        <p>Ensemble, faisons grandir vos idées !</p>
+      </div>
+    }
   </div>
+
 </aside>

@@ -11,7 +11,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AuthService } from '../../core/services/auth-service';
 import { LoginRequest } from '../../core/model/LoginRequest';
 import { NotificationService } from '../../core/services/notification-service';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -29,35 +28,36 @@ import { NotificationService } from '../../core/services/notification-service';
   styleUrl: './login-component.css' 
 })
 export class LoginComponent {
-  message=inject(NotificationService)
+  message = inject(NotificationService);
   loginForm: FormGroup;
   hidePassword = true;
   router = inject(Router);
-
-  private AuntService=inject(AuthService)
-
+  private AuntService = inject(AuthService);
   constructor(private fb: FormBuilder) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
   }
-
   onSubmit(): void {
     if (this.loginForm.valid) {
-        this.AuntService.login(this.loginForm.value as LoginRequest).subscribe(
-          {
-             next: (response) => {
-                  console.log(response)
-                  this.router.navigate(["/porteur/mes-projets",]);  
-        },
-        error: (error) => {
-          this.message.erreur("mot de passe ou email incorrect")
-          console.log(error);
-        },
+        this.AuntService.login(this.loginForm.value as LoginRequest).subscribe({
+          next: (response) => {
+            console.log(response);
+            const roleUtilisateur = this.AuntService.getRole();
+            if (roleUtilisateur === 'ADMIN') {
+              this.router.navigate(['/admin/dashboard']);
+            } else if (roleUtilisateur === 'PORTEUR') {
+              this.router.navigate(['/porteur/mes-projets']);
+            } else {
+              this.router.navigate(['/']);
+            }
+          },
+          error: (error) => {
+            this.message.erreur("Mot de passe ou email incorrect");
+            console.log(error);
           }
-
-        )
+        });
     }
   }
 }

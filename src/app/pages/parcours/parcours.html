@@ -2,138 +2,141 @@
     <header class="parcours-header">
         <div class="welcome-section">
             <h1>Parcours du projet – {{ nomProjet }}</h1>
-            <p>Suivez les 4 étapes et complétez ou modifiez les informations requises pour faire avancer votre projet.</p>
+            <p>Pilotez votre projet librement : sélectionnez n'importe quelle étape de la frise pour répondre au
+                questionnaire.</p>
         </div>
     </header>
 
-    <!-- 1. LA FRISE CHRONOLOGIQUE DES ÉTAPES (TIMELINE) -->
+    <!-- 1. LA FRISE CHRONOLOGIQUE -->
     <div class="timeline-card">
         <div class="timeline-steps">
             @for (etape of listeEtapes(); track etape.id; let last = $last) {
-                <div class="step-container" [class.active]="etapeSelectionnee()?.id === etape.id">
-                    <div class="step" (click)="CommencerEtapes(etape.id.toString(), etape.nom_etape, etape)">
-                        <div class="step-circle" [class.completed]="etape.statut === 'TERMINE' || etape.statut === 'Validé'" [class.current]="etape.statut === 'EN_COUR' || etape.statut === 'En cours'">
-                            <mat-icon>check</mat-icon>
-                        </div>
-                        <span class="step-label">{{ etape.nom_etape }}</span>
-                        <span class="step-status">
-                            {{ etape.statut || 'À venir' }}
-                        </span>
+            <div class="step-container" [class.active]="etapeSelectionnee()?.id === etape.id">
+                <div class="step" (click)="cliquerSurEtape(etape)">
+                    <div class="step-circle"
+                        [class.completed]="etape.StatutEtape === 'TERMINE' || etape.StatutEtape === 'Validé'"
+                        [class.current]="etape.StatutEtape === 'EN_COUR' || etape.StatutEtape === 'En cours'">
+                        <mat-icon>check</mat-icon>
                     </div>
+                    <span class="step-label">{{ etape.etape }}</span>
+                    <span class="step-status">
+                        {{ etape.StatutEtape || 'À commencer' }}
+                    </span>
                 </div>
+            </div>
 
-                @if (!last) {
-                    <div class="step-line" [class.active]="etape.statut === 'TERMINE' || etape.statut === 'Validé'"></div>
-                }
+            @if (!last) {
+            <div class="step-line" [class.active]="etape.StatutEtape === 'TERMINE' || etape.StatutEtape === 'Validé'">
+            </div>
+            }
             }
         </div>
     </div>
 
-    <!-- 2. PANNEAU CENTRAL DE COMPLÉTION -->
     <div class="main-parcours-grid">
-        
-        <!-- COMPOSANT QUESTIONS (COLONNE GAUCHE) -->
+
+        <!-- MODULE DES QUESTIONS (GAUCHE) -->
         <div class="card questions-card">
-            <h3>Questions de l'étape</h3>
+            <h3>Questions de l'étape : {{ etapeSelectionnee()?.etape }}</h3>
             <div class="questions-list">
                 @for (question of listeQuestions(); track question.id) {
-                    <div class="question-item" 
-                         [class.selected]="questionSelectionnee()?.id === question.id" 
-                         (click)="ouvrirLectureQuestion(question)">
-                        <span class="question-text">{{ question.libelle }}</span>
-                        
-                        <div class="question-actions-right">
-                            @if (question.reposonse_donnee) {
-                                <button mat-icon-button class="btn-pencil-edit" title="Modifier la réponse"
-                                        (click)="$event.stopPropagation(); activerModeEdition(question)">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                                <!-- Le petit rond passe au vert coché dynamiquement 🟢 -->
-                                <mat-icon class="icon-valid" style="color: #059669;">check_circle</mat-icon>
-                            } @else {
-                                <mat-icon class="icon-empty" style="color: #D1D5DB;" (click)="$event.stopPropagation(); activerModeEdition(question)">
-                                    radio_button_unchecked
-                                </mat-icon>
-                            }
-                        </div>
+                <!-- 🚀 CHANGEMENT : Le clic sur toute la ligne ouvre DIRECTEMENT le formulaire d'écriture -->
+                <div class="question-item" [class.selected]="questionSelectionnee()?.id === question.id"
+                    (click)="ouvrirFormulaireSaisieDirecte(question)">
+                    <span class="question-text">{{ question.libelle }}</span>
+
+                    <div class="question-actions-right">
+                        @if (question.reponse_donnee) {
+                        <button mat-icon-button class="btn-pencil-edit" title="Modifier la réponse"
+                            (click)="$event.stopPropagation(); ouvrirFormulaireSaisieDirecte(question)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <mat-icon class="icon-valid" style="color: #059669;">check_circle</mat-icon>
+                        } @else {
+                        <mat-icon class="icon-empty" style="color: #D1D5DB;"
+                            (click)="$event.stopPropagation(); ouvrirFormulaireSaisieDirecte(question)">
+                            radio_button_unchecked
+                        </mat-icon>
+                        }
                     </div>
+                </div>
                 } @empty {
-                    <p class="empty-hint">Sélectionnez ou commencez une étape pour charger ses questions.</p>
+                <p class="empty-hint">Sélectionnez une étape sur la frise ci-dessus pour afficher son questionnaire.</p>
                 }
             </div>
         </div>
 
-        <!-- COMPOSANT DROIT : FORMULAIRE DE SAISIE / LECTURE -->
+        <!-- MODULE DE DROITE : S'ADAPTE SI UNE QUESTION EST ACTIVE -->
         <div class="card detail-card">
-            
-            @if (modeEditionActive && questionSelectionnee(); as questionActive) {
-                <!-- FORMULAIRE ÉDITABLE DÉCLENCHÉ POUR COMPLÉTER OU CORRIGER -->
-                <div class="response-form-container">
-                    <span class="form-eyebrow" [style.background]="reponseExistante ? '#E6F4EA' : '#FEF3C7'" [style.color]="reponseExistante ? '#059669' : '#D97706'">
-                        {{ reponseExistante ? 'MODIFICATION' : 'RÉPONSE REQUISE' }}
-                    </span>
-                    <h2 class="question-title-highlight">{{ questionActive.libelle }}</h2>
-                    
-                    <div class="textarea-wrapper">
-                        <mat-icon>edit</mat-icon>
-                        <textarea [(ngModel)]="texteReponse" placeholder="Rédigez ou corrigez votre réponse..." rows="5"></textarea>
-                    </div>
 
-                    <div class="form-actions-row">
-                        <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">Annuler</button>
-                        <button mat-flat-button class="btn-submit-reply" (click)="enregistrerReponse()">
-                            {{ reponseExistante ? 'Mettre à jour' : 'Enregistrer' }}
-                        </button>
-                    </div>
+            @if (questionSelectionnee(); as questionActive) {
+            <!-- 🚀 AFFICHAGE DU FORMULAIRE UNIQUE (Saisie initiale ou modification) -->
+            <div class="response-form-container">
+                <span class="form-eyebrow" [style.background]="reponseExistante ? '#E6F4EA' : '#FEF3C7'"
+                    [style.color]="reponseExistante ? '#059669' : '#D97706'">
+                    {{ reponseExistante ? 'MODIFICATION' : 'RÉPONSE REQUISE' }}
+                </span>
+                <h2 class="question-title-highlight">{{ questionActive.libelle }}</h2>
+
+                <div class="textarea-wrapper">
+                    <mat-icon>edit</mat-icon>
+                    <textarea [(ngModel)]="texteReponse"
+                        placeholder="Rédigez ou modifiez votre réponse ici de manière détaillée..." rows="5"></textarea>
                 </div>
-            } 
-            @else if (!modeEditionActive && questionSelectionnee(); as questionActive) {
-                <!-- ZONE DE LECTURE DU CONTENU SAISI -->
-                <div class="read-only-container">
-                    <span class="form-eyebrow" style="background: #E8F0FE; color: #1A73E8;">CONSULTATION</span>
-                    <h2 class="question-title-highlight">{{ questionActive.libelle }}</h2>
-                    
-                    <div class="display-response-box">
-                        <strong>Votre réponse enregistrée :</strong>
-                        <p>« {{ questionActive.reposonse_donnee || 'Aucune réponse rédigée pour le moment.' }} »</p>
-                    </div>
 
-                    <button mat-stroked-button class="btn-trigger-edit-from-view" style="color: #059669; border-color: #059669;" (click)="activerModeEdition(questionActive)">
-                        <mat-icon>edit</mat-icon> {{ questionActive.reposonse_donnee ? 'Modifier cette réponse' : 'Rédiger une réponse' }}
+                <div class="form-actions-row">
+                    <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">Annuler</button>
+                    <button mat-flat-button class="btn-submit-reply" (click)="enregistrerReponse()">
+                        {{ reponseExistante ? 'Mettre à jour' : 'Enregistrer' }}
                     </button>
                 </div>
+            </div>
             }
             @else {
-                <!-- AFFICHAGE PAR DÉFAUT SI AUCUNE SELECTION -->
-                <div class="detail-header-block">
-                    <div class="step-badge-icon"><mat-icon>assignment</mat-icon></div>
-                    <div class="detail-titles">
-                        <h3>Détail de l'étape</h3>
-                        <h2>{{ etapeSelectionnee()?.nom_etape || 'Sélectionnez une étape' }}</h2>
-                        <p>Cliquez sur une question de la liste pour lire votre soumission ou y apporter vos réponses.</p>
+            <!-- AFFICHAGE DES INSTRUCTIONS PAR DÉFAUT -->
+            <div class="detail-header-block">
+                <div class="step-badge-icon" style="background: rgba(5, 150, 105, 0.08); color: #059669;">
+                    <mat-icon>assignment</mat-icon></div>
+                <div class="detail-titles">
+                    <h3>Étape sélectionnée</h3>
+                    <h2>{{ etapeSelectionnee()?.etape }}</h2>
+                    <p>Cette étape est active. Cliquez simplement sur une question du volet de gauche pour ouvrir son
+                        champ de réponse.</p>
+                </div>
+            </div>
+
+            @if (etapeSelectionnee()?.commentaireMentor) {
+            <div class="mentor-comment-box" style="margin-top: 20px;">
+                <div class="mentor-profile">
+                    <div class="mentor-avatar"><mat-icon>person</mat-icon></div>
+                    <div class="mentor-meta">
+                        <strong>Observations de votre mentor</strong>
+                        <span>Instructions</span>
                     </div>
                 </div>
+                <p class="comment-text">« {{ etapeSelectionnee()?.commentaireMentor }} »</p>
+            </div>
+            }
             }
 
         </div>
 
     </div>
-
-    <!-- 3. ZONE BASSE : TÉLÉCHARGEMENT DU DOCUMENT GÉNÉRÉ -->
     <div class="card document-download-card">
         <div class="doc-info-block">
-            <div class="doc-icon-box">
-                <mat-icon>description</mat-icon>
-            </div>
+            <div class="doc-icon-box"><mat-icon>description</mat-icon></div>
             <div class="doc-text-meta">
-                <span class="label">Document généré</span>
+                <span class="label">Document d'accompagnement</span>
                 <strong>Fiche de formalisation (PDF)</strong>
-                <p>Mis à jour en temps réel selon vos corrections</p>
+                <p>Généré automatiquement dès la complétion du questionnaire</p>
             </div>
         </div>
-        <button mat-stroked-button class="btn-download-premium" style="color: #059669; border-color: #059669;">
+        <button mat-stroked-button class="btn-download-premium" style="color: #059669; border-color: #059669;" 
+                [disabled]="!etapeSelectionnee()?.id"
+                (click)="telechargerLeDocument()">
             Télécharger
         </button>
     </div>
+
 
 </div>

@@ -5,12 +5,17 @@ import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { EtapeService } from '../../core/services/etape/etape-service';
-import { EtapeResponseDto } from '../../core/model/EtapeResponseDto';
 import { ProjetEtapeService } from '../../core/services/ProjetEtape/projet-etape-service';
 import { projetEtapeRequestDto } from '../../core/model/projetEtapeRequestDto';
 import { NotificationService } from '../../core/services/notification-service';
 import { QuestionEtapeService } from '../../core/services/question_etape/question-etape-service';
 import { questionPourEtapeResponseDto } from '../../core/model/questionPourEtapeResponseDto';
+import { commencerEtapeReponseDto } from '../../core/model/commencerEtapeReponseDto';
+import { FichierService } from '../../core/services/fichier_telecharger/fichier-service';
+
+interface EtapeAffichageDto extends commencerEtapeReponseDto {
+  etapeId: number; // ID technique fixe (1, 2, 3...) pour charger les questions
+}
 
 @Component({
   selector: 'app-parcours',
@@ -26,88 +31,104 @@ import { questionPourEtapeResponseDto } from '../../core/model/questionPourEtape
 })
 export class Parcours implements OnInit {
   private route = inject(ActivatedRoute);
+  private telechargerFichier_service = inject(FichierService);
+
+  private etapeService = inject(EtapeService);
   private projetEtapeService = inject(ProjetEtapeService);
-  private etapeServive = inject(EtapeService);
   private questionEtapeService = inject(QuestionEtapeService);
   messageSnakBar = inject(NotificationService);
 
-  nomProjet: string = 'Waati Delivery';
+  nomProjet!: string ;
   projetId!: number;
   
-  listeEtapes = signal<EtapeResponseDto[]>([]);
+  listeEtapes = signal<EtapeAffichageDto[]>([]);
   listeQuestions = signal<questionPourEtapeResponseDto[]>([]);
   
-  etapeSelectionnee = signal<EtapeResponseDto | null>(null);
+  etapeSelectionnee = signal<EtapeAffichageDto | null>(null);
   questionSelectionnee = signal<questionPourEtapeResponseDto | null>(null);
   
   texteReponse: string = '';
   reponseExistante: boolean = false;
-  modeEditionActive: boolean = false;
 
   ngOnInit(): void {
     this.nomProjet = localStorage.getItem('activeProjetNom') || 'Waati Delivery';
     
-    // Extraction sécurisée de l'ID du projet parent depuis la route active
     const idParam = this.route.parent?.snapshot.paramMap.get('id');
     this.projetId = parseInt(idParam || '0', 10);
 
-    this.etapeServive.getAllEtapes().subscribe({
-      next: (donnees: EtapeResponseDto[]) => {
-        this.listeEtapes.set(donnees);
+    this.etapeService.getAllEtapes().subscribe({
+      next: (donnees) => {
+        const etapesInitialisees: EtapeAffichageDto[] = donnees.map(e => ({
+          id: 0,
+          etapeId: e.id,
+          etape: e.nom_etape,
+          StatutEtape: '', 
+          dateSoumission: '',
+          dateValidation: '',
+          commentaireMentor: '',
+          document_url: ''
+        }));
+
+        this.listeEtapes.set(etapesInitialisees);
         
-        if (donnees && donnees.length > 0) {
-          this.etapeSelectionnee.set(donnees[0]); 
-          this.chargerQuestionsDeLEtape(donnees[0].id.toString());
+        if (etapesInitialisees.length > 0) {
+          this.cliquerSurEtape(etapesInitialisees[0]);
         }
       },
-      error: (erreur) => {
-        console.error("Erreur lors de la récupération des étapes :", erreur);
-      }
+      error: (erreur) => console.error("Erreur d'acquisition des étapes :", erreur)
     });
   }
 
-  public CommencerEtapes(id: string, nom_etape: string, etapeObjet: EtapeResponseDto) {
+  public cliquerSurEtape(etapeObjet: EtapeAffichageDto): void {
     this.etapeSelectionnee.set(etapeObjet);
     this.annulerEdition();
 
+    if (!etapeObjet.StatutEtape) {
+      this.CommencerEtapes(etapeObjet.etapeId.toString(), etapeObjet.etape, etapeObjet);
+    } else {
+      this.chargerQuestionsDeLEtape(etapeObjet.etapeId.toString());
+    }
+  }
+
+  public CommencerEtapes(idFixe: string, nom_etape: string, etapeObjet: EtapeAffichageDto) {
     const projetEtapeRequest: projetEtapeRequestDto = {
-      projetId: localStorage.getItem("activeProjetId")!,
-      etape_id: id
+      projetId: this.projetId.toString(),
+      etape_id: idFixe
     };
 
     this.projetEtapeService.commcerEtape(projetEtapeRequest).subscribe({
-      next: () => {
-        this.messageSnakBar.succes("L'étape " + nom_etape + " a été commencée avec succès !");
-        this.chargerQuestionsDeLEtape(id);
+      next: (reponseFreshDto: commencerEtapeReponseDto) => {
+        this.messageSnakBar.succes("L'étape " + nom_etape + " est lancée !");
+        
+        const etapeMiseAJour: EtapeAffichageDto = {
+          ...reponseFreshDto,
+          etapeId: etapeObjet.etapeId 
+        };
+
+        this.etapeSelectionnee.set(etapeMiseAJour);
+
+        this.listeEtapes.update(etapes => 
+          etapes.map(e => e.etapeId === etapeObjet.etapeId ? etapeMiseAJour : e)
+        );
+
+        this.chargerQuestionsDeLEtape(idFixe);
       },
-      error: (erreur) => {
-        console.error("Erreur lors du démarrage de l'étape :", erreur);
-      }
+      error: (erreur) => console.error("Erreur lors du démarrage de l'étape :", erreur)
     });
   }
 
-  public ouvrirLectureQuestion(question: questionPourEtapeResponseDto): void {
-    this.modeEditionActive = false;
+  public ouvrirFormulaireSaisieDirecte(question: questionPourEtapeResponseDto): void {
     this.questionSelectionnee.set(question);
-  }
-
-  public activerModeEdition(question: questionPourEtapeResponseDto): void {
-    this.questionSelectionnee.set(question);
-    this.modeEditionActive = true;
-    
-    this.texteReponse = question.reposonse_donnee || '';
-    this.reponseExistante = !!question.reposonse_donnee;
+    this.texteReponse = question.reponse_donnee || '';
+    this.reponseExistante = !!question.reponse_donnee;
   }
 
   public annulerEdition(): void {
     this.questionSelectionnee.set(null);
-    this.modeEditionActive = false;
     this.texteReponse = '';
+    this.reponseExistante = false;
   }
 
-  /**
-   * Enregistre la réponse et coche instantanément le rond vert via l'URL d'API par PathVariable 🟢
-   */
   public enregistrerReponse(): void {
     if (!this.texteReponse.trim() || !this.questionSelectionnee() || !this.etapeSelectionnee()) {
       return;
@@ -116,17 +137,10 @@ export class Parcours implements OnInit {
     const questionActive = this.questionSelectionnee()!;
     const etapeActive = this.etapeSelectionnee()!;
 
-    // 1. MISE À JOUR VISUELLE LOCALE IMMEDIATE : Évite d'attendre la latence réseau pour passer au vert
     this.listeQuestions.update(questions => {
-      return questions.map(q => {
-        if (q.id === questionActive.id) {
-          return { ...q, reposonse_donnee: this.texteReponse };
-        }
-        return q;
-      });
+      return questions.map(q => q.id === questionActive.id ? { ...q, reposonse_donnee: this.texteReponse } : q);
     });
 
-    // 2. Envoi effectif vers la route exacte du serveur Spring Boot [1.6]
     this.questionEtapeService.sauvegarderReponseExacte(
       etapeActive.id, 
       questionActive.id, 
@@ -135,26 +149,45 @@ export class Parcours implements OnInit {
       next: () => {
         this.messageSnakBar.succes(this.reponseExistante ? "Modification enregistrée avec succès !" : "Réponse enregistrée avec succès !");
         this.annulerEdition();
-        
-        // 3. Synchronisation finale de contrôle avec votre base de données relationnelle
-        this.chargerQuestionsDeLEtape(etapeActive.id.toString());
+        this.chargerQuestionsDeLEtape(etapeActive.etapeId.toString());
       },
       error: (erreur) => {
-        console.error("Erreur d'enregistrement sur Spring Boot :", erreur);
+        console.error("Erreur de sauvegarde Spring Boot :", erreur);
         this.messageSnakBar.succes("Erreur lors de la sauvegarde sur le serveur.");
       }
     });
   }
 
-  private chargerQuestionsDeLEtape(etapeId: string): void {
-    // Appel d'acquisition couplant l'étape et le projet actif requis par le Repository [1.6]
-    this.questionEtapeService.getQuestionForEtapeDonnee(etapeId, this.projetId).subscribe({
-      next: (donnees) => {
-        this.listeQuestions.set(donnees);
+  private chargerQuestionsDeLEtape(idFixe: string): void {
+    this.questionEtapeService.getQuestionForEtapeDonnee(idFixe, this.projetId).subscribe({
+      next: (donnees) => this.listeQuestions.set(donnees),
+      error: (erreur) => console.error(erreur)
+    });
+  }
+    
+  public telechargerLeDocument(): void {
+    const etapeActive = this.etapeSelectionnee();
+    if (!etapeActive || !etapeActive.id) {
+      this.messageSnakBar.succes("Impossible de télécharger : l'étape n'est pas initialisée.");
+      return;
+    }
+    this.telechargerFichier_service.telechargerLivrableFichier(etapeActive.id).subscribe({
+      next: (blobBinaire: Blob) => {
+        const urlFichierEnMemoire = window.URL.createObjectURL(blobBinaire);
+                const lienInvisible = document.createElement('a');
+        lienInvisible.href = urlFichierEnMemoire;
+        lienInvisible.download = `Livrable_Projet_Etape_${etapeActive.id}.txt`;
+        document.body.appendChild(lienInvisible);
+        lienInvisible.click();
+                document.body.removeChild(lienInvisible);
+        window.URL.revokeObjectURL(urlFichierEnMemoire);
+        this.messageSnakBar.succes("Le livrable a été téléchargé avec succès !");
       },
       error: (erreur) => {
-        console.error("Erreur lors du chargement des questions :", erreur);
+        console.error("Échec du téléchargement du livrable :", erreur);
+        this.messageSnakBar.succes("Erreur : Assurez-vous de répondre à toutes les questions avant de télécharger.");
       }
     });
   }
+
 }
