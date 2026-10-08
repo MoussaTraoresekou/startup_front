@@ -1,0 +1,10 @@
+<div class="search-box">
+  <span class="search-icon">
+    <mat-icon>search</mat-icon>
+  </span>
+  <input #recherche
+    type="text"
+    placeholder="Rechercher un projet..."  
+    (input)="chercher(recherche.value)"
+  />
+</div>

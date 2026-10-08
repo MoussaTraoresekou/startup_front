@@ -1,0 +1,51 @@
+.filter-box {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 220px;
+}
+
+.filter-box select {
+  width: 100%;
+  height: 44px;
+  /* On laisse de l'espace à droite pour ne pas que le texte chevauche l'icône */
+  padding: 0 40px 0 14px; 
+  background-color: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--text-primary, #374151);
+  outline: none;
+  cursor: pointer;
+  
+  /* Supprime la flèche par défaut du navigateur */
+  appearance: none; 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Style et positionnement de la flèche Material Icon */
+.dropdown-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary, #9ca3af);
+  
+  /* Permet de cliquer à travers l'icône pour ouvrir le select normalement */
+  pointer-events: none; 
+  
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.filter-box select:focus {
+  border-color: var(--primary);
+}
+
+@media (max-width: 750px) {
+  .filter-box {
+    max-width: 100%;
+  }
+}

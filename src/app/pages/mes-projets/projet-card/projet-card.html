@@ -1,0 +1,59 @@
+<div class="project-card-container">
+    <div class="project-header-main">
+        <div class="project-mark">
+            {{ projet().titre.charAt(0) }}
+        </div>
+        <div class="project-info">
+            <h3>
+                {{ projet().titre }}
+            </h3>
+            <div class="project-meta">
+                <span class="sector">
+                    {{ projet().secteur }}
+                </span>
+                <span class="separator">•</span>
+                <span class="project-status">
+                    En cours
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="project-progress">
+        <div class="progress-top">
+            <span>Progression</span>
+            <strong>50%</strong>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-value" style="width: 50%;">
+            </div>
+        </div>
+    </div>
+    <div class="project-action">
+        <div class="icon-buttons-group">
+            <button mat-icon-button type="button" title="Visualiser"
+                (click)="$event.stopPropagation(); visualiser(projet().id)">
+                <mat-icon class="view-icon">
+                    visibility
+                </mat-icon>
+            </button>
+            <button mat-icon-button type="button" title="Modifier"
+                (click)="$event.stopPropagation(); modifier(projet().id)">
+                <mat-icon class="edit-icon">
+                    edit
+                </mat-icon>
+            </button>
+            <button mat-icon-button type="button" title="Supprimer"
+                (click)="$event.stopPropagation(); supprimerProjet(projet().id)">
+                <mat-icon class="delete-icon">
+                    delete
+                </mat-icon>
+            </button>
+        </div>
+        <button mat-stroked-button class="btn-open" type="button" (click)="ouvrirProjet(projet())">
+            Ouvrir
+            <mat-icon>
+                arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.project-card-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============================================================
+   IDENTITÉ (MARQUE + TITRE)
+   ============================================================ */
+
+.project-header-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0; /* Évite les débordements de texte */
+}
+
+.project-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.project-info {
+  min-width: 0;
+}
+
+.project-info h3 {
+  margin: 0 0 4px 0;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-info .sector {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* ============================================================
+   PROGRESSION BAR
+   ============================================================ */
+
+.project-progress {
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.progress-top span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.progress-top strong {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #eeeae2; /* Teinte douce adaptée à votre fond */
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.progress-value {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: inherit;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   BOUTONS D'ACTIONS
+   ============================================================ */
+
+.project-action {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.icon-buttons-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Couleurs ciblées pour vos icônes d'actions */
+.view-icon {
+  color: var(--text-secondary);
+}
+
+.edit-icon {
+  color: var(--secondary);
+}
+
+.delete-icon {
+  color: var(--error);
+}
+
+/* Style du bouton principal "Ouvrir" */
+.btn-open {
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-sm) !important;
+  height: 38px;
+  font-weight: 500;
+}
+
+.btn-open mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+}
+
+/* ============================================================
+   RESPONSIVE MODERNE
+   ============================================================ */
+
+@media (max-width: 900px) {
+  .project-card-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .project-progress {
+    width: 100%;
+  }
+
+  .project-action {
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+}
