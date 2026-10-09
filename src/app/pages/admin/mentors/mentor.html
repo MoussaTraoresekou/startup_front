@@ -1,0 +1,71 @@
+<div class="validation-page">
+  
+  <header class="validation-header">
+    <div class="welcome-section">
+      <h1>Validation des mentors / formateurs</h1>
+      <p>Gérez les inscriptions des experts et mentors en attente de validation pour l'accompagnement.</p>
+    </div>
+  </header>
+
+  <div class="filter-bar-layout">
+    <div class="filter-title">
+      <mat-icon>filter_list</mat-icon>
+      <span>Filtrer par statut</span>
+    </div>
+
+    <div class="chips-group">
+      <button class="chip-btn" [class.active]="filtreActif() === 'TOUS'" (click)="changerFiltre('TOUS')">
+         Tous <span class="badge">{{ totalTous() }}</span>
+      </button>
+      <button class="chip-btn" [class.active]="filtreActif() === 'EN_ATTENTE'" (click)="changerFiltre('EN_ATTENTE')">
+         En attente <span class="badge">{{ totalEnAttente() }}</span>
+      </button>
+      <button class="chip-btn" [class.active]="filtreActif() === 'ACCEPTEE'" (click)="changerFiltre('ACCEPTEE')">
+         Validés <span class="badge">{{ totalValides() }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLEAU EXCLUSIF PLEINE LARGEUR (PLUS DE CO-EXISTENCE LATERALE) -->
+  <div class="table-container-card">
+    <table class="premium-validation-table">
+      <thead>
+        <tr>
+          <th>Nom complet</th>
+          <th>Téléphone</th>
+          <th>Spécialité</th>
+          <th>Statut</th>
+          <th style="text-align: right; padding-right: 36px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (mentor of mentorsFilgres(); track mentor.id) {
+          <tr app-mentor-liste 
+              [mentor]="mentor"
+              (click)="selectionnerMentor(mentor)">
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="empty-table-fallback">
+              <mat-icon>person_search</mat-icon>
+              <p>Aucun mentor ne correspond au filtre sélectionné.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (mentorSelectionne()) {
+    <div class="modal-overlay" >
+      <div class="modal-card-center" (click)="$event.stopPropagation()">
+        <app-mentor-detail (mettreAjourOnclik)="chargerMentors()"
+          [mentor]="mentorSelectionne()!"
+          (fermerOnClic)="fermerModal()"
+          >   
+        </app-mentor-detail>
+      </div>
+    </div>
+  }
+
+</div>

@@ -1,0 +1,30 @@
+<td>
+    <span class="main-name">{{ mentor().nom }} {{ mentor().prenom }}</span>
+    <span class="sub-email">{{ mentor().email }}</span>
+</td>
+<td class="cell-phone">
+    {{ mentor().telephone }}
+</td>
+<td>
+    <span class="specialite-tag">Finance</span>
+</td>
+<td>
+    <span class="status-badge" [class]="mentor().statu">
+        {{ mentor().statu === 'EN_ATTENTE' ? 'En attente' : mentor().statu === 'ACCEPTEE' ? 'Validé' : 'Refusé' }}
+    </span>
+</td>
+<td class="cell-actions">
+    <div class="actions-wrapper">
+        <button mat-icon-button class="btn-view-details" title="Voir le dossier"
+            (click)="consulterDetails(mentor())">
+            <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-action-approve" title="Approuver" (click)="approuverMentor(mentor().id)">
+            <mat-icon>check</mat-icon>
+        </button>
+        <button mat-icon-button class="btn-action-reject" title="Refuser" (click)="rejeterMentor(mentor().id)">
+            <mat-icon>block</mat-icon>
+        </button>
+        
+    </div>
+</td>

@@ -1,7 +1,8 @@
 import { Component, inject, output, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { SecteurService } from '../../../core/services/secteur/secteur-service';
-import { SecteurReponse } from '../../../core/model/secteurReponse';
+import { SecteurService } from '../../../../core/services/secteur/secteur-service';
+import { SecteurReponse } from '../../../../core/model/secteurReponse';
+
 
 @Component({
   selector: 'app-filtre-secteur',

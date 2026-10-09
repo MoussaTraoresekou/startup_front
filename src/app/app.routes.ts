@@ -14,6 +14,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/login-component/login-component').then((m) => m.LoginComponent),
   },
+   {
+    path: 'auth/mentor_register',
+    loadComponent: () =>
+      import('./pages/mentors/mentor-register/mentor-register').then((m) => m.MentorRegister),
+  },
   {
     path: 'porteur',
     canActivate: [authGuard, roleGuard],
@@ -21,7 +26,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'mes-projets',
-        loadComponent: () => import('./pages/mes-projets/mes-projets').then((m) => m.MesProjets),
+        loadComponent: () => import('./pages/porteur/mes-projets/mes-projets').then((m) => m.MesProjets),
       },
       {
         path: 'projets/:id',
@@ -38,27 +43,24 @@ export const routes: Routes = [
           },
           {
             path: 'parcours',
-            loadComponent: () => import('./pages/parcours/parcours').then((m) => m.Parcours),
+            loadComponent: () => import('./pages/porteur/parcours/parcours').then((m) => m.Parcours),
           },
           {
             path: 'equipe',
-            loadComponent: () => import('./pages/equipe/equipe').then((m) => m.Equipe),
+            loadComponent: () => import('./pages/porteur/equipe/equipe').then((m) => m.Equipe),
           },
-          {
-            path: 'mentor',
-            loadComponent: () => import('./pages/mentor/mentor').then((m) => m.Mentor),
-          },
+          
           {
             path: 'financement',
             loadComponent: () => import('./pages/financement/financement').then((m) => m.Financement),
           },
           {
             path: 'taches',
-            loadComponent: () => import('./pages/taches/taches').then((m) => m.Taches),
+            loadComponent: () => import('./pages/porteur/taches/taches').then((m) => m.Taches),
           },
           {
             path: 'discussion',
-            loadComponent: () => import('./pages/discussion/discussion').then((m) => m.Discussion),
+            loadComponent: () => import('./pages/porteur/discussion/discussion').then((m) => m.Discussion),
           },
           {
             path: 'actualites',
@@ -70,7 +72,7 @@ export const routes: Routes = [
           },
           {
             path: 'profil',
-            loadComponent: () => import('./pages/profil/profil').then((m) => m.Profil),
+            loadComponent: () => import('./pages/porteur/profil/profil').then((m) => m.Profil),
           },
         ],
       },
@@ -101,7 +103,7 @@ export const routes: Routes = [
       },
       {
         path: 'mentors',
-        loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+        loadComponent: () => import('./pages/admin/mentors/mentor').then((m) => m.Mentor),
       },
       {
         path: 'evenements',
@@ -121,7 +123,7 @@ export const routes: Routes = [
       },
       {
         path: 'profil',
-        loadComponent: () => import('./pages/profil/profil').then((m) => m.Profil),
+        loadComponent: () => import('./pages/porteur/profil/profil').then((m) => m.Profil),
       },
     ],
   },

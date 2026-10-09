@@ -4,14 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { EtapeService } from '../../core/services/etape/etape-service';
-import { ProjetEtapeService } from '../../core/services/ProjetEtape/projet-etape-service';
-import { projetEtapeRequestDto } from '../../core/model/projetEtapeRequestDto';
-import { NotificationService } from '../../core/services/notification-service';
-import { QuestionEtapeService } from '../../core/services/question_etape/question-etape-service';
-import { questionPourEtapeResponseDto } from '../../core/model/questionPourEtapeResponseDto';
-import { commencerEtapeReponseDto } from '../../core/model/commencerEtapeReponseDto';
-import { FichierService } from '../../core/services/fichier_telecharger/fichier-service';
+import { commencerEtapeReponseDto } from '../../../core/model/commencerEtapeReponseDto';
+import { FichierService } from '../../../core/services/fichier_telecharger/fichier-service';
+import { EtapeService } from '../../../core/services/etape/etape-service';
+import { ProjetEtapeService } from '../../../core/services/ProjetEtape/projet-etape-service';
+import { QuestionEtapeService } from '../../../core/services/question_etape/question-etape-service';
+import { NotificationService } from '../../../core/services/notification-service';
+import { questionPourEtapeResponseDto } from '../../../core/model/questionPourEtapeResponseDto';
+import { projetEtapeRequestDto } from '../../../core/model/projetEtapeRequestDto';
+
 
 interface EtapeAffichageDto extends commencerEtapeReponseDto {
   etapeId: number; // ID technique fixe (1, 2, 3...) pour charger les questions

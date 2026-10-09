@@ -1,11 +1,12 @@
 <div class="landing-page">
+  
   <!-- BARRE DE NAVIGATION HAUTE -->
   <header class="landing-navbar">
     <div class="nav-container">
       <div class="brand-logo" routerLink="/">
-        <mat-icon class="brand-icon">stars</mat-icon>
+        <mat-icon class="brand-icon">rocket_launch</mat-icon>
         <div class="brand-text">
-          <span class="title">Entrepreneur360</span>
+          <span class="title">Entrepreneur<span>360</span></span>
           <span class="subtitle">Votre projet, étape par étape</span>
         </div>
       </div>
@@ -14,7 +15,7 @@
         <a mat-button routerLink="/auth/login" class="btn-login">
           <mat-icon>login</mat-icon> Se connecter
         </a>
-        <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-signup">
+        <a mat-flat-button color="primary" routerLink="/auth/register" class="btn-signup">
           Créer un compte
         </a>
       </div>
@@ -33,10 +34,10 @@
       </p>
 
       <div class="hero-buttons">
-        <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-hero-primary">
+        <a mat-flat-button color="primary" routerLink="/auth/register" class="btn-hero-primary">
           Commencer mon parcours <mat-icon>arrow_forward</mat-icon>
         </a>
-        <a mat-stroke-button color="primary" routerLink="/auth/login" class="btn-hero-secondary">
+        <a mat-stroked-button color="primary" routerLink="/auth/login" class="btn-hero-secondary">
           Espace membre
         </a>
       </div>
@@ -51,11 +52,13 @@
     </div>
 
     <div class="workflow-grid">
-      <div class="workflow-card" *ngFor="let step of workflowSteps; let last = last">
-        <div class="step-badge">{{ step.number }}</div>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.desc }}</p>
-      </div>
+      @for (step of workflowSteps; track step.number) {
+        <div class="workflow-card">
+          <div class="step-badge">{{ step.number }}</div>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.desc }}</p>
+        </div>
+      }
     </div>
   </section>
 
@@ -67,14 +70,36 @@
     </div>
 
     <div class="profiles-grid">
-      <div class="profile-card" *ngFor="let profile of userProfiles">
-        <div class="profile-icon">
-          <mat-icon>{{ profile.icon }}</mat-icon>
+      <div class="profile-card">
+        <div class="profile-icon" style="background: var(--primary-light); color: var(--primary-dark);">
+          <mat-icon>lightbulb</mat-icon>
         </div>
-        <h3>{{ profile.title }}</h3>
-        <p>{{ profile.description }}</p>
-        <a mat-flat-button color="primary" [routerLink]="profile.link" class="btn-profile">
-          {{ profile.actionText }}
+        <h3>Porteur de Projet</h3>
+        <p>Vous avez une idée ou une startup en cours de création et vous souhaitez être accompagné de A à Z.</p>
+        <a mat-flat-button color="primary" routerLink="/auth/register" class="btn-profile">
+          Créer mon profil
+        </a>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-icon" style="background: var(--secondary-light); color: var(--secondary-dark);">
+          <mat-icon>school</mat-icon>
+        </div>
+        <h3>Mentor / Formateur</h3>
+        <p>Partagez votre expertise, validez les livrables d'étapes et coachez la nouvelle génération d'entrepreneurs.</p>
+        <a mat-flat-button color="primary" routerLink="/auth/mentor_register" class="btn-profile" style="background-color: var(--secondary); color: white;">
+          Devenir Mentor
+        </a>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-icon" style="background: #FCE7F3; color: #EC4899;">
+          <mat-icon>monetization_on</mat-icon>
+        </div>
+        <h3>Partenaire Financier</h3>
+        <p>Accédez à un catalogue de projets qualifiés, analysez les fiches de formalisation et financez l'innovation.</p>
+        <a mat-flat-button color="primary" routerLink="/auth/register" class="btn-profile">
+          Nous rejoindre
         </a>
       </div>
     </div>
@@ -85,21 +110,21 @@
     <div class="cta-box">
       <h2>Prêt à propulser votre entreprise ?</h2>
       <p>Inscrivez-vous dès aujourd'hui pour structurer votre dossier et accéder aux mentors et investisseurs.</p>
-      <a mat-flat-button color="tertiary" routerLink="/auth/register" class="btn-cta">
+      <a mat-flat-button color="primary" routerLink="/auth/register" class="btn-cta" style="height: 48px; font-weight: 600; border-radius: var(--radius-sm);">
         Créer mon compte gratuitement
       </a>
     </div>
   </section>
 
   <!-- PIED DE PAGE -->
-  <footer class="landing-footer">
+  <footer class="landing-footer" style="margin-top: 40px; padding: 24px; border-top: 1px solid var(--border); text-align: center;">
     <div class="footer-container">
-      <div class="footer-brand">
+      <div class="footer-brand" style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
         <div class="brand-logo">
-          <mat-icon class="brand-icon">stars</mat-icon>
-          <span class="title">Entrepreneur360</span>
+          <mat-icon class="brand-icon" style="color: var(--primary);">rocket_launch</mat-icon>
+          <span class="title" style="color: var(--text-primary); font-weight: 700;">Entrepreneur<span style="color: var(--primary);">360</span></span>
         </div>
-        <p>© 2026 Entrepreneur360. Tous droits réservés.</p>
+        <p style="color: var(--text-secondary); font-size: 12px; margin: 0;">© 2026 Entrepreneur360. Tous droits réservés.</p>
       </div>
     </div>
   </footer>

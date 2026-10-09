@@ -1,92 +1,53 @@
-/* ==========================================================================
-   LANDING PAGE — ENTREPRENEUR360
-   Le thème Angular Material est défini dans material-theme.scss.
-   Les couleurs globales sont définies dans styles.css.
-   Ce fichier gère le layout, les espacements et la décoration.
-   ========================================================================== */
-
 :host {
   display: block;
   min-height: 100vh;
 }
 
-
-/* ==========================================================================
-   PAGE
-   ========================================================================== */
-
 .landing-page {
   min-height: 100vh;
-
   display: flex;
   flex-direction: column;
-
   background: var(--background);
   color: var(--text-primary);
 }
-
-
-/* ==========================================================================
-   NAVBAR
-   ========================================================================== */
 
 .landing-navbar {
   position: sticky;
   top: 0;
   z-index: 1000;
-
   background: rgba(255, 251, 245, 0.92);
-
   backdrop-filter: blur(12px);
-
-  border-bottom: 1px solid rgba(31, 41, 55, 0.08);
+  border-bottom: 1px solid var(--border);
 }
 
 .nav-container {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto;
-
   padding: 14px 24px;
-
   box-sizing: border-box;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-
-/* ==========================================================================
-   BRAND
-   ========================================================================== */
-
 .brand-logo {
   display: flex;
   align-items: center;
-
   gap: 10px;
-
   cursor: pointer;
-
   text-decoration: none;
 }
 
 .brand-icon {
   width: 38px !important;
   height: 38px !important;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 10px;
-
+  border-radius: var(--radius-sm);
   background: var(--primary);
-
-  color: #ffffff;
-
+  color: var(--surface);
   font-size: 21px !important;
 }
 
@@ -97,13 +58,9 @@
 
 .brand-text .title {
   color: var(--text-primary);
-
   font-size: 18px;
-
   line-height: 1.1;
-
   font-weight: 700;
-
   letter-spacing: -0.4px;
 }
 
@@ -113,29 +70,19 @@
 
 .brand-text .subtitle {
   margin-top: 3px;
-
   color: var(--text-secondary);
-
   font-size: 9px;
-
   line-height: 1;
 }
-
-
-/* ==========================================================================
-   NAVIGATION
-   ========================================================================== */
 
 .nav-actions {
   display: flex;
   align-items: center;
-
   gap: 10px;
 }
 
 .nav-actions .btn-login {
-  border-radius: 8px;
-
+  border-radius: var(--radius-sm);
   font-weight: 600;
 }
 
@@ -144,21 +91,13 @@
 }
 
 .nav-actions .btn-signup {
-  border-radius: 9px;
-
+  border-radius: var(--radius-sm);
   font-weight: 600;
 }
 
-
-/* ==========================================================================
-   HERO
-   ========================================================================== */
-
 .hero-section {
   padding: 90px 24px 80px;
-
   text-align: center;
-
   background:
     radial-gradient(
       circle at 50% 0%,
@@ -170,57 +109,35 @@
 .hero-content {
   width: 100%;
   max-width: 820px;
-
   margin: 0 auto;
 }
-
-
-/* Badge */
 
 .badge-hero {
   display: inline-flex;
   align-items: center;
-
   gap: 7px;
-
   margin-bottom: 24px;
-
   padding: 7px 14px;
-
   border-radius: 999px;
-
   background: var(--secondary-light);
-
   color: var(--primary-dark);
-
   font-size: 12px;
-
   font-weight: 600;
 }
 
 .badge-hero mat-icon {
   width: 17px !important;
   height: 17px !important;
-
   font-size: 17px !important;
 }
 
-
-/* Titre */
-
 .hero-content h1 {
   max-width: 800px;
-
   margin: 0 auto 20px;
-
   color: var(--text-primary);
-
   font-size: clamp(40px, 5vw, 60px);
-
   line-height: 1.08;
-
   font-weight: 700;
-
   letter-spacing: -2.5px;
 }
 
@@ -228,82 +145,50 @@
   color: var(--primary);
 }
 
-
-/* Description */
-
 .hero-description {
   max-width: 650px;
-
   margin: 0 auto 32px;
-
   color: var(--text-secondary);
-
   font-size: 16px;
-
   line-height: 1.7;
 }
-
-
-/* Boutons */
 
 .hero-buttons {
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 12px;
-
   flex-wrap: wrap;
 }
 
 .btn-hero-primary {
   min-height: 48px;
-
   padding: 0 22px;
-
-  border-radius: 9px;
-
+  border-radius: var(--radius-sm);
   font-size: 14px;
-
   font-weight: 600;
 }
 
 .btn-hero-secondary {
   min-height: 48px;
-
   padding: 0 22px;
-
-  border-radius: 9px;
-
+  border-radius: var(--radius-sm);
   font-size: 14px;
-
   font-weight: 600;
 }
 
-
-/* ==========================================================================
-   HEADERS DES SECTIONS
-   ========================================================================== */
-
 .section-title {
   max-width: 650px;
-
   margin: 0 auto 48px;
-
   text-align: center;
 }
 
 .section-title h2 {
   margin: 0 0 10px;
-
   color: var(--text-primary);
-
   font-size: 32px;
-
   line-height: 1.2;
-
   font-weight: 700;
-
   letter-spacing: -1px;
 }
 
@@ -313,51 +198,32 @@
 
 .section-title p {
   margin: 0;
-
   color: var(--text-secondary);
-
   font-size: 14px;
-
   line-height: 1.7;
 }
-
-
-/* ==========================================================================
-   WORKFLOW
-   ========================================================================== */
 
 .workflow-section {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto;
-
   padding: 90px 24px;
-
   box-sizing: border-box;
 }
 
 .workflow-grid {
   display: grid;
-
   grid-template-columns: repeat(4, 1fr);
-
   gap: 18px;
 }
 
 .workflow-card {
   min-height: 190px;
-
   box-sizing: border-box;
-
   padding: 24px;
-
   background: var(--surface);
-
-  border: 1px solid rgba(31, 41, 55, 0.08);
-
-  border-radius: 16px;
-
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -365,73 +231,48 @@
 
 .workflow-card:hover {
   transform: translateY(-3px);
-
-  box-shadow:
-    0 12px 30px rgba(31, 41, 55, 0.07);
+  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.04);
 }
 
 .step-badge {
   width: 38px;
   height: 38px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 18px;
-
-  border-radius: 10px;
-
+  border-radius: var(--radius-sm);
   background: var(--secondary-light);
-
   color: var(--primary);
-
   font-size: 12px;
-
   font-weight: 700;
 }
 
 .workflow-card h3 {
   margin: 0 0 8px;
-
   color: var(--text-primary);
-
   font-size: 16px;
-
   font-weight: 600;
 }
 
 .workflow-card p {
   margin: 0;
-
   color: var(--text-secondary);
-
   font-size: 13px;
-
   line-height: 1.6;
 }
-
-
-/* ==========================================================================
-   PROFILS
-   ========================================================================== */
 
 .profiles-section {
   width: 100%;
   max-width: 1200px;
-
   margin: 0 auto;
-
   padding: 20px 24px 90px;
-
   box-sizing: border-box;
 }
 
 .profiles-grid {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
   gap: 20px;
 }
 
@@ -439,21 +280,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   min-height: 270px;
-
   padding: 30px 24px;
-
   box-sizing: border-box;
-
   text-align: center;
-
   background: var(--surface);
-
-  border: 1px solid rgba(31, 41, 55, 0.08);
-
-  border-radius: 18px;
-
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -461,303 +294,87 @@
 
 .profile-card:hover {
   transform: translateY(-3px);
-
-  box-shadow:
-    0 12px 30px rgba(31, 41, 55, 0.07);
+  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.04);
 }
 
 .profile-icon {
   width: 56px;
   height: 56px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   margin-bottom: 20px;
-
-  border-radius: 15px;
-
+  border-radius: var(--radius-sm);
   background: var(--secondary-light);
-
   color: var(--secondary-dark);
 }
 
 .profile-icon mat-icon {
   width: 27px !important;
   height: 27px !important;
-
   font-size: 27px !important;
 }
 
 .profile-card h3 {
   margin: 0 0 10px;
-
   color: var(--text-primary);
-
   font-size: 17px;
-
   font-weight: 600;
 }
 
 .profile-card p {
   flex: 1;
-
   margin: 0 0 22px;
-
   color: var(--text-secondary);
-
   font-size: 13px;
-
   line-height: 1.6;
 }
 
 .btn-profile {
   width: 100%;
-
   min-height: 44px;
-
-  border-radius: 9px;
-
+  border-radius: var(--radius-sm);
   font-weight: 600;
 }
-
-
-/* ==========================================================================
-   CALL TO ACTION
-   ========================================================================== */
 
 .cta-section {
   width: 100%;
   max-width: 1050px;
-
   margin: 0 auto;
-
   padding: 20px 24px 90px;
-
   box-sizing: border-box;
 }
 
 .cta-box {
   padding: 60px 32px;
-
   box-sizing: border-box;
-
   text-align: center;
-
-  border-radius: 22px;
-
-  background: var(--primary);
-
-  color: #ffffff;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
 }
 
-.cta-box h2 {
-  margin: 0 0 12px;
-
-  font-size: 32px;
-
-  line-height: 1.2;
-
-  font-weight: 700;
-
-  letter-spacing: -1px;
-}
-
-.cta-box p {
-  max-width: 580px;
-
-  margin: 0 auto 28px;
-
-  color: rgba(255, 255, 255, 0.86);
-
-  font-size: 14px;
-
-  line-height: 1.7;
-}
-
-.btn-cta {
-  min-height: 48px;
-
-  padding: 0 26px;
-
-  border-radius: 9px;
-
-  font-size: 14px;
-
-  font-weight: 600;
-}
-
-
-/* ==========================================================================
-   FOOTER
-   ========================================================================== */
-
-.landing-footer {
-  margin-top: auto;
-
-  padding: 24px;
-
-  border-top: 1px solid rgba(31, 41, 55, 0.08);
-}
-
-.footer-container {
-  width: 100%;
-  max-width: 1200px;
-
-  margin: 0 auto;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-brand {
-  display: flex;
-  align-items: center;
-
-  width: auto;
-}
-
-.footer-brand .brand-logo {
-  gap: 8px;
-}
-
-.footer-brand .brand-icon {
-  width: 30px !important;
-  height: 30px !important;
-
-  font-size: 17px !important;
-}
-
-.footer-brand .title {
-  color: var(--primary);
-
-  font-size: 14px;
-
-  font-weight: 700;
-}
-
-.landing-footer p {
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 11px;
-}
-
-
-/* ==========================================================================
-   RESPONSIVE — TABLETTE
-   ========================================================================== */
-
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .workflow-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
   .profiles-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .hero-section {
-    padding-top: 70px;
-  }
 }
 
-
-/* ==========================================================================
-   RESPONSIVE — MOBILE
-   ========================================================================== */
-
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+  .profiles-grid {
+    grid-template-columns: 1fr;
+  }
   .nav-container {
-    padding: 12px 16px;
+    padding: 14px 16px;
   }
-
-  .brand-text .subtitle {
-    display: none;
-  }
-
-  .nav-actions {
-    gap: 5px;
-  }
-
-  .nav-actions .btn-login {
-    min-width: auto;
-  }
-
-  .nav-actions .btn-login mat-icon {
-    margin: 0;
-  }
-
-  .nav-actions .btn-login span {
-    display: none;
-  }
-
   .hero-section {
-    padding: 60px 20px 70px;
-  }
-
-  .hero-content h1 {
-    font-size: 40px;
-
-    letter-spacing: -1.8px;
-  }
-
-  .hero-description {
-    font-size: 14px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-
-    width: 100%;
-  }
-
-  .btn-hero-primary,
-  .btn-hero-secondary {
-    width: 100%;
-  }
-
-  .workflow-section,
-  .profiles-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .workflow-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .profiles-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .section-title h2 {
-    font-size: 28px;
-  }
-
-  .cta-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .cta-box {
-    padding: 45px 22px;
-
-    border-radius: 18px;
-  }
-
-  .cta-box h2 {
-    font-size: 28px;
-  }
-
-  .footer-container {
-    flex-direction: column;
-
-    gap: 12px;
-
-    text-align: center;
+    padding: 60px 16px 60px;
   }
 }

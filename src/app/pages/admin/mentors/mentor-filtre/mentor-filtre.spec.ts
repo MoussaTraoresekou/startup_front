@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Mentor } from './mentor';
+import { MentorFiltre } from './mentor-filtre';
 
-describe('Mentor', () => {
-  let component: Mentor;
-  let fixture: ComponentFixture<Mentor>;
+describe('MentorFiltre', () => {
+  let component: MentorFiltre;
+  let fixture: ComponentFixture<MentorFiltre>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Mentor],
+      imports: [MentorFiltre],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Mentor);
+    fixture = TestBed.createComponent(MentorFiltre);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

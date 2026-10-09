@@ -1,7 +1,7 @@
 import { Component, inject, input, output } from '@angular/core';
-import { ProjetResponse } from '../../../core/model/ProjetResponse';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { ProjetResponse } from '../../../../core/model/ProjetResponse';
 
 @Component({
   selector: 'app-projet-card',

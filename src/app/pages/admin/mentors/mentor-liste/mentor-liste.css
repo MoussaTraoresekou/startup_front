@@ -1,0 +1,101 @@
+td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+.main-name {
+  display: block;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.sub-email {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.cell-phone {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.specialite-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--secondary-light);
+  color: var(--secondary-dark);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status-badge.EN_ATTENTE,
+.status-badge.en_attente {
+  background: var(--secondary-light);
+  color: var(--secondary-dark);
+}
+
+.status-badge.ACCEPTEE,
+.status-badge.acceptee,
+.status-badge.VALIDE,
+.status-badge.valide {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.status-badge.REFUSE,
+.status-badge.refuse {
+  background: #FEE2E2;
+  color: var(--error);
+}
+
+.cell-actions {
+  text-align: right;
+}
+
+.actions-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.actions-wrapper button {
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.actions-wrapper button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.btn-view-details { background: var(--secondary-light) !important; color: var(--secondary) !important; border: none; }
+.btn-action-approve { background: var(--primary) !important; color: var(--surface) !important; border: none; }
+.btn-action-reject { background: var(--error) !important; color: var(--surface) !important; border: none; }

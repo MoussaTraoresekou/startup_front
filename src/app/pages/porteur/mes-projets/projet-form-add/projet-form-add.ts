@@ -6,12 +6,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ProjetService } from '../../../core/services/projet-service';
-import { SupabaseService } from '../../../core/services/supabase/supabase-service';
-import { ProjetRequest } from '../../../core/model/ProjetRequest';
-import { SecteurReponse } from '../../../core/model/secteurReponse';
-import { SecteurService } from '../../../core/services/secteur/secteur-service';
-import { NotificationService } from '../../../core/services/notification-service';
+import { ProjetService } from '../../../../core/services/projet-service';
+import { SupabaseService } from '../../../../core/services/supabase/supabase-service';
+import { SecteurReponse } from '../../../../core/model/secteurReponse';
+import { SecteurService } from '../../../../core/services/secteur/secteur-service';
+import { NotificationService } from '../../../../core/services/notification-service';
+import { ProjetRequest } from '../../../../core/model/ProjetRequest';
+
 
 @Component({
   selector: 'app-projet-form-add',
