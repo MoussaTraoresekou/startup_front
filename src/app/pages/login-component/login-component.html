@@ -1,56 +1,63 @@
 <div class="login-container">
   <div class="login-card">
-        <div class="login-header">
+    
+    <!-- EN-TÊTE DU LOGO & TITRES -->
+    <div class="login-header">
       <a routerLink="/" class="brand-logo">
-        <mat-icon class="brand-icon">auto_awesome</mat-icon>
-        <span class="brand-title">Entrepreneur360</span>
+        <mat-icon class="brand-icon">rocket_launch</mat-icon>
+        <span class="brand-title">Entrepreneur<span>360</span></span>
       </a>
       <h1>Connexion</h1>
       <p>Accédez à votre espace de gestion</p>
     </div>
+
+    <!-- FORMULAIRE SÉCURISÉ -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       
-      <!-- Email -->
+      <!-- CHAMP EMAIL -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Adresse e-mail</mat-label>
         <input matInput type="email" formControlName="email" placeholder="nom@exemple.com" required>
         <mat-icon matPrefix>email</mat-icon>
-        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-          L'email est requis
-        </mat-error>
-        <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-          Format d'email invalide
-        </mat-error>
+        
+        @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+          <mat-error>L'email est requis</mat-error>
+        }
+        @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+          <mat-error>Format d'email invalide</mat-error>
+        }
       </mat-form-field>
 
-      <!-- Mot de passe -->
+      <!-- CHAMP MOT DE PASSE -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Mot de passe</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
         <mat-icon matPrefix>lock</mat-icon>
+        
         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
-        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-          Le mot de passe est requis
-        </mat-error>
+
+        @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+          <mat-error>Le mot de passe est requis</mat-error>
+        }
       </mat-form-field>
 
-      <!-- Options : Se souvenir de moi & Mot de passe oublié -->
+      <!-- GESTION DES OPTIONS SESSIONS -->
       <div class="form-options">
-        <mat-checkbox formControlName="rememberMe" class="remember-me" color="primary">
+        <mat-checkbox class="remember-me" color="primary">
           Se souvenir de moi
         </mat-checkbox>
         <a routerLink="/forgot-password" class="forgot-password">Mot de passe oublié ?</a>
       </div>
 
-      <!-- Bouton de Soumission -->
+      <!-- BOUTON DE SOUMISSION INTERACTIF -->
       <button mat-flat-button color="primary" type="submit" class="btn-submit" [disabled]="loginForm.invalid">
         Se connecter
       </button>
     </form>
 
-    <!-- Pied de carte -->
+    <!-- PIED DE CARTE (REDIRECTION NAVIGATION) -->
     <div class="login-footer">
       <span>Vous n'avez pas encore de compte ?</span>
       <a routerLink="/register">S'inscrire</a>

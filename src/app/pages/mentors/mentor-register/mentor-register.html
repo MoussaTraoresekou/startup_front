@@ -1,0 +1,166 @@
+<div class="login-container">
+  <div class="project-card">
+    
+    <div class="login-header">
+      <a routerLink="/" class="brand-logo">
+        <mat-icon class="brand-icon">rocket_launch</mat-icon>
+        <span class="brand-title">Entrepreneur<span>360</span></span>
+      </a>
+      <h1>Rejoindre l'incubateur</h1>
+      <p>Créez votre profil d'expert ou mentor d'accompagnement</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="project-form">
+      
+      <div class="form-row">
+        <div class="field-group">
+          <label for="prenom">Prénom <span>*</span></label>
+          <div class="input-wrapper">
+            <mat-icon>person</mat-icon>
+            <input id="prenom" type="text" formControlName="prenom" placeholder="Ex. Moussa" />
+          </div>
+          @if (registerForm.get("prenom")?.invalid && registerForm.get("prenom")?.touched) {
+            <small class="invalid-feedbacks">Le prénom est requis (2 caractères min.)</small>
+          }
+        </div>
+
+        <div class="field-group">
+          <label for="nom">Nom <span>*</span></label>
+          <div class="input-wrapper">
+            <mat-icon>badge</mat-icon>
+            <input id="nom" type="text" formControlName="nom" placeholder="Ex. Traoré" />
+          </div>
+          @if (registerForm.get("nom")?.invalid && registerForm.get("nom")?.touched) {
+            <small class="invalid-feedbacks">Le nom est requis (2 caractères min.)</small>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <label for="email">Adresse e-mail <span>*</span></label>
+          <div class="input-wrapper">
+            <mat-icon>email</mat-icon>
+            <input id="email" type="email" formControlName="email" placeholder="mentor@exemple.com" />
+          </div>
+          @if (registerForm.get("email")?.invalid && registerForm.get("email")?.touched) {
+            <small class="invalid-feedbacks">Un email valide est requis</small>
+          }
+        </div>
+
+        <div class="field-group">
+          <label for="telephone">Numéro de téléphone <span>*</span></label>
+          <div class="input-wrapper">
+            <mat-icon>phone</mat-icon>
+            <input id="telephone" type="tel" formControlName="telephone" placeholder="Ex. +223 66 59 45 81" />
+          </div>
+          @if (registerForm.get("telephone")?.invalid && registerForm.get("telephone")?.touched) {
+            <small class="invalid-feedbacks">Le numéro de téléphone est requis</small>
+          }
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="motDePass">Mot de passe <span>*</span></label>
+        <div class="input-wrapper">
+          <mat-icon>lock</mat-icon>
+          <input id="motDePass" [type]="hidePassword ? 'password' : 'text'" formControlName="motDePass" placeholder="Sécurisez votre compte..." />
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" class="toggle-password-btn">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </div>
+        @if (registerForm.get("motDePass")?.invalid && registerForm.get("motDePass")?.touched) {
+          <small class="invalid-feedbacks">Le mot de passe est requis (6 caractères min.)</small>
+        }
+      </div>
+
+      <!-- INTERFACE DÉPOT : CV -->
+      <div class="field-group">
+        <label>Curriculum Vitae (Format PDF requis) <span>*</span></label>
+        <input id="cvFile" type="file" accept=".pdf" class="hidden-file-input" [disabled]="chargementCV || chargement" (change)="onFileSelected($event, 'cvUrl')" />
+        <label for="cvFile" class="file-upload-zone" [class.has-file]="fichierCV">
+          <div class="upload-content">
+            <div class="upload-icon">
+              <mat-icon>{{ chargementCV ? 'hourglass_top' : (fichierCV ? 'description' : 'cloud_upload') }}</mat-icon>
+            </div>
+            <div class="upload-text">
+              @if (chargementCV) {
+                <span class="upload-title">Téléversement vers Supabase...</span>
+                <span class="upload-hint">Veuillez patienter</span>
+              } @else if (fichierCV) {
+                <span class="upload-title filename">{{ fichierCV.name }}</span>
+                <span class="upload-hint">Stocké avec succès • Remplacer</span>
+              } @else {
+                <span class="upload-title">Cliquez pour importer <span>votre CV</span></span>
+                <span class="upload-hint">Document PDF uniquement (max. 10MB)</span>
+              }
+            </div>
+          </div>
+          @if (fichierCV && !chargementCV && !chargement) {
+            <button type="button" class="remove-file-btn" aria-label="Supprimer le fichier" (click)="supprimerFichier($event, 'cvUrl')">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </label>
+        @if (registerForm.get("cvUrl")?.invalid && registerForm.get("cvUrl")?.touched && !chargementCV) {
+          <small class="invalid-feedbacks">Le dépôt de votre CV au format PDF est obligatoire</small>
+        }
+      </div>
+
+      <!-- INTERFACE DÉPOT : DIPLÔME -->
+      <div class="field-group">
+        <label>Diplôme le plus élevé (Format PDF requis) <span>*</span></label>
+        <input id="diplomeFile" type="file" accept=".pdf" class="hidden-file-input" [disabled]="chargementDiplome || chargement" (change)="onFileSelected($event, 'diplomeUrl')" />
+        <label for="diplomeFile" class="file-upload-zone" [class.has-file]="fichierDiplome">
+          <div class="upload-content">
+            <div class="upload-icon">
+              <mat-icon>{{ chargementDiplome ? 'hourglass_top' : (fichierDiplome ? 'school' : 'cloud_upload') }}</mat-icon>
+            </div>
+            <div class="upload-text">
+              @if (chargementDiplome) {
+                <span class="upload-title">Téléversement vers Supabase...</span>
+                <span class="upload-hint">Veuillez patienter</span>
+              } @else if (fichierDiplome) {
+                <span class="upload-title filename">{{ fichierDiplome.name }}</span>
+                <span class="upload-hint">Stocké avec succès • Remplacer</span>
+              } @else {
+                <span class="upload-title">Cliquez pour importer <span>votre Diplôme</span></span>
+                <span class="upload-hint">Document PDF uniquement (max. 10MB)</span>
+              }
+            </div>
+          </div>
+          @if (fichierDiplome && !chargementDiplome && !chargement) {
+            <button type="button" class="remove-file-btn" aria-label="Supprimer le fichier" (click)="supprimerFichier($event, 'diplomeUrl')">
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </label>
+        @if (registerForm.get("diplomeUrl")?.invalid && registerForm.get("diplomeUrl")?.touched && !chargementDiplome) {
+          <small class="invalid-feedbacks">Le dépôt de votre diplôme au format PDF est obligatoire</small>
+        }
+      </div>
+
+      <div class="field-group">
+        <label for="description">Description de vos expertises <span>*</span></label>
+        <div class="input-wrapper textarea-wrapper">
+          <mat-icon>rate_review</mat-icon>
+          <textarea id="description" formControlName="description" placeholder="Présentez brièvement vos expertises majeures d'accompagnement (Finance, Stratégie, Marketing...)" rows="3"></textarea>
+        </div>
+        @if (registerForm.get("description")?.invalid && registerForm.get("description")?.touched) {
+          <small class="invalid-feedbacks">La description est requise (10 caractères min.)</small>
+        }
+      </div>
+
+      <button mat-flat-button color="primary" type="submit" class="btn-submit" [disabled]="registerForm.invalid || chargement || chargementCV || chargementDiplome">
+        {{ chargement ? 'Création du compte en cours...' : 'Soumettre ma candidature' }}
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <span>Vous possédez déjà un compte ?</span>
+      <a routerLink="/auth/login">Se connecter</a>
+    </div>
+
+  </div>
+</div>

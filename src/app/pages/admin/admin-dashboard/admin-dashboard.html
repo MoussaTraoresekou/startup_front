@@ -1,0 +1,107 @@
+<div class="admin-dashboard">
+  
+  <!-- ENTÊTE DE BIENVENUE -->
+  <header class="dashboard-header">
+    <div class="welcome-block">
+      <h1>Tableau de bord de supervision</h1>
+      <p>Consultez l'état d'avancement des startups et gérez les validations de l'incubateur.</p>
+    </div>
+  </header>
+
+  <!-- GRILLE DES 4 CARTES KPI DU HAUT -->
+  <div class="kpi-grid">
+    @for (kpi of kpis(); track kpi.titre) {
+      <div class="card kpi-card">
+        <div class="kpi-content">
+          <span class="kpi-title">{{ kpi.titre }}</span>
+          <strong class="kpi-value">{{ kpi.valeur }}</strong>
+          <span class="kpi-badge" [class.positive]="kpi.estPositif" [class.negative]="!kpi.estPositif">
+            <mat-icon>{{ kpi.estPositif ? 'trending_up' : 'trending_down' }}</mat-icon>
+            {{ kpi.evolution }}
+          </span>
+        </div>
+        <div class="kpi-icon-box" [class]="kpi.couleurClasse">
+          <mat-icon>{{ kpi.icone }}</mat-icon>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- PANNEAU DES GRAPHIQUES ET ACTIONS -->
+  <div class="dashboard-center-grid">
+    
+    <!-- BLOC GAUCHE : REPARTITION DES PROJETS -->
+    <div class="card chart-card">
+      <div class="card-header-flex">
+        <h3>Répartition des projets par étape</h3>
+        <span class="sub-label">Statistiques globales</span>
+      </div>
+
+      <div class="chart-container-layout">
+        <!-- Donut Chart simulé en CSS pur avec les cercles superposés -->
+        <div class="donut-chart-simulation">
+          <div class="donut-center">
+            <strong>124</strong>
+            <span>Startups</span>
+          </div>
+        </div>
+
+        <!-- LEGENDE ET POURCENTAGES -->
+        <div class="chart-legend-list">
+          @for (item of repartitionProjets(); track item.etape) {
+            <div class="legend-item">
+              <div class="legend-left">
+                <span class="color-dot" [style.background-color]="item.couleurHex"></span>
+                <span class="legend-name">{{ item.etape }}</span>
+              </div>
+              <div class="legend-right">
+                <strong>{{ item.quantite }}</strong>
+                <span class="percentage">({{ item.pourcentage }}%)</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOC DROIT : LES DEMANDES EN ATTENTE DE VALIDATION -->
+    <div class="card requests-card">
+      <div class="card-header-flex">
+        <h3>Demandes en attente de validation</h3>
+        <span class="badge-count">{{ demandesValidation().length }} urgentes</span>
+      </div>
+
+      <div class="requests-list">
+        @for (demande of demandesValidation(); track demande.id) {
+          <div class="request-item">
+            <div class="request-user-info">
+              <div class="user-avatar-placeholder">
+                <mat-icon>person</mat-icon>
+              </div>
+              <div class="user-meta-text">
+                <strong>{{ demande.nomComplet }}</strong>
+                <span>{{ demande.roleDemande }} • <small>{{ demande.dateDemande }}</small></span>
+              </div>
+            </div>
+            
+            <div class="request-actions">
+              <button mat-icon-button class="btn-action-refuse" title="Refuser" (click)="rejeterDemande(demande.id, demande.nomComplet)">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button class="btn-action-accept" title="Approuver" (click)="approuverDemande(demande.id, demande.nomComplet)">
+                <mat-icon>check</mat-icon>
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-requests-fallback">
+            <mat-icon>verified_user</mat-icon>
+            <p>Aucune demande d'inscription en attente. Tout est à jour !</p>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -12,7 +12,16 @@ export const routes: Routes = [
   {
     path: 'auth/login',
     loadComponent: () =>
-      import('./pages/login-component/login-component').then((m) => m.LoginComponent),
+      import('./pages/login-component/login-component').then(
+        (m) => m.LoginComponent
+      ),
+  },
+  {
+    path: 'auth/mentor_register',
+    loadComponent: () =>
+      import('./pages/mentors/mentor-register/mentor-register').then(
+        (m) => m.MentorRegister
+      ),
   },
   {
     path: 'porteur',
@@ -21,7 +30,10 @@ export const routes: Routes = [
     children: [
       {
         path: 'mes-projets',
-        loadComponent: () => import('./pages/mes-projets/mes-projets').then((m) => m.MesProjets),
+        loadComponent: () =>
+          import('./pages/porteur/mes-projets/mes-projets').then(
+            (m) => m.MesProjets
+          ),
       },
       {
         path: 'projets/:id',
@@ -34,45 +46,227 @@ export const routes: Routes = [
           },
           {
             path: 'dashboard',
-            loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
+            loadComponent: () =>
+              import('./pages/dashboard/dashboard').then(
+                (m) => m.Dashboard
+              ),
           },
           {
             path: 'parcours',
-            loadComponent: () => import('./pages/parcours/parcours').then((m) => m.Parcours),
+            loadComponent: () =>
+              import('./pages/porteur/parcours/parcours').then(
+                (m) => m.Parcours
+              ),
           },
           {
             path: 'equipe',
-            loadComponent: () => import('./pages/equipe/equipe').then((m) => m.Equipe),
+            loadComponent: () =>
+              import('./pages/porteur/equipe/equipe').then(
+                (m) => m.Equipe
+              ),
           },
           {
             path: 'mentor',
-            loadComponent: () => import('./pages/mentor/mentor').then((m) => m.Mentor),
+            loadComponent: () =>
+              import('./pages/porteur/mentor/mentor').then(
+                (m) => m.PorteurMentorsComponent
+              ),
           },
           {
             path: 'financement',
-            loadComponent: () => import('./pages/financement/financement').then((m) => m.Financement),
+            loadComponent: () =>
+              import('./pages/financement/financement').then(
+                (m) => m.Financement
+              ),
+          },
+          {
+            path: 'notifications',
+            loadComponent: () =>
+              import(
+                './pages/mentors/notifications/notifications-component/notifications-component'
+              ).then((m) => m.NotificationsComponent),
           },
           {
             path: 'taches',
-            loadComponent: () => import('./pages/taches/taches').then((m) => m.Taches),
+            loadComponent: () =>
+              import('./pages/porteur/taches/taches').then(
+                (m) => m.Taches
+              ),
           },
           {
             path: 'discussion',
-            loadComponent: () => import('./pages/discussion/discussion').then((m) => m.Discussion),
+            loadComponent: () =>
+              import('./pages/porteur/discussion/discussion').then(
+                (m) => m.Discussion
+              ),
           },
           {
             path: 'actualites',
-            loadComponent: () => import('./pages/actualites/actualites').then((m) => m.Actualites),
+            loadComponent: () =>
+              import('./pages/actualites/actualites').then(
+                (m) => m.Actualites
+              ),
           },
           {
             path: 'formations',
-            loadComponent: () => import('./pages/formations/formations').then((m) => m.Formations),
+            loadComponent: () =>
+              import('./pages/formations/formations').then(
+                (m) => m.Formations
+              ),
           },
           {
             path: 'profil',
-            loadComponent: () => import('./pages/profil/profil').then((m) => m.Profil),
+            loadComponent: () =>
+              import('./pages/porteur/profil/profil').then(
+                (m) => m.Profil
+              ),
           },
         ],
+      },
+    ],
+  },
+  {
+    path: 'mentor',
+    component: MainLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'MENTOR' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/mentors/mentor-dasboard/mentor-dasboard').then(
+            (m) => m.MentorDashboardComponent
+          ),
+      },
+      {
+        path: 'demandes',
+        loadComponent: () =>
+          import('./pages/mentors/mentor-demandes/mentor-demandes').then(
+            (m) => m.MentorDemandesComponent
+          ),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/mentors/notifications/notifications-component/notifications-component'
+          ).then((m) => m.NotificationsComponent),
+      },
+      {
+        path: 'projets',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'formations',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'actualites',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./pages/porteur/profil/profil').then(
+            (m) => m.Profil
+          ),
+      },
+    ],
+  },
+  {
+    path: 'admin',
+    component: MainLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'ADMIN' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/admin/admin-dashboard/admin-dashboard').then(
+            (m) => m.AdminDashboard
+          ),
+      },
+      {
+        path: 'projets',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'utilisateurs',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'mentors',
+        loadComponent: () =>
+          import('./pages/admin/mentors/mentor').then(
+            (m) => m.Mentor
+          ),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/mentors/notifications/notifications-component/notifications-component'
+          ).then((m) => m.NotificationsComponent),
+      },
+      {
+        path: 'evenements',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'formations',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'financements',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'actualites',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./pages/porteur/profil/profil').then(
+            (m) => m.Profil
+          ),
       },
     ],
   },

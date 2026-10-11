@@ -1,0 +1,276 @@
+<div class="mentor-requests-container">
+
+  <header class="page-header-widget">
+    <div class="title-meta">
+      <span class="page-eyebrow">ESPACE MENTOR</span>
+      <h1>Demandes d'accompagnement</h1>
+      <p>Consultez les projets et gérez vos décisions d'accompagnement.</p>
+    </div>
+  </header>
+
+  <section class="filter-bar-layout">
+    <div class="filter-title">
+      <h2>Mes demandes</h2>
+      <span class="total-count">{{ totalTous() }}</span>
+    </div>
+
+    <div class="chips-group">
+      <button
+        type="button"
+        class="chip-btn"
+        [class.active]="filtreActif() === 'TOUS'"
+        (click)="changerFiltre('TOUS')">
+        Toutes
+        <span class="badge">{{ totalTous() }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.active]="filtreActif() === 'EN_ATTENTE'"
+        (click)="changerFiltre('EN_ATTENTE')">
+        En attente
+        <span class="badge">{{ totalEnAttente() }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.active]="filtreActif() === 'ACCEPTEE'"
+        (click)="changerFiltre('ACCEPTEE')">
+        Acceptées
+        <span class="badge">{{ totalAcceptees() }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="chip-btn"
+        [class.active]="filtreActif() === 'REFUSEE'"
+        (click)="changerFiltre('REFUSEE')">
+        Refusées
+        <span class="badge">{{ totalRefusees() }}</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="requests-section">
+    <div class="requests-section-header">
+      <h2>
+        @switch (filtreActif()) {
+          @case ('TOUS') {
+            Toutes les demandes
+          }
+          @case ('EN_ATTENTE') {
+            Demandes en attente
+          }
+          @case ('ACCEPTEE') {
+            Demandes acceptées
+          }
+          @case ('REFUSEE') {
+            Demandes refusées
+          }
+        }
+      </h2>
+
+      <span class="requests-count">
+        {{ demandesFiltrees().length }}
+        demande{{ demandesFiltrees().length > 1 ? 's' : '' }}
+      </span>
+    </div>
+
+    @if (erreurChargement) {
+      <div class="empty-requests-fallback">
+        <div class="empty-icon-container">
+          <mat-icon>cloud_off</mat-icon>
+        </div>
+        <h3>Chargement impossible</h3>
+        <p>Une erreur est survenue lors du chargement des demandes.</p>
+        <button
+          type="button"
+          class="btn-action-view"
+          (click)="chargerDemandes()">
+          <mat-icon>refresh</mat-icon>
+          Réessayer
+        </button>
+      </div>
+    } @else if (demandesFiltrees().length > 0) {
+      <div class="requests-stack-layout">
+        @for (demande of demandesFiltrees(); track demande.id) {
+          <article class="request-interactive-card">
+
+            <div class="request-card-header">
+              <div class="project-avatar-icon">
+                <mat-icon>rocket_launch</mat-icon>
+              </div>
+
+              <div class="project-meta-text">
+                <h3>{{ demande.projetTitre }}</h3>
+                <p>
+                  <mat-icon>person_outline</mat-icon>
+                  {{ demande.porteurNom }}
+                </p>
+              </div>
+
+              <span
+                class="secteur-badge"
+                *ngIf="demande.secteur">
+                {{ demande.secteur }}
+              </span>
+            </div>
+
+            <div class="request-card-body">
+              <div class="message-quote-box">
+                <mat-icon>format_quote</mat-icon>
+                <p>
+                  {{ demande.messageInvitation || 'Aucun message fourni.' }}
+                </p>
+              </div>
+
+              <div class="date-row">
+                <mat-icon>calendar_today</mat-icon>
+                <span>
+                  Reçue le
+                  {{ demande.dateDemande | date:'dd/MM/yyyy' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="request-card-actions">
+              <button
+                type="button"
+                class="btn-action-view"
+                [disabled]="chargement"
+                (click)="chargerEtOuvrirProjet(demande.projetId)">
+                <mat-icon>visibility</mat-icon>
+                Consulter le projet
+              </button>
+
+              @if (demande.statut === 'EN_ATTENTE') {
+                <div class="decision-actions">
+                  <button
+                    type="button"
+                    class="btn-action-decline"
+                    [disabled]="chargement"
+                    (click)="refuserInvitation(demande.id, demande.projetTitre)">
+                    <mat-icon>close</mat-icon>
+                    Refuser
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn-action-accept"
+                    [disabled]="chargement"
+                    (click)="accepterInvitation(demande.id, demande.projetTitre)">
+                    <mat-icon>check</mat-icon>
+                    Accepter
+                  </button>
+                </div>
+              } @else {
+                <div class="decision-actions">
+                  <span
+                    class="request-status"
+                    [class.status-accepted]="demande.statut === 'ACCEPTEE'"
+                    [class.status-refused]="demande.statut === 'REFUSEE'">
+                    <mat-icon>
+                      {{ demande.statut === 'ACCEPTEE' ? 'check_circle' : 'cancel' }}
+                    </mat-icon>
+                    {{ demande.statut === 'ACCEPTEE' ? 'Demande acceptée' : 'Demande refusée' }}
+                  </span>
+
+                  <button
+                    type="button"
+                    class="btn-action-view"
+                    [disabled]="chargement"
+                    (click)="demande.statut === 'ACCEPTEE'
+                      ? refuserInvitation(demande.id, demande.projetTitre)
+                      : accepterInvitation(demande.id, demande.projetTitre)">
+                    <mat-icon>
+                      {{ demande.statut === 'ACCEPTEE' ? 'swap_horiz' : 'check_circle' }}
+                    </mat-icon>
+                    {{ demande.statut === 'ACCEPTEE'
+                      ? 'Modifier : refuser'
+                      : 'Modifier : accepter' }}
+                  </button>
+                </div>
+              }
+            </div>
+
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="empty-requests-fallback">
+        <div class="empty-icon-container">
+          <mat-icon>
+            @switch (filtreActif()) {
+              @case ('TOUS') {
+                inbox
+              }
+              @case ('EN_ATTENTE') {
+                hourglass_empty
+              }
+              @case ('ACCEPTEE') {
+                task_alt
+              }
+              @case ('REFUSEE') {
+                do_not_disturb_on
+              }
+            }
+          </mat-icon>
+        </div>
+
+        <h3>
+          @switch (filtreActif()) {
+            @case ('TOUS') {
+              Aucune demande pour le moment
+            }
+            @case ('EN_ATTENTE') {
+              Aucune demande en attente
+            }
+            @case ('ACCEPTEE') {
+              Aucune demande acceptée
+            }
+            @case ('REFUSEE') {
+              Aucune demande refusée
+            }
+          }
+        </h3>
+
+        <p>
+          @switch (filtreActif()) {
+            @case ('TOUS') {
+              Les demandes d'accompagnement reçues apparaîtront ici.
+            }
+            @case ('EN_ATTENTE') {
+              Vous avez traité toutes vos demandes en attente.
+            }
+            @case ('ACCEPTEE') {
+              Les demandes que vous acceptez apparaîtront ici.
+            }
+            @case ('REFUSEE') {
+              Les demandes que vous refusez apparaîtront ici.
+            }
+          }
+        </p>
+
+        @if (filtreActif() !== 'TOUS') {
+          <button
+            type="button"
+            class="btn-action-view"
+            (click)="changerFiltre('TOUS')">
+            <mat-icon>visibility</mat-icon>
+            Voir toutes les demandes
+          </button>
+        }
+      </div>
+    }
+  </section>
+
+</div>
+
+@if (projetActif(); as projet) {
+  <app-projet-detail-modal
+    [projet]="projet"
+    (fermer)="fermerModaleProjet()">
+  </app-projet-detail-modal>
+}

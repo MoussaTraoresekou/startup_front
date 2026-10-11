@@ -1,0 +1,275 @@
+<div class="porteur-mentors-container">
+
+  <header class="page-header-widget">
+    <div class="title-meta">
+      <span class="page-eyebrow">
+        <mat-icon>handshake</mat-icon>
+        VOTRE ACCOMPAGNEMENT
+      </span>
+
+      <h1>Trouvez le mentor idéal</h1>
+
+      <p>
+        Échangez avec des experts pour structurer votre projet,
+        développer votre activité et concrétiser vos ambitions.
+      </p>
+    </div>
+  </header>
+
+  <!-- RECHERCHE -->
+  <section class="search-section">
+    <div class="search-bar-card">
+      <mat-icon>search</mat-icon>
+
+      <input
+        type="text"
+        [ngModel]="rechercheMotCle()"
+        (ngModelChange)="rechercheMotCle.set($event)"
+        placeholder="Rechercher une expertise, un secteur..."
+        aria-label="Rechercher un mentor"
+      />
+
+      <span class="search-shortcut">
+        <mat-icon>tune</mat-icon>
+        Recherche
+      </span>
+    </div>
+  </section>
+
+  <!-- LISTE DES MENTORS -->
+  <section class="mentors-section">
+
+    <div class="section-heading">
+      <div>
+        <h2>Nos mentors et experts</h2>
+        <p>Découvrez les profils et choisissez votre accompagnement.</p>
+      </div>
+
+      <span class="results-label">
+        <mat-icon>groups</mat-icon>
+        {{ mentorsFilfres().length }}
+        {{ mentorsFilfres().length > 1 ? 'profils' : 'profil' }}
+      </span>
+    </div>
+
+    <div class="mentors-grid-layout">
+
+      @for (mentor of mentorsFilfres(); track mentor.id) {
+
+        <article class="mentor-profile-card">
+
+          <div class="card-cover">
+            <div class="cover-pattern"></div>
+
+            <div class="user-avatar-badge">
+              {{ mentor.prenom.charAt(0).toUpperCase() }}{{ mentor.nom.charAt(0).toUpperCase() }}
+            </div>
+
+            <span class="mentor-status">
+              <span class="status-dot"></span>
+              Mentor
+            </span>
+          </div>
+
+          <div class="card-body-content">
+
+            <div class="mentor-heading">
+              <h3>{{ mentor.prenom }} {{ mentor.nom }}</h3>
+
+              <span class="expertise-pill">
+                <mat-icon>workspace_premium</mat-icon>
+                Expert
+              </span>
+            </div>
+
+            <p class="mentor-bio-snippet">
+              {{ mentor.description }}
+            </p>
+
+            <div class="card-divider"></div>
+
+            <div class="card-action-row">
+              <button
+                type="button"
+                mat-stroked-button
+                class="btn-profile"
+                (click)="ouvrirProfil(mentor)"
+              >
+                <mat-icon>visibility</mat-icon>
+                Voir le profil
+              </button>
+
+              <button
+                type="button"
+                mat-flat-button
+                color="primary"
+                class="btn-action-profile"
+                (click)="ouvrirProfil(mentor)"
+              >
+                <mat-icon>send</mat-icon>
+                Contacter
+              </button>
+            </div>
+
+          </div>
+        </article>
+
+      } @empty {
+
+        <div class="empty-grid-fallback">
+          <div class="empty-icon">
+            <mat-icon>person_search</mat-icon>
+          </div>
+
+          <h3>Aucun mentor trouvé</h3>
+
+          <p>
+            Essayez un autre mot-clé pour découvrir
+            les experts qui peuvent vous accompagner.
+          </p>
+        </div>
+
+      }
+
+    </div>
+  </section>
+
+  <!-- MODALE DE DEMANDE D'ACCOMPAGNEMENT -->
+  @if (mentorSelectionne(); as activeMentor) {
+
+    <div
+      class="modal-overlay"
+      (click)="fermerProfil()"
+    >
+
+      <div
+        class="modal-card-center"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+        (click)="$event.stopPropagation()"
+      >
+
+        <div class="panel-header">
+
+          <div class="header-title-wrapper">
+            <div class="modal-heading-icon">
+              <mat-icon>handshake</mat-icon>
+            </div>
+
+            <div>
+              <h2 id="modal-title">Demande d'accompagnement</h2>
+              <p>Faites le premier pas vers votre réussite.</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            mat-icon-button
+            class="btn-close"
+            aria-label="Fermer la fenêtre"
+            [disabled]="demandeEnCours"
+            (click)="fermerProfil()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+
+        </div>
+
+        <div class="panel-body">
+
+          <!-- PROFIL DU MENTOR -->
+          <div class="profile-summary">
+
+            <div class="big-avatar">
+              {{ activeMentor.prenom.charAt(0).toUpperCase() }}{{ activeMentor.nom.charAt(0).toUpperCase() }}
+            </div>
+
+            <h3>{{ activeMentor.prenom }} {{ activeMentor.nom }}</h3>
+
+            <span class="badge-verified">
+              <mat-icon>verified</mat-icon>
+              Mentor Entrepreneur360
+            </span>
+
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="detail-section">
+
+            <h4>À propos du mentor</h4>
+
+            <div class="bio-text-box">
+              <p>{{ activeMentor.description }}</p>
+            </div>
+
+          </div>
+
+          <!-- FORMULAIRE -->
+          <div class="detail-section request-form-box">
+
+            <div class="form-heading">
+              <h4>Votre besoin</h4>
+              <span class="required-label">Obligatoire</span>
+            </div>
+
+            <p class="form-description">
+              Présentez brièvement votre projet et expliquez
+              comment ce mentor pourrait vous aider.
+            </p>
+
+            <div class="textarea-container">
+
+              <mat-icon>edit_note</mat-icon>
+
+              <textarea
+                [(ngModel)]="messageAccompagnement"
+                placeholder="Bonjour, je développe un projet dans... J'aurais besoin d'un accompagnement pour..."
+                rows="5"
+                maxlength="1500"
+                aria-label="Message de demande d'accompagnement"
+                [disabled]="demandeEnCours"
+              ></textarea>
+
+            </div>
+
+            <p class="form-hint">
+              Soyez précis pour faciliter la compréhension de votre besoin.
+            </p>
+
+          </div>
+
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="panel-footer-actions">
+
+          <button
+            type="button"
+            class="btn-cancel"
+            [disabled]="demandeEnCours"
+            (click)="fermerProfil()"
+          >
+            Annuler
+          </button>
+
+          <button
+            type="button"
+            class="btn-approve"
+            [disabled]="!messageAccompagnement.trim() || demandeEnCours"
+            (click)="envoyerDemandeMentor(activeMentor.id)"
+          >
+            <mat-icon>
+              {{ demandeEnCours ? 'hourglass_top' : 'send' }}
+            </mat-icon>
+
+            {{ demandeEnCours ? 'Envoi en cours...' : 'Envoyer ma demande' }}
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>
