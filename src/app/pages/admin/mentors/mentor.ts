@@ -5,11 +5,12 @@ import { MentorResponseDto } from '../../../core/model/MentorResponseDto';
 import { AdminService } from '../../../core/services/admin/admin-service';
 import { MentorListe } from './mentor-liste/mentor-liste';
 import { MentorDetail } from './mentor_detail/mentor-detail';
+import { BarreRecherche } from '../../porteur/mes-projets/barre-recherche/barre-recherche';
 
 
 @Component({
   selector: 'app-mentor',
-  imports: [MatIconModule, MentorListe, MentorDetail],
+  imports: [MatIconModule, MentorListe, MentorDetail,BarreRecherche],
   templateUrl: './mentor.html',
   styleUrl: './mentor.css',
 })
@@ -17,7 +18,6 @@ import { MentorDetail } from './mentor_detail/mentor-detail';
 export class Mentor {
   public afficheDetail=false;
   mentorSelectionne = signal<MentorResponseDto | null>(null);
-  private messageSnakBar = inject(NotificationService);
   private adminServices = inject(AdminService)
 
   listeMentors = signal<MentorResponseDto[]>([]);
@@ -39,11 +39,16 @@ export class Mentor {
     this.chargerMentors();
   }
 
-  private chargerMentors() {
+   chargerMentors() {
     this.adminServices.getAllMentor().subscribe({
       next: (donnees) => {
         console.log(donnees)
-        this.listeMentors.set(donnees)
+
+       
+             this.listeMentors.set(donnees)
+        
+        
+
       },
       error: (error) => {
         console.log(error)
@@ -51,23 +56,8 @@ export class Mentor {
     })
 
   }
-
   public changerFiltre(nouveauFiltre: 'TOUS' | 'EN_ATTENTE' | 'ACCEPTEE' | 'REFUSEE'): void {
     this.filtreActif.set(nouveauFiltre);
-  }
-
-  public approuverMentor(id: number, nom: string): void {
-    this.listeMentors.update(mentors =>
-      mentors.map(m => m.id === id ? { ...m, statut: 'VALIDE' } : m)
-    );
-    this.messageSnakBar.succes(`Le mentor ${nom} a été validé et intégré à l'incubateur !`);
-  }
-
-  public rejeterMentor(id: number, nom: string): void {
-    this.listeMentors.update(mentors =>
-      mentors.map(m => m.id === id ? { ...m, statut: 'REFUSE' } : m)
-    );
-    this.messageSnakBar.succes(`L'inscription de ${nom} a été refusée.`);
   }
   selectionnerMentor(mentor:MentorResponseDto){
           this.mentorSelectionne.set(mentor);
@@ -77,4 +67,5 @@ export class Mentor {
        this.mentorSelectionne.set(null)
       
   }
+ 
 }

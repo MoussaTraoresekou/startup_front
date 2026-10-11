@@ -1,6 +1,5 @@
 <aside class="sidebar">
   
-  <!-- ENTÊTE DE LA SIDEBAR AVEC LE LOGO ENTRE360 -->
   <div class="sidebar-header">
     <div class="brand-icon">
       <mat-icon>rocket_launch</mat-icon>
@@ -11,10 +10,8 @@
     </div>
   </div>
 
-  <!-- ZONE DE NAVIGATION INTERACTIVE DU MENU -->
   <nav class="sidebar-nav">
     
-    <!-- 1. VUE EXCLUSIVE : PROFILE ADMINISTRATEUR (Calqué au pixel près sur votre maquette verte) -->
     @if (authService.getRole() === 'ADMIN') {
       <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-item">
         <mat-icon>dashboard</mat-icon>
@@ -57,7 +54,6 @@
       </a>
     }
 
-    <!-- 2. VUE EXCLUSIVE : PORTAIL COLLABORATIF DU PORTEUR DE PROJET CONNECTÉ -->
     @if (authService.getRole() === 'PORTEUR') {
       <a routerLink="dashboard" routerLinkActive="active" class="nav-item">
         <mat-icon>dashboard</mat-icon>
@@ -105,7 +101,43 @@
       </a>
     }
 
-    <!-- LIEN DE PROFIL COMMUN AUX ROLES (Ajustable) -->
+    @if (authService.getRole() === 'MENTOR') {
+      <a routerLink="/mentor/dashboard" routerLinkActive="active" class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Tableau de bord</span>
+      </a>
+
+      <a routerLink="/mentor/demandes" routerLinkActive="active" class="nav-item">
+        <mat-icon>handshake</mat-icon>
+        <span>Demandes d'accompagnement</span>
+      </a>
+
+      <a routerLink="/mentor/projets" routerLinkActive="active" class="nav-item">
+        <mat-icon>assignment_turned_in</mat-icon>
+        <span>Startups assignées</span>
+      </a>
+
+      <a routerLink="/mentor/formations" routerLinkActive="active" class="nav-item">
+        <mat-icon>menu_book</mat-icon>
+        <span>Mes cours</span>
+      </a>
+
+      <a routerLink="/mentor/actualites" routerLinkActive="active" class="nav-item">
+        <mat-icon>newspaper</mat-icon>
+        <span>Actualités</span>
+      </a>
+    }
+
+    <a routerLink="notifications" routerLinkActive="active" class="nav-item notification-link">
+      <mat-icon>notifications</mat-icon>
+      <span>Notifications</span>
+      @if (sseService.compteurNonLues() > 0) {
+        <span class="sidebar-notification-badge animate-bounce">
+          {{ sseService.compteurNonLues() }}
+        </span>
+      }
+    </a>
+
     <a routerLink="profil" routerLinkActive="active" class="nav-item">
       <mat-icon>person</mat-icon>
       <span>Mon Profil</span>
@@ -113,7 +145,6 @@
 
   </nav>
 
-  <!-- PIED DE LA BARRE : AFFICHAGE DU COMPTE ACTIF ET DÉCONNEXION -->
   <div class="sidebar-footer-profile">
     @if (authService.estConnecte()) {
       <button type="button" class="btn-sidebar-logout" [disabled]="deconnexionEnCours" (click)="deconnexion()">

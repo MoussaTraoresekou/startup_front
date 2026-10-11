@@ -6,7 +6,7 @@
     {{ mentor().telephone }}
 </td>
 <td>
-    <span class="specialite-tag">Finance</span>
+    <span class="specialite-tag">{{mentor().secteur}}</span>
 </td>
 <td>
     <span class="status-badge" [class]="mentor().statu">
@@ -19,12 +19,5 @@
             (click)="consulterDetails(mentor())">
             <mat-icon>visibility</mat-icon>
         </button>
-        <button mat-icon-button class="btn-action-approve" title="Approuver" (click)="approuverMentor(mentor().id)">
-            <mat-icon>check</mat-icon>
-        </button>
-        <button mat-icon-button class="btn-action-reject" title="Refuser" (click)="rejeterMentor(mentor().id)">
-            <mat-icon>block</mat-icon>
-        </button>
-        
     </div>
 </td>

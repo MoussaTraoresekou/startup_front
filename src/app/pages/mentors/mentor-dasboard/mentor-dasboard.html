@@ -1,0 +1,75 @@
+<div class="mentor-dashboard">
+  
+  <header class="dashboard-header">
+    <div class="welcome-block">
+      <h1>Bonjour, {{ authService.getNomComplet() }} 👋</h1>
+      <p>Réseau d'experts Entrepreneur360 • Suivez l'avancement de vos startups et gérez vos sessions d'accompagnement.</p>
+    </div>
+  </header>
+
+  <div class="kpi-grid">
+    @for (kpi of kpis(); track kpi.titre) {
+      <div class="card kpi-card">
+        <div class="kpi-content">
+          <span class="kpi-title">{{ kpi.titre }}</span>
+          <strong class="kpi-value">{{ kpi.valeur }}</strong>
+        </div>
+        <div class="kpi-icon-box" [class]="kpi.couleurClasse">
+          <mat-icon>{{ kpi.icone }}</mat-icon>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="dashboard-center-grid">
+    
+    <div class="card main-table-card">
+      <div class="card-header-flex">
+        <h3>Mes Startups Assignées</h3>
+        <p>Liste des projets entrepreneuriaux sous votre mentorat actif.</p>
+      </div>
+
+      <div class="table-container">
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>Nom de la Startup</th>
+              <th>Porteur</th>
+              <th>Secteur d'activité</th>
+              <th>Étape actuelle</th>
+              <th style="text-align: right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (startup of startups(); track startup.id) {
+              <tr>
+                <td class="cell-bold">{{ startup.titre }}</td>
+                <td>{{ startup.porteur }}</td>
+                <td>
+                  <span class="secteur-tag">{{ startup.secteur }}</span>
+                </td>
+                <td>
+                  <span class="etape-badge">{{ startup.etape }}</span>
+                </td>
+                <td style="text-align: right;">
+                  <button mat-flat-button color="primary" class="btn-table-action" (click)="gererStartup(startup.id)">
+                    <mat-icon>visibility</mat-icon> Suivre
+                  </button>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="empty-table">
+                  <mat-icon>rocket</mat-icon>
+                  <p>Vous n'accompagnez aucun projet pour le moment.</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>

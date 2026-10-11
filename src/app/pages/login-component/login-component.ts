@@ -53,7 +53,13 @@ export class LoginComponent {
               this.router.navigate(['/admin/dashboard']);
             } else if (roleUtilisateur === 'PORTEUR') {
               this.router.navigate(['/porteur/mes-projets']);
-            } else {
+            }
+             else if (roleUtilisateur === 'MENTOR') {
+              this.router.navigate(['/mentor/dashboard']);
+            }
+             else if (roleUtilisateur === 'INVESTISSEUR') {
+              this.router.navigate(['/investisseur/dashboard']);
+            }  else {
               this.router.navigate(['/']);
             }
           },

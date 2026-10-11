@@ -1,0 +1,127 @@
+
+<div class="notifications-page-container">
+
+  <header class="page-header-widget">
+    <div class="title-meta">
+      <div class="eyebrow">
+        <mat-icon>notifications_active</mat-icon>
+        <span>ESPACE PERSONNEL</span>
+      </div>
+
+      <h1>Centre de notifications</h1>
+      <p>
+        Retrouvez les actualités, les réponses de vos mentors
+        et les évolutions de vos projets.
+      </p>
+    </div>
+
+    @if (sseService.compteurNonLues() > 0) {
+      <button
+        mat-flat-button
+        class="btn-mark-all-read"
+        (click)="marquerSessionCommeLue()">
+        <mat-icon>done_all</mat-icon>
+        Tout marquer comme lu
+      </button>
+    }
+  </header>
+
+  <section class="notification-summary">
+    <div class="summary-icon">
+      <mat-icon>notifications</mat-icon>
+    </div>
+
+    <div class="summary-text">
+      <span class="summary-label">Votre activité</span>
+      <strong>
+        {{ sseService.listeNotifications().length }}
+        notification(s)
+      </strong>
+    </div>
+
+    <div class="unread-summary">
+      <span class="unread-indicator"></span>
+      <span>
+        {{ sseService.compteurNonLues() }} non lue(s)
+      </span>
+    </div>
+  </section>
+
+  <section class="notifications-section">
+    <div class="section-heading">
+      <div>
+        <h2>Vos notifications</h2>
+        <p>Les informations concernant vos projets</p>
+      </div>
+
+      <span class="total-count">
+        {{ sseService.listeNotifications().length }}
+      </span>
+    </div>
+
+    <div class="notifications-stack-layout">
+
+      @for (notif of sseService.listeNotifications(); track notif.id) {
+        <article
+          class="notification-card"
+          [class.unread-mode]="!notif.lu">
+
+          <div class="notification-icon"
+               [class.unread-icon]="!notif.lu">
+            <mat-icon>
+              {{ !notif.lu ? 'mark_email_unread' : 'drafts' }}
+            </mat-icon>
+          </div>
+
+          <div class="notification-content">
+            <div class="notification-topline">
+              <span class="notification-category">
+                Entrepreneur360
+              </span>
+
+              @if (!notif.lu) {
+                <span class="new-badge">
+                  <span class="new-dot"></span>
+                  Nouveau
+                </span>
+              }
+            </div>
+
+            <p class="message-text">{{ notif.message }}</p>
+
+            <div class="notification-footer">
+              <span class="time-stamp-text">
+                <mat-icon>schedule</mat-icon>
+                {{ notif.dateCreation | date:'dd MMM yyyy, HH:mm' }}
+              </span>
+
+              <span class="read-status"
+                    [class.unread-status]="!notif.lu">
+                {{ notif.lu ? 'Déjà consultée' : 'Non lue' }}
+              </span>
+            </div>
+          </div>
+
+          @if (!notif.lu) {
+            <span class="notification-indicator-dot"></span>
+          }
+        </article>
+      } @empty {
+        <div class="empty-notifications-fallback">
+          <div class="fallback-icon-frame">
+            <mat-icon>notifications_none</mat-icon>
+          </div>
+
+          <h3>Tout est calme pour le moment</h3>
+
+          <p>
+            Vous n'avez pas encore de notifications.
+            Les nouvelles activités de vos projets apparaîtront ici.
+          </p>
+        </div>
+      }
+
+    </div>
+  </section>
+
+</div>

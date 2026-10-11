@@ -7,7 +7,7 @@ import { NotificationService } from '../../../../core/services/notification-serv
 
 @Component({
   selector: 'app-mentor-detail',
-  imports: [MatIconModule,DatePipe],
+  imports: [MatIconModule, DatePipe],
   templateUrl: './mentor-detail.html',
   styleUrl: './mentor-detail.css',
 })
@@ -16,47 +16,40 @@ export class MentorDetail {
   valider = output<number>();
   refuser = output<number>();
   fermerOnClic = output<void>();
-  mettreAjourOnclik=output<void>();
-  private adminService=inject(AdminService)
-  private messageSnackbar=inject(NotificationService)
+  mettreAjourOnclik = output<void>();
+  private adminService = inject(AdminService);
+  private messageSnackbar = inject(NotificationService);
 
-  
   public ouvrirDocument(url: string): void {
     if (url) {
       window.open(url, '_blank');
     }
   }
-  fermer(){
-       this.fermerOnClic.emit()
+  fermer() {
+    this.fermerOnClic.emit();
   }
-  refuserMentor(id:number){
-this.adminService.refuserMentor(id).subscribe(
-      {
-         next:(donnee)=>{
-                this.messageSnackbar.succes("mentor refusé avec succes avec succes!")
-                this.mettreAjourOnclik.emit()
-                    this.fermer()
-         },
-         error:(erreur)=>{
-          console.log(erreur)
-         }
-          
-      }
-    )
+  refuserMentor(id: number) {
+    this.adminService.refuserMentor(id).subscribe({
+      next: (donnee) => {
+        this.messageSnackbar.succes('mentor refusé avec succes avec succes!');
+        this.mettreAjourOnclik.emit();
+        this.fermer();
+      },
+      error: (erreur) => {
+        console.log(erreur);
+      },
+    });
   }
-  accepterMentore(id:number){
-    this.adminService.validerMentor(id).subscribe(
-      {
-         next:(donnee)=>{
-                this.messageSnackbar.succes("mentor validé avec succes!")
-                    this.fermer()
-
-         },
-         error:(erreur)=>{
-          console.log(erreur)
-         }
-          
-      }
-    )
+  accepterMentore(id: number) {
+    this.adminService.validerMentor(id).subscribe({
+      next: (donnee) => {
+        this.messageSnackbar.succes('mentor validé avec succes!');
+        this.mettreAjourOnclik.emit();
+        this.fermer();
+      },
+      error: (erreur) => {
+        console.log(erreur);
+      },
+    });
   }
 }

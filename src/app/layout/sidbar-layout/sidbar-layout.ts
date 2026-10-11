@@ -1,8 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../core/services/auth-service';
+import { NotificationSseService } from '../../core/services/notificationSpring/notification-sse-service';
 
 @Component({
   selector: 'app-sidebar-layout',
@@ -16,22 +17,27 @@ import { AuthService } from '../../core/services/auth-service';
   templateUrl: './sidbar-layout.html',
   styleUrl: './sidbar-layout.css',
 })
-export class SidebarLayout implements OnInit {
-  // Injection moderne de vos services
+export class SidebarLayout implements OnInit, OnDestroy {
   public authService = inject(AuthService);
+  public sseService = inject(NotificationSseService);
   private router = inject(Router);
 
   roleConnecte: string | null = null;
   deconnexionEnCours = false;
 
   ngOnInit(): void {
-    // Lecture directe du rôle stocké en cache lors du Login
     this.roleConnecte = this.authService.getRole();
+    
+    if (this.authService.estConnecte()) {
+      const currentUserId = this.authService.getUtilisateurId();
+      this.sseService.connecterAuFluxFlux(currentUserId);
+    }
   }
 
-  /**
-   * Calcule les deux premières lettres du profil utilisateur (ex: "Moussa Traoré" -> "MT")
-   */
+  ngOnDestroy(): void {
+    this.sseService.fermerConnexion();
+  }
+
   public obtenirInitiales(): string {
     const prenom = this.authService.getPNom() || '';
     const nom = this.authService.getNom() || '';
@@ -42,9 +48,6 @@ export class SidebarLayout implements OnInit {
     return `${initialePrenom}${initialeNom}` || 'U';
   }
 
-  /**
-   * Traduit le rôle technique de la base de données pour un affichage propre
-   */
   public obtenirRoleLabel(): string {
     const role = this.roleConnecte;
     if (role === 'ADMIN') return 'Administrateur';
@@ -53,13 +56,10 @@ export class SidebarLayout implements OnInit {
     return role || 'Utilisateur';
   }
 
-  /**
-   * Efface le localStorage et redirige l'utilisateur vers la mire de connexion
-   */
   public deconnexion(): void {
     this.deconnexionEnCours = true;
+    this.sseService.fermerConnexion();
     
-    // Petite temporisation visuelle fluide avant redirection
     setTimeout(() => {
       this.authService.logout();
       this.deconnexionEnCours = false;

@@ -1,37 +1,46 @@
 <header class="top-toolbar">
   <div class="toolbar-spacer"></div>
 
-  <button mat-icon-button class="notification-button">
+  <!-- 🚀 LA CLOCHE S'ACTIVE ICI AVEC UN LIEN VERS LA PAGE ET UN BADGE RÉACTIF -->
+  <button mat-icon-button class="notification-button" routerLink="notifications">
     <span class="material-icons">notifications_none</span>
-    <span class="notification-badge">3</span>
+    @if (sseService.compteurNonLues() > 0) {
+      <span class="notification-badge animate-bounce">
+        {{ sseService.compteurNonLues() }}
+      </span>
+    }
   </button>
 
   <div class="user-profile">
-    <div class="user-avatar">{{authService.getPNom()!.charAt( 0).toUpperCase() +
-      authService.getNom()!.charAt(0).toUpperCase()}}</div>
+    <div class="user-avatar">
+      {{ authService.getPNom()!.charAt(0).toUpperCase() + authService.getNom()!.charAt(0).toUpperCase() }}
+    </div>
 
     <div class="user-info">
-      <strong>{{authService.getNomComplet()}}</strong>
-      <span>{{authService.getRole()}}</span>
+      <strong>{{ authService.getNomComplet() }}</strong>
+      <span>{{ authService.getRole() }}</span>
     </div>
 
     <button mat-icon-button [matMenuTriggerFor]="userMenu">
       <span class="material-icons">expand_more</span>
     </button>
   </div>
+
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item routerLink="profil">
       <span class="material-icons">person</span>
       <span>Mon profil</span>
     </button>
-    @if(role!="ADMIN"){
-    <button mat-menu-item routerLink="/porteur/mes-projets">
-      <span class="material-icons">apps</span>
-      <span>Changer de projet</span>
-    </button>
+    
+    @if (role != "ADMIN") {
+      <button mat-menu-item routerLink="/porteur/mes-projets">
+        <span class="material-icons">apps</span>
+        <span>Changer de projet</span>
+      </button>
     }
 
     <mat-divider></mat-divider>
+    
     <button mat-menu-item (click)="logout()">
       <span class="material-icons">logout</span>
       <span>Déconnexion</span>

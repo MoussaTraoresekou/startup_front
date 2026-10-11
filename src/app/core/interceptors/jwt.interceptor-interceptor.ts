@@ -1,20 +1,62 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+
+import {
+  HttpInterceptorFn,
+  HttpErrorResponse
+} from '@angular/common/http';
+
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { catchError, throwError } from 'rxjs';
+
+import { AuthService } from '../services/auth-service';
+import { NotificationService } from '../services/notification-service';
+
+let expirationEnCours = false;
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  // 1. Récupération du token JWT stocké au moment du login
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const notification = inject(NotificationService);
+
   const token = localStorage.getItem('token');
 
-  // 2. Si un token est présent, on clone la requête pour y ajouter le header "Authorization"
-  if (token) {
-    const cloneReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    // On envoie la requête clonée et sécurisée
-    return next(cloneReq);
-  }
+  const requete = token
+    ? req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    : req;
 
-  // 3. Si aucun token n'est trouvé (ex: inscription ou login public), la requête continue telle quelle
-  return next(req);
+  return next(requete).pipe(
+    catchError((error: HttpErrorResponse) => {
+      const estRequeteLogin = req.url.includes('/api/user/login');
+
+      if (error.status === 401 && !estRequeteLogin) {
+        const sessionExistante = !!localStorage.getItem('token');
+
+        if (sessionExistante && !expirationEnCours) {
+          expirationEnCours = true;
+
+          authService.logout();
+
+          notification.erreur(
+            'Votre session a expiré. Veuillez vous reconnecter.'
+          );
+
+          if (router.url !== '/auth/login') {
+            void router.navigate(['/auth/login']).finally(() => {
+              expirationEnCours = false;
+            });
+          } else {
+            expirationEnCours = false;
+          }
+        } else if (!sessionExistante && router.url !== '/auth/login') {
+          void router.navigate(['/auth/login']);
+        }
+      }
+
+      return throwError(() => error);
+    })
+  );
 };

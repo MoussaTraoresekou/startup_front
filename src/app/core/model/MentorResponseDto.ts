@@ -9,5 +9,6 @@ export interface MentorResponseDto {
   role: string;  
   email: string;
   dateCreation: string; 
-  description:string
+  description:string;
+  secteur:string
 }

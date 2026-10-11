@@ -12,6 +12,7 @@
       <mat-icon>filter_list</mat-icon>
       <span>Filtrer par statut</span>
     </div>
+    <app-barre-recherche  />
 
     <div class="chips-group">
       <button class="chip-btn" [class.active]="filtreActif() === 'TOUS'" (click)="changerFiltre('TOUS')">
@@ -22,6 +23,9 @@
       </button>
       <button class="chip-btn" [class.active]="filtreActif() === 'ACCEPTEE'" (click)="changerFiltre('ACCEPTEE')">
          Validés <span class="badge">{{ totalValides() }}</span>
+      </button>
+      <button class="chip-btn" [class.active]="filtreActif() === 'REFUSEE'" (click)="changerFiltre('REFUSEE')">
+         Refusés <span class="badge">{{ totalRefuses() }}</span>
       </button>
     </div>
   </div>
@@ -35,7 +39,7 @@
           <th>Téléphone</th>
           <th>Spécialité</th>
           <th>Statut</th>
-          <th style="text-align: right; padding-right: 36px;">Actions</th>
+          <th style="text-align: right; padding-right: 15px;">Actions</th>
         </tr>
       </thead>
       <tbody>
