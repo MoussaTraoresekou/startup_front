@@ -12,6 +12,7 @@ import { ProjetService } from '../../../core/services/projet-service';
 import { ProjetResponse } from '../../../core/model/ProjetResponse';
 import { NotificationService } from '../../../core/services/notification-service';
 import { ProjetEtapeService } from '../../../core/services/ProjetEtape/projet-etape-service';
+import { NavbarLayout } from '../../../layout/navbar-layout/navbar-layout';
 @Component({
   selector: 'app-mes-projets',
   standalone: true,
@@ -22,8 +23,9 @@ import { ProjetEtapeService } from '../../../core/services/ProjetEtape/projet-et
     ProjetFormAdd,
     ProjetFormEdit,
     ProjetCard,
-    BarreRecherche,FiltreSecteur
-  ],
+    BarreRecherche, FiltreSecteur,
+    //NavbarLayout
+],
   templateUrl: './mes-projets.html',
   styleUrl: './mes-projets.css'
 })

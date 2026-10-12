@@ -10,11 +10,14 @@ import { HttpClient } from '@angular/common/http';
 import { MentorServices } from '../../../core/services/mentor/mentor-services';
 import { RegisterMentorRequest } from '../../../core/model/RegisterMentorRequest ';
 import { MentorResponseDto } from '../../../core/model/MentorResponseDto';
+import { SecteurService } from '../../../core/services/secteur/secteur-service';
+import { SecteurReponse } from '../../../core/model/secteurReponse';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-register-mentor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule,MatSelectModule],
   templateUrl: './mentor-register.html',
   styleUrls: ['./mentor-register.css']
 })
@@ -23,6 +26,8 @@ export class MentorRegister {
   private mentorService = inject(MentorServices);
   private supabaseService = inject(SupabaseService);
   private router = inject(Router);
+  private secteurService=inject(SecteurService)
+  public listeSecteur=signal<SecteurReponse[]>([])
   message = inject(NotificationService);
 
   registerForm: FormGroup;
@@ -46,8 +51,19 @@ export class MentorRegister {
       telephone: ['', [Validators.required]],
       cvUrl: ['', [Validators.required]],      
       diplomeUrl: ['', [Validators.required]], 
-      description: ['', [Validators.required, Validators.minLength(10)]]
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      secteur: ['', Validators.required],
     });
+    this.secteurService.getSecteurs().subscribe({
+          next:(donnees)=>{
+               this.listeSecteur.set(donnees)
+          },
+          error:(erreur)=>{
+               console.log(erreur)
+          }
+
+    })
+
   }
 
   /**

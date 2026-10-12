@@ -1,0 +1,438 @@
+.mentor-workflow-container {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - var(--top-toolbar-height, 70px));
+  background-color: var(--background);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   COLONNE DE GAUCHE : LISTE DES STARTUPS ASSIGNÉES
+   ========================================================================== */
+.startups-sidebar-panel {
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  height: 100%;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.panel-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.panel-section-title mat-icon {
+  color: var(--text-secondary);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.panel-section-title h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.startups-stack-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+}
+
+.startup-nav-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.startup-nav-card:hover {
+  background: var(--background);
+  border-color: var(--text-secondary);
+}
+
+.startup-nav-card.is-selected {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+}
+
+.startup-avatar-box {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.startup-nav-card.is-selected .startup-avatar-box {
+  background: var(--surface);
+}
+
+.startup-avatar-box mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.startup-meta-brief {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.startup-meta-brief h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.secteur-tag {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow-indicator {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--border);
+  transition: transform 0.2s ease;
+}
+
+.startup-nav-card.is-selected .arrow-indicator {
+  color: var(--primary);
+  transform: translateX(2px);
+}
+
+.empty-startups-fallback {
+  text-align: center;
+  padding: 40px 10px;
+  color: var(--text-secondary);
+}
+
+.empty-startups-fallback mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+}
+
+.empty-startups-fallback p {
+  margin: 0;
+  font-size: 12px;
+}
+
+/* ==========================================================================
+   ZONE DE DROITE : FEUILLE DE ROUTE & ÉTAPES DU PROJET
+   ========================================================================== */
+.parcours-main-panel {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding: 30px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.parcours-header-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrow-text {
+  font-size: 11px;
+  font-weight: 750;
+  color: var(--primary);
+  letter-spacing: 0.5px;
+}
+
+.parcours-header-widget h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.parcours-header-widget p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 800px;
+  line-height: 1.5;
+}
+
+.steps-grid-table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+.premium-parcours-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.premium-parcours-table th {
+  background: var(--background);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.premium-parcours-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s ease;
+}
+
+.premium-parcours-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.premium-parcours-table tbody tr:hover {
+  background: var(--background);
+}
+
+.premium-parcours-table tbody tr.highlight-row {
+  background: rgba(5, 150, 105, 0.02);
+}
+
+.premium-parcours-table tbody tr.highlight-row:hover {
+  background: rgba(5, 150, 105, 0.05);
+}
+
+.text-right-align {
+  text-align: right;
+}
+
+.cell-primary-title {
+  padding: 16px 20px;
+}
+
+.step-title-flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-icon-indicator {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+}
+
+.highlight-row .step-icon-indicator {
+  color: var(--primary);
+}
+
+.step-title-flex strong {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.cell-date {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.cell-status {
+  padding: 16px 20px;
+}
+
+.status-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.status-pill-badge.en_cour {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.status-pill-badge.soumis {
+  background-color: var(--secondary-light);
+  color: var(--secondary-dark);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-pill-badge.a_corriger {
+  background-color: #FEE2E2;
+  color: var(--error);
+}
+
+.cell-actions {
+  padding: 12px 20px;
+}
+
+.btn-evaluate-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-evaluate-trigger:hover:not(:disabled) {
+  background: var(--primary-dark);
+}
+
+.btn-evaluate-trigger mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.resolved-text-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.resolved-text-badge mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.text-success { color: var(--success); }
+.text-muted { color: var(--text-secondary); font-size: 12px; font-weight: 500; }
+
+.empty-table-fallback {
+  text-align: center;
+  padding: 48px 20px !important;
+  color: var(--text-secondary);
+}
+
+.empty-table-fallback mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+}
+
+.empty-table-fallback p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   ÉTAT INITIAL : LORSQU'AUCUNE STARTUP N'EST SÉLECTIONNÉE
+   ========================================================================== */
+.no-selection-fallback {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.fallback-graphic-frame {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.fallback-graphic-frame mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.no-selection-fallback h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 750;
+  color: var(--text-primary);
+}
+
+.no-selection-fallback p {
+  margin: 0;
+  font-size: 13px;
+  max-width: 380px;
+  line-height: 1.5;
+}
+
+/* Animation de fondu pour le chargement des étapes */
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
