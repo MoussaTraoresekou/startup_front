@@ -1,0 +1,139 @@
+<div class="mentor-workflow-container">
+
+  <!-- ==========================================
+       COLONNE DE GAUCHE : LISTE DES STARTUPS ASSIGNÉES
+       ========================================== -->
+  <aside class="startups-sidebar-panel">
+    <div class="panel-section-title">
+      <mat-icon>business</mat-icon>
+      <h3>Startups accompagnées</h3>
+    </div>
+
+    <div class="startups-stack-list">
+      @for (startup of startupsAssignees(); track startup.id) {
+        <div 
+          class="startup-nav-card" 
+          [class.is-selected]="startupSelectionneeId() === startup.id"
+          (click)="selectionnerStartup(startup.id)">
+          <div class="startup-avatar-box">
+            <mat-icon>rocket_launch</mat-icon>
+          </div>
+          <div class="startup-meta-brief">
+            <h4>{{ startup.titre }}</h4>
+            <span class="secteur-tag">{{ startup.secteur }}</span>
+          </div>
+          <mat-icon class="arrow-indicator">chevron_right</mat-icon>
+        </div>
+      } @empty {
+        <div class="empty-startups-fallback">
+          <mat-icon>handshake</mat-icon>
+          <p>Aucune startup ne vous est assignée pour le moment.</p>
+        </div>
+      }
+    </div>
+  </aside>
+
+  <!-- ==========================================
+       ZONE DE DROITE : FEUILLE DE ROUTE & ÉTAPES DU PROJET
+       ========================================== -->
+  <main class="parcours-main-panel">
+    
+    @if (startupSelectionneeId()) {
+      
+      <header class="parcours-header-widget">
+        <span class="eyebrow-text">SUIVI DU PARCOURS D'INCUBATION</span>
+        <h2>Feuille de Route de l'Étape Active</h2>
+        <p>Consultez l'avancement des livrables de votre startup. Inspectez les questionnaires soumis pour valider l'étape ou demander des corrections.</p>
+      </header>
+
+      <div class="steps-grid-table-card">
+        <table class="premium-parcours-table">
+          <thead>
+            <tr>
+              <th>Intitulé de l'Étape</th>
+              <th>Date de Soumission</th>
+              <th>État d'Avancement</th>
+              <th class="text-right-align">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (etape of etapes(); track etape.id) {
+              <tr [class.highlight-row]="etape.StatutEtape === 'SOUMIS'">
+                
+                <td class="cell-primary-title">
+                  <div class="step-title-flex">
+                    <mat-icon class="step-icon-indicator">assignment_turned_in</mat-icon>
+                    <strong>{{ etape.etape }}</strong>
+                  </div>
+                </td>
+
+                <td class="cell-date">
+                  {{ etape.dateSoumission ? (etape.dateSoumission | date:'dd MMMM yyyy') : '—' }}
+                </td>
+
+                <td class="cell-status">
+                  <span class="status-pill-badge" [class]="etape.StatutEtape.toLowerCase()">
+                    {{ etape.StatutEtape === 'EN_COUR' ? 'En cours' : etape.StatutEtape }}
+                  </span>
+                </td>
+
+                <td class="cell-actions text-right-align">
+                  <!-- 🚀 LE BOUTON INTERACTIF DU WORKFLOW REEL -->
+                  @if (etape.StatutEtape === 'SOUMIS') {
+                    <button 
+                      type="button" 
+                      class="btn-evaluate-trigger" 
+                      [disabled]="chargementLivrable()"
+                      (click)="inspecterLivrableVirtuel(etape.id)">
+                      <mat-icon>rate_review</mat-icon>
+                      <span>Évaluer</span>
+                    </button>
+                  } @else if (etape.StatutEtape === 'VALIDEE') {
+                    <span class="resolved-text-badge text-success">
+                      <mat-icon>check_circle</mat-icon> Validée
+                    </span>
+                  } @else {
+                    <span class="resolved-text-badge text-muted">En attente du porteur</span>
+                  }
+                </td>
+
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4" class="empty-table-fallback">
+                  <mat-icon>format_list_bulleted</mat-icon>
+                  <p>Aucune ligne de parcours initialisée pour ce projet en base de données.</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+    } @else {
+      
+      <!-- ÉTAT INITIAL : AUCUNE STARTUP CLIQUÉE -->
+      <div class="no-selection-fallback">
+        <div class="fallback-graphic-frame">
+          <mat-icon>bubble_chart</mat-icon>
+        </div>
+        <h3>Sélectionnez une startup</h3>
+        <p>Choisissez une entreprise dans la colonne de gauche pour charger sa feuille de route et piloter les validations d'étapes.</p>
+      </div>
+
+    }
+
+  </main>
+</div>
+
+<!-- ==========================================
+     MODALE TECHNIQUE S'OUVRANT SANS QUITTER LA PAGE
+     ========================================== -->
+@if (livrableSelectionne() && projetEtapeIdActif()) {
+  <app-livrable-detail-modal
+    [projetEtapeId]="projetEtapeIdActif()!"
+    [livrable]="livrableSelectionne()!"
+    (fermer)="fermerLiseuseLivrable()"
+    (actionTerminee)="rafraichirApresAction()">
+  </app-livrable-detail-modal>
+}

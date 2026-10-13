@@ -160,8 +160,8 @@ export const routes: Routes = [
       {
         path: 'projets',
         loadComponent: () =>
-          import('./pages/actualites/actualites').then(
-            (m) => m.Actualites
+          import('./pages/mentors/mentor-projets-component/mentor-projets-component').then(
+            (m) => m.MentorProjetsComponent
           ),
       },
       {

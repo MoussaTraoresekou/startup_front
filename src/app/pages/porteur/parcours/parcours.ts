@@ -12,10 +12,11 @@ import { QuestionEtapeService } from '../../../core/services/question_etape/ques
 import { NotificationService } from '../../../core/services/notification-service';
 import { questionPourEtapeResponseDto } from '../../../core/model/questionPourEtapeResponseDto';
 import { projetEtapeRequestDto } from '../../../core/model/projetEtapeRequestDto';
-
+import { PoteurService } from '../../../core/services/porteur/poteur-service';
 
 interface EtapeAffichageDto extends commencerEtapeReponseDto {
-  etapeId: number; // ID technique fixe (1, 2, 3...) pour charger les questions
+  etapeId: number;
+  metaId: number; // Index d'identification immuable pour le track d'Angular
 }
 
 @Component({
@@ -33,13 +34,13 @@ interface EtapeAffichageDto extends commencerEtapeReponseDto {
 export class Parcours implements OnInit {
   private route = inject(ActivatedRoute);
   private telechargerFichier_service = inject(FichierService);
-
   private etapeService = inject(EtapeService);
   private projetEtapeService = inject(ProjetEtapeService);
   private questionEtapeService = inject(QuestionEtapeService);
+  private porteurService = inject(PoteurService);
   messageSnakBar = inject(NotificationService);
 
-  nomProjet!: string ;
+  nomProjet!: string;
   projetId!: number;
   
   listeEtapes = signal<EtapeAffichageDto[]>([]);
@@ -50,18 +51,20 @@ export class Parcours implements OnInit {
   
   texteReponse: string = '';
   reponseExistante: boolean = false;
+  chargementSoumission = signal<boolean>(false);
 
   ngOnInit(): void {
     this.nomProjet = localStorage.getItem('activeProjetNom') || 'Waati Delivery';
-    
     const idParam = this.route.parent?.snapshot.paramMap.get('id');
     this.projetId = parseInt(idParam || '0', 10);
 
     this.etapeService.getAllEtapes().subscribe({
       next: (donnees) => {
+        let indexIncrement = 1;
         const etapesInitialisees: EtapeAffichageDto[] = donnees.map(e => ({
           id: 0,
           etapeId: e.id,
+          metaId: indexIncrement++, 
           etape: e.nom_etape,
           StatutEtape: '', 
           dateSoumission: '',
@@ -76,7 +79,7 @@ export class Parcours implements OnInit {
           this.cliquerSurEtape(etapesInitialisees[0]);
         }
       },
-      error: (erreur) => console.error("Erreur d'acquisition des étapes :", erreur)
+      error: (erreur) => console.error(erreur)
     });
   }
 
@@ -91,7 +94,7 @@ export class Parcours implements OnInit {
     }
   }
 
-  public CommencerEtapes(idFixe: string, nom_etape: string, etapeObjet: EtapeAffichageDto) {
+  public CommencerEtapes(idFixe: string, nom_etape: string, etapeObjet: EtapeAffichageDto): void {
     const projetEtapeRequest: projetEtapeRequestDto = {
       projetId: this.projetId.toString(),
       etape_id: idFixe
@@ -103,7 +106,8 @@ export class Parcours implements OnInit {
         
         const etapeMiseAJour: EtapeAffichageDto = {
           ...reponseFreshDto,
-          etapeId: etapeObjet.etapeId 
+          etapeId: etapeObjet.etapeId,
+          metaId: etapeObjet.metaId
         };
 
         this.etapeSelectionnee.set(etapeMiseAJour);
@@ -114,8 +118,12 @@ export class Parcours implements OnInit {
 
         this.chargerQuestionsDeLEtape(idFixe);
       },
-      error: (erreur) => console.error("Erreur lors du démarrage de l'étape :", erreur)
+      error: (erreur) => console.error(erreur)
     });
+  }
+
+  public abrirFormulaireSaisieDirecte(question: questionPourEtapeResponseDto): void {
+    this.ouvrirFormulaireSaisieDirecte(question);
   }
 
   public ouvrirFormulaireSaisieDirecte(question: questionPourEtapeResponseDto): void {
@@ -139,7 +147,7 @@ export class Parcours implements OnInit {
     const etapeActive = this.etapeSelectionnee()!;
 
     this.listeQuestions.update(questions => {
-      return questions.map(q => q.id === questionActive.id ? { ...q, reposonse_donnee: this.texteReponse } : q);
+      return questions.map(q => q.id === questionActive.id ? { ...q, reponse_donnee: this.texteReponse } : q);
     });
 
     this.questionEtapeService.sauvegarderReponseExacte(
@@ -153,7 +161,7 @@ export class Parcours implements OnInit {
         this.chargerQuestionsDeLEtape(etapeActive.etapeId.toString());
       },
       error: (erreur) => {
-        console.error("Erreur de sauvegarde Spring Boot :", erreur);
+        console.error(erreur);
         this.messageSnakBar.succes("Erreur lors de la sauvegarde sur le serveur.");
       }
     });
@@ -163,6 +171,39 @@ export class Parcours implements OnInit {
     this.questionEtapeService.getQuestionForEtapeDonnee(idFixe, this.projetId).subscribe({
       next: (donnees) => this.listeQuestions.set(donnees),
       error: (erreur) => console.error(erreur)
+    });
+  }
+
+  public verifierSiEtapeComplete(): boolean {
+    return true; 
+  }
+
+  public executerSoumissionEtapeOfficielle(): void {
+    const etapeActive = this.etapeSelectionnee();
+    if (!etapeActive || !etapeActive.id) return;
+
+    if (this.chargementSoumission()) return;
+    this.chargementSoumission.set(true);
+
+    this.porteurService.soumettreEtape(etapeActive.id).subscribe({
+      next: () => {
+        this.messageSnakBar.succes("Votre questionnaire a été validé et transmis à votre mentor avec succès.");
+        
+        const etapeModifiee: EtapeAffichageDto = {
+          ...etapeActive,
+          StatutEtape: 'SOUMIS'
+        };
+
+        this.etapeSelectionnee.set(etapeModifiee);
+        this.listeEtapes.update(etapes => 
+          etapes.map(e => e.id === etapeActive.id ? etapeModifiee : e)
+        );
+        this.chargementSoumission.set(false);
+      },
+      error: (erreur) => {
+        this.chargementSoumission.set(false);
+        console.error(erreur);
+      }
     });
   }
     
@@ -175,20 +216,19 @@ export class Parcours implements OnInit {
     this.telechargerFichier_service.telechargerLivrableFichier(etapeActive.id).subscribe({
       next: (blobBinaire: Blob) => {
         const urlFichierEnMemoire = window.URL.createObjectURL(blobBinaire);
-                const lienInvisible = document.createElement('a');
+        const lienInvisible = document.createElement('a');
         lienInvisible.href = urlFichierEnMemoire;
         lienInvisible.download = `Livrable_Projet_Etape_${etapeActive.id}.txt`;
         document.body.appendChild(lienInvisible);
         lienInvisible.click();
-                document.body.removeChild(lienInvisible);
+        document.body.removeChild(lienInvisible);
         window.URL.revokeObjectURL(urlFichierEnMemoire);
         this.messageSnakBar.succes("Le livrable a été téléchargé avec succès !");
       },
       error: (erreur) => {
-        console.error("Échec du téléchargement du livrable :", erreur);
-        this.messageSnakBar.succes("Erreur : Assurez-vous de répondre à toutes les questions avant de télécharger.");
+        console.error(erreur);
+        this.messageSnakBar.succes("Erreur lors du téléchargement.");
       }
     });
   }
-
 }
