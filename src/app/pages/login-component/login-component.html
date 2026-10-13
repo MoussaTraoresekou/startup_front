@@ -1,20 +1,19 @@
 <div class="login-container">
   <div class="login-card">
     
-    <!-- EN-TÊTE DU LOGO & TITRES -->
     <div class="login-header">
       <a routerLink="/" class="brand-logo">
-        <mat-icon class="brand-icon">rocket_launch</mat-icon>
+        <div class="brand-logo-frame">
+          <img src="/images/logo_startup.png" alt="Logo Entrepreneur360" class="brand-logo-img" />
+        </div>
         <span class="brand-title">Entrepreneur<span>360</span></span>
       </a>
       <h1>Connexion</h1>
       <p>Accédez à votre espace de gestion</p>
     </div>
 
-    <!-- FORMULAIRE SÉCURISÉ -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       
-      <!-- CHAMP EMAIL -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Adresse e-mail</mat-label>
         <input matInput type="email" formControlName="email" placeholder="nom@exemple.com" required>
@@ -28,7 +27,6 @@
         }
       </mat-form-field>
 
-      <!-- CHAMP MOT DE PASSE -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Mot de passe</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required>
@@ -43,7 +41,6 @@
         }
       </mat-form-field>
 
-      <!-- GESTION DES OPTIONS SESSIONS -->
       <div class="form-options">
         <mat-checkbox class="remember-me" color="primary">
           Se souvenir de moi
@@ -51,13 +48,11 @@
         <a routerLink="/forgot-password" class="forgot-password">Mot de passe oublié ?</a>
       </div>
 
-      <!-- BOUTON DE SOUMISSION INTERACTIF -->
       <button mat-flat-button color="primary" type="submit" class="btn-submit" [disabled]="loginForm.invalid">
         Se connecter
       </button>
     </form>
 
-    <!-- PIED DE CARTE (REDIRECTION NAVIGATION) -->
     <div class="login-footer">
       <span>Vous n'avez pas encore de compte ?</span>
       <a routerLink="/register">S'inscrire</a>

@@ -1,0 +1,131 @@
+<div class="login-container">
+<div class="project-card">
+    <div class="login-header">
+        <a routerLink="/" class="brand-logo">
+            <div class="brand-logo-frame">
+                <img src="/images/logo_startup.png" alt="Logo Entrepreneur360" class="brand-logo-img" />
+            </div>
+            <span class="brand-title">Entrepreneur<span>360</span></span>
+        </a>
+        <h1>Rejoindre l'écosystème</h1>
+        <p>Créez votre profil collaborateur pour propulser des startups innovantes</p>
+    </div>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="project-form">
+        <div class="form-row">
+            <div class="field-group">
+                <label for="prenom">Prénom <span>*</span></label>
+                <div class="input-wrapper">
+                    <mat-icon>person</mat-icon>
+                    <input id="prenom" type="text" formControlName="prenom" placeholder="Ex. Seyba" />
+                </div>
+                @if (registerForm.get("prenom")?.invalid && registerForm.get("prenom")?.touched) {
+                <small class="invalid-feedbacks">Le prénom est requis (2 caractères min.)</small>
+                }
+            </div>
+
+            <div class="field-group">
+                <label for="nom">Nom <span>*</span></label>
+                <div class="input-wrapper">
+                    <mat-icon>badge</mat-icon>
+                    <input id="nom" type="text" formControlName="nom" placeholder="Ex. Sissoko" />
+                </div>
+                @if (registerForm.get("nom")?.invalid && registerForm.get("nom")?.touched) {
+                <small class="invalid-feedbacks">Le nom est requis (2 caractères min.)</small>
+                }
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-group">
+                <label for="specialite">Spécialité technique <span>*</span></label>
+                <div class="input-wrapper">
+                    <mat-icon>construction</mat-icon>
+                    <input id="specialite" type="text" formControlName="specialite"
+                        placeholder="Ex. Développeur Angular" />
+                </div>
+
+                @if (registerForm.get("specialite")?.invalid && registerForm.get("specialite")?.touched) {
+                <small class="invalid-feedbacks">
+                    @if (registerForm.get("specialite")?.hasError('required')) { La spécialité technique est
+                    requise. }
+                    @if (registerForm.get("specialite")?.hasError('pattern')) { Veuillez saisir un seul métier
+                    unique (les listes ou virgules sont interdites). }
+                </small>
+                }
+            </div>
+
+
+            <div class="field-group">
+                <label for="lienPortfolio">Lien portfolio ou GitHub</label>
+                <div class="input-wrapper">
+                    <mat-icon>link</mat-icon>
+                    <input id="lienPortfolio" type="url" formControlName="lienPortfolio"
+                        placeholder="https://github.com" />
+                </div>
+                @if (registerForm.get("lienPortfolio")?.invalid && registerForm.get("lienPortfolio")?.touched) {
+                <small class="invalid-feedbacks">Veuillez saisir une URL valide (http://... ou https://...)</small>
+                }
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-group">
+                <label for="email">Adresse e-mail <span>*</span></label>
+                <div class="input-wrapper">
+                    <mat-icon>email</mat-icon>
+                    <input id="email" type="email" formControlName="email" placeholder="moutra213@gmail.com" />
+                </div>
+                @if (registerForm.get("email")?.invalid && registerForm.get("email")?.touched) {
+                <small class="invalid-feedbacks">Un email valide est requis</small>
+                }
+            </div>
+
+            <div class="field-group">
+                <label for="telephone">Numéro de téléphone <span>*</span></label>
+                <div class="input-wrapper">
+                    <mat-icon>phone</mat-icon>
+                    <input id="telephone" type="text" formControlName="telephone" placeholder="Ex. 90876543" />
+                </div>
+                @if (registerForm.get("telephone")?.invalid && registerForm.get("telephone")?.touched) {
+                <small class="invalid-feedbacks">Le numéro de téléphone est requis</small>
+                }
+            </div>
+        </div>
+
+        <div class="field-group">
+            <label for="password">Mot de passe <span>*</span></label>
+            <div class="input-wrapper">
+                <mat-icon>lock</mat-icon>
+                <input id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                    placeholder="Sécurisez votre compte..." />
+                <button mat-icon-button (click)="hidePassword = !hidePassword" type="button"
+                    class="toggle-password-btn">
+                    <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+            </div>
+            @if (registerForm.get("password")?.invalid && registerForm.get("password")?.touched) {
+            <small class="invalid-feedbacks">Le mot de passe est requis (6 caractères min.)</small>
+            }
+        </div>
+
+        <div class="field-group">
+            <label for="biographie">Biographie / Présentation libre</label>
+            <div class="input-wrapper textarea-wrapper">
+                <mat-icon>rate_review</mat-icon>
+                <textarea id="biographie" formControlName="biographie"
+                    placeholder="Décrivez votre parcours, vos motivations et les types de projets de startups que vous souhaitez rejoindre..."
+                    rows="4"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 24px;">
+            <button type="submit" class="btn-submit" style="width: 100%; height: 46px;"
+                [disabled]="registerForm.invalid || chargement()">
+                {{ chargement() ? 'Création de votre compte...' : 'Créer mon compte collaborateur' }}
+            </button>
+        </div>
+
+    </form>
+
+</div>
+</div>

@@ -1,6 +1,5 @@
 <aside class="sidebar">
 
-  <!-- En-tête avec le logo -->
   <div class="sidebar-header">
     <div class="brand-icon">
       <img
@@ -16,10 +15,8 @@
     </div>
   </div>
 
-  <!-- Navigation -->
   <nav class="sidebar-nav">
 
-    <!-- ADMIN -->
     @if (authService.getRole() === 'ADMIN') {
 
       <a routerLink="/admin/dashboard"
@@ -79,7 +76,6 @@
       </a>
     }
 
-    <!-- PORTEUR DE PROJET -->
     @if (authService.getRole() === 'PORTEUR') {
 
       <a routerLink="dashboard"
@@ -146,7 +142,6 @@
       </a>
     }
 
-    <!-- MENTOR -->
     @if (authService.getRole() === 'MENTOR') {
 
       <a routerLink="/mentor/dashboard"
@@ -185,7 +180,37 @@
       </a>
     }
 
-    <!-- Notifications communes -->
+    @if (authService.getRole() === 'COLLABORATEUR') {
+
+      <a routerLink="/collaborateur/dashboard"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Tableau de bord</span>
+      </a>
+
+      <a routerLink="/collaborateur/offres"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>explore</mat-icon>
+        <span>Appels à candidature</span>
+      </a>
+
+      <a routerLink="/collaborateur/mes-projets"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>work_outline</mat-icon>
+        <span>Mes projets</span>
+      </a>
+
+      <a routerLink="/collaborateur/actualites"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>newspaper</mat-icon>
+        <span>Actualités</span>
+      </a>
+    }
+
     <a routerLink="notifications"
        routerLinkActive="active"
        class="nav-item notification-link">
@@ -200,7 +225,6 @@
       }
     </a>
 
-    <!-- Profil -->
     <a routerLink="profil"
        routerLinkActive="active"
        class="nav-item">
@@ -210,7 +234,6 @@
 
   </nav>
 
-  <!-- Pied de la sidebar -->
   <div class="sidebar-footer-profile">
 
     @if (authService.estConnecte()) {

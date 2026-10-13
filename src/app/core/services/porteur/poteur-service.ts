@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { InvitationMentorDto } from '../../model/InvitationMentorDto';
 import { Observable } from 'rxjs';
 import { ProjetEtapeResponseDto } from '../../model/ProjetEtapeResponseDto';
+import { RegisterPorteurRequestDto } from '../../model/RegisterPorteurRequestDto';
+import { PorteurResponseDto } from '../../model/PorteurResponseDto';
 
 @Injectable({
   providedIn: 'root',
@@ -22,12 +24,15 @@ export class PoteurService {
     return this.http.put(`${this.baseUrl}/projet-etapes/${projetEtapeId}/soumettre`, {}, { responseType: 'text' });
   }
     /**
-   * 📡 REAL DATA : Récupère la liste réelle des étapes associées à un projet précis
+   *  REAL DATA : Récupère la liste réelle des étapes associées à un projet précis
    */
   public getEtapesProjet(projetId: number): Observable<ProjetEtapeResponseDto[]> {
     return this.http.get<ProjetEtapeResponseDto[]>(`${this.baseUrl}/projets/${projetId}/etapes`);
   }
   
+  registerPorteur(porteur:RegisterPorteurRequestDto){
+    return this.http.post<PorteurResponseDto>(`${this.baseUrl}/register`,porteur);
+  }
 
 
 }
