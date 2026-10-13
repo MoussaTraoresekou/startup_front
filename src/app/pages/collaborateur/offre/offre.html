@@ -1,0 +1,105 @@
+<div class="offres-container">
+
+  <header class="offres-header">
+    <div class="header-brief">
+      <h1>Appels à candidature</h1>
+      <p>Explorez les besoins de l'écosystème, mettez à profit vos compétences et rejoignez l'équipe d'une startup innovante.</p>
+    </div>
+  </header>
+
+  @if (chargement()) {
+    <div class="loading-state">
+      <mat-icon class="spinner-icon">sync</mat-icon>
+      <p>Chargement des opportunités d'incubation...</p>
+    </div>
+  } @else {
+    <div class="offres-grid">
+      @for (offre of listeAnnonces(); track offre.id) {
+        <div class="offre-card">
+          <div class="card-top">
+            <span class="startup-badge">
+              <mat-icon>rocket_launch</mat-icon>
+              {{ offre.projetTitre }}
+            </span>
+            <span class="date-badge">{{ offre.datePublication | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <h3 class="offre-title">{{ offre.titre }}</h3>
+          
+          <div class="meta-owner">
+            <mat-icon>person</mat-icon>
+            <span>Porteur : {{ offre.porteurPrenom }} {{ offre.porteurNom }}</span>
+          </div>
+
+          <p class="offre-preview">{{ offre.description | slice:0:140 }}...</p>
+
+          <button mat-flat-button class="btn-discover" (click)="ouvrirLiseuseOffre(offre)">
+            <mat-icon>visibility</mat-icon>
+            <span>Consulter l'offre</span>
+          </button>
+        </div>
+      } @empty {
+        <div class="empty-state-card">
+          <mat-icon>campaign</mat-icon>
+          <h3>Aucun appel actif</h3>
+          <p>Il n'y a pas d'appel à candidature ouvert pour le moment au sein de l'incubateur.</p>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- MODALE / LISEUSE DE L'OFFRE AVEC FORMULAIRE DE MOTIVATION (CLASSE D'ASSOCIATION) -->
+  @if (offreSelectionnee(); as offreActive) {
+    <div class="modal-overlay" (click)="fermerLiseuseOffre()">
+      <div class="modal-window" (click)="$event.stopPropagation()">
+        
+        <header class="modal-header">
+          <div class="modal-titles">
+            <span class="modal-eyebrow">{{ offreActive.projetTitre }}</span>
+            <h2>{{ offreActive.titre }}</h2>
+          </div>
+          <button mat-icon-button class="btn-close" (click)="fermerLiseuseOffre()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </header>
+
+        <main class="modal-body">
+          <div class="info-block">
+            <h3><mat-icon>description</mat-icon> Description de la mission</h3>
+            <p>{{ offreActive.description }}</p>
+          </div>
+
+          <div class="info-block">
+            <h3><mat-icon>construction</mat-icon> Profil technique recherché</h3>
+            <p>{{ offreActive.profilRecherche }}</p>
+          </div>
+
+          <div class="motivation-form-zone">
+            <h3><mat-icon>rate_review</mat-icon> Vos motivations pour ce projet <span>*</span></h3>
+            <div class="textarea-frame">
+              <textarea 
+                [(ngModel)]="motivationTexte" 
+                placeholder="Expliquez en quoi vos compétences et votre expérience de collaborateur vont aider cette startup à franchir ses jalons..." 
+                rows="5">
+              </textarea>
+            </div>
+          </div>
+        </main>
+
+        <footer class="modal-footer">
+          <button mat-button class="btn-cancel" (click)="fermerLiseuseOffre()">Annuler</button>
+          <button 
+            mat-flat-button 
+            class="btn-send-application" 
+            [disabled]="!motivationTexte.trim() || chargementPostuler()"
+            (click)="soumettreCandidature()">
+            <mat-icon>{{ chargementPostuler() ? 'sync' : 'send' }}</mat-icon>
+            <span>{{ chargementPostuler() ? 'Envoi...' : 'Soumettre ma candidature' }}</span>
+          </button>
+        </footer>
+
+      </div>
+    </div>
+  }
+
+</div>
