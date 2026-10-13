@@ -59,7 +59,10 @@ export class LoginComponent {
             }
              else if (roleUtilisateur === 'INVESTISSEUR') {
               this.router.navigate(['/investisseur/dashboard']);
-            }  else {
+            }else if (roleUtilisateur === 'COLLABORATEUR') {
+              this.router.navigate(['/collaborateur/dashboard']);
+            }
+              else {
               this.router.navigate(['/']);
             }
           },

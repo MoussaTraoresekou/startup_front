@@ -1,0 +1,93 @@
+<div class="dashboard-container">
+  
+  <header class="dashboard-header">
+    <div class="welcome-block">
+      <h1>Espace Collaborateur</h1>
+      <p>Suivez vos engagements, gérez vos candidatures et découvrez les opportunités de l'incubateur.</p>
+    </div>
+  </header>
+
+  <section class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon" style="background: var(--primary-light); color: var(--primary-dark);">
+        <mat-icon>work_outline</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>{{ stats().projetsActifsCount }}</h3>
+        <span>Projets rejoints</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: var(--secondary-light); color: var(--secondary-dark);">
+        <mat-icon>hourglass_top</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>{{ stats().candidaturesEnAttenteCount }}</h3>
+        <span>Candidatures en attente</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon" style="background: var(--secondary-light); color: var(--secondary-dark);">
+        <mat-icon>mail_outline</mat-icon>
+      </div>
+      <div class="stat-info">
+        <h3>{{ stats().invitationsRecuesCount }}</h3>
+        <span>Invitations reçues</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="dashboard-main-grid">
+    
+    <div class="card offers-card">
+      <div class="card-header">
+        <mat-icon>explore</mat-icon>
+        <h3>Derniers appels à candidature</h3>
+      </div>
+
+      <div class="offers-list">
+        @for (offre of dernieresOffres(); track offre.id) {
+          <div class="offer-item">
+            <div class="offer-meta">
+              <h4>{{ offre.titreRole }}</h4>
+              <span class="startup-tag">{{ offre.projetTitre }}</span>
+            </div>
+            <button mat-stroked-button color="primary" class="btn-action-view" [routerLink]="['/collaborateur/offres', offre.id]">
+              Voir la mission
+            </button>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <mat-icon>campaign</mat-icon>
+            <p>Aucun appel à candidature n'est publié pour le moment.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="card actions-card">
+      <div class="card-header">
+        <mat-icon>bolt</mat-icon>
+        <h3>Raccourcis d'actions</h3>
+      </div>
+      <div class="shortcuts-list">
+        <a routerLink="/collaborateur/offres" class="shortcut-btn">
+          <mat-icon>search</mat-icon>
+          <span>Parcourir les annonces</span>
+        </a>
+        <a routerLink="/collaborateur/mes-projets" class="shortcut-btn">
+          <mat-icon>forum</mat-icon>
+          <span>Accéder aux discussions</span>
+        </a>
+        <a routerLink="/profil" class="shortcut-btn">
+          <mat-icon>badge</mat-icon>
+          <span>Mettre à jour ma spécialité</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+</div>

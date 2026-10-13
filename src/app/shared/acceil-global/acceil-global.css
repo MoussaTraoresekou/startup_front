@@ -11,6 +11,9 @@
   color: var(--text-primary);
 }
 
+/* ==========================================================================
+   BARRE DE NAVIGATION HAUTE
+   ========================================================================== */
 .landing-navbar {
   position: sticky;
   top: 0;
@@ -34,21 +37,27 @@
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0px;
   cursor: pointer;
   text-decoration: none;
 }
 
-.brand-icon {
-  width: 38px !important;
-  height: 38px !important;
+.brand-logo-frame {
+  width: 70px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: var(--surface);
-  font-size: 21px !important;
+  background: transparent;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-text {
@@ -84,6 +93,7 @@
 .nav-actions .btn-login {
   border-radius: var(--radius-sm);
   font-weight: 600;
+  color: var(--text-primary);
 }
 
 .nav-actions .btn-login mat-icon {
@@ -93,17 +103,19 @@
 .nav-actions .btn-signup {
   border-radius: var(--radius-sm);
   font-weight: 600;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  cursor: pointer;
 }
 
+/* ==========================================================================
+   SECTION HERO (PRÉSENTATION PRINCIPALE)
+   ========================================================================== */
 .hero-section {
   padding: 90px 24px 80px;
   text-align: center;
-  background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(5, 150, 105, 0.09),
-      transparent 55%
-    );
+  background: radial-gradient(circle at 50% 0%, rgba(5, 150, 105, 0.09), transparent 55%);
 }
 
 .hero-content {
@@ -120,25 +132,25 @@
   padding: 7px 14px;
   border-radius: 999px;
   background: var(--secondary-light);
-  color: var(--primary-dark);
+  color: var(--secondary-dark);
   font-size: 12px;
   font-weight: 600;
 }
 
 .badge-hero mat-icon {
-  width: 17px !important;
-  height: 17px !important;
-  font-size: 17px !important;
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
 }
 
 .hero-content h1 {
   max-width: 800px;
   margin: 0 auto 20px;
   color: var(--text-primary);
-  font-size: clamp(40px, 5vw, 60px);
-  line-height: 1.08;
-  font-weight: 700;
-  letter-spacing: -2.5px;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -1.5px;
 }
 
 .hero-content h1 span {
@@ -157,224 +169,232 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .btn-hero-primary {
-  min-height: 48px;
-  padding: 0 22px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  height: 48px;
+  padding: 0 24px;
   font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 
 .btn-hero-secondary {
-  min-height: 48px;
-  padding: 0 22px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
+  height: 48px;
+  padding: 0 24px;
   font-weight: 600;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-.section-title {
-  max-width: 650px;
-  margin: 0 auto 48px;
-  text-align: center;
-}
-
-.section-title h2 {
-  margin: 0 0 10px;
-  color: var(--text-primary);
-  font-size: 32px;
-  line-height: 1.2;
-  font-weight: 700;
-  letter-spacing: -1px;
-}
-
-.section-title h2 span {
-  color: var(--primary);
-}
-
-.section-title p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.workflow-section {
+/* ==========================================================================
+   SECTIONS APPLICATIVES COMPLÈTES (WORKFLOW & PROFILS)
+   ========================================================================== */
+.workflow-section, 
+.profiles-section, 
+.cta-section {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 90px 24px;
+  padding: 60px 24px;
   box-sizing: border-box;
 }
 
+.section-title {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-title h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+}
+
+.section-title p {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 15px;
+}
+
+/* GRILLE DU PARCOURS */
 .workflow-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
 }
 
 .workflow-card {
-  min-height: 190px;
-  box-sizing: border-box;
-  padding: 24px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.workflow-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.04);
+  border-radius: var(--radius-lg);
+  padding: 30px 24px;
+  position: relative;
 }
 
 .step-badge {
-  width: 38px;
-  height: 38px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary-dark);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 18px;
-  border-radius: var(--radius-sm);
-  background: var(--secondary-light);
-  color: var(--primary);
-  font-size: 12px;
   font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 16px;
 }
 
 .workflow-card h3 {
-  margin: 0 0 8px;
-  color: var(--text-primary);
+  margin: 0 0 10px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .workflow-card p {
   margin: 0;
-  color: var(--text-secondary);
   font-size: 13px;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
-.profiles-section {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 24px 90px;
-  box-sizing: border-box;
-}
-
+/* 🚀 GRILLE DES 4 PROFILS : Ajustement sur 4 colonnes fluides */
 .profiles-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
 }
 
 .profile-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 270px;
-  padding: 30px 24px;
-  box-sizing: border-box;
   text-align: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.profile-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(31, 41, 55, 0.04);
+  box-sizing: border-box;
 }
 
 .profile-icon {
   width: 56px;
   height: 56px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  border-radius: var(--radius-sm);
-  background: var(--secondary-light);
-  color: var(--secondary-dark);
 }
 
 .profile-icon mat-icon {
-  width: 27px !important;
-  height: 27px !important;
-  font-size: 27px !important;
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
 }
 
 .profile-card h3 {
   margin: 0 0 10px;
+  font-size: 18px;
+  font-weight: 750;
   color: var(--text-primary);
-  font-size: 17px;
-  font-weight: 600;
 }
 
 .profile-card p {
-  flex: 1;
-  margin: 0 0 22px;
-  color: var(--text-secondary);
+  margin: 0 0 24px;
   font-size: 13px;
+  color: var(--text-secondary);
   line-height: 1.6;
+  flex: 1;
 }
 
 .btn-profile {
   width: 100%;
-  min-height: 44px;
-  border-radius: var(--radius-sm);
+  height: 42px;
   font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.cta-section {
-  width: 100%;
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 20px 24px 90px;
-  box-sizing: border-box;
-}
-
+/* ==========================================================================
+   CALL TO ACTION FINAL & FOOTER
+   ========================================================================== */
 .cta-box {
-  padding: 60px 32px;
-  box-sizing: border-box;
+  padding: 60px 40px;
   text-align: center;
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+  color: var(--surface);
 }
 
-@media (max-width: 1024px) {
-  .workflow-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .profiles-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+.cta-box h2 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
+.cta-box p {
+  margin: 0 0 32px;
+  font-size: 16px;
+  opacity: 0.95;
+  max-width: 550px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-cta {
+  height: 48px;
+  padding: 0 24px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landing-footer {
+  box-sizing: border-box;
+}
+
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
-  .workflow-grid {
-    grid-template-columns: 1fr;
-  }
-  .profiles-grid {
-    grid-template-columns: 1fr;
-  }
-  .nav-container {
-    padding: 14px 16px;
-  }
   .hero-section {
-    padding: 60px 16px 60px;
+    padding: 60px 20px 40px;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn-hero-primary, 
+  .btn-hero-secondary {
+    width: 100%;
+  }
+  
+  .cta-box {
+    padding: 40px 20px;
+  }
+  
+  .cta-box h2 {
+    font-size: 24px;
   }
 }

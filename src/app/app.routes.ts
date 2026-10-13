@@ -24,6 +24,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'auth/collaborateur_register',
+    loadComponent: () =>
+      import('./pages/collaborateur/register-collaborateur/register-collaborateur').then(
+        (m) => m.RegisterCollaborateurComponent
+      ),
+  },
+  {
+    path: 'auth/porteur_register',
+    loadComponent: () =>
+      import('./pages/porteur/register-porteur/register-porteur').then(
+        (m) => m.RegisterPorteur
+      ),
+  },
+  {
     path: 'porteur',
     canActivate: [authGuard, roleGuard],
     data: { role: 'PORTEUR' },
@@ -170,6 +184,47 @@ export const routes: Routes = [
           import('./pages/actualites/actualites').then(
             (m) => m.Actualites
           ),
+      },
+      {
+        path: 'actualites',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./pages/porteur/profil/profil').then(
+            (m) => m.Profil
+          ),
+      },
+    ],
+  },
+  {
+    path: 'collaborateur',
+    component: MainLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'COLLABORATEUR' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/collaborateur/collaborateur-dashboard/collaborateur-dashboard').then(
+            (m) => m.CollaborateurDashboardComponent
+          ),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/mentors/notifications/notifications-component/notifications-component'
+          ).then((m) => m.NotificationsComponent),
       },
       {
         path: 'actualites',

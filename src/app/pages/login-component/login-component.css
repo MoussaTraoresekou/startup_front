@@ -40,30 +40,36 @@
 .brand-logo {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  justify-content: center;
   margin-bottom: 24px;
   text-decoration: none;
   cursor: pointer;
 }
 
-.brand-icon {
+.brand-logo-frame {
+  width: 70px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px !important;
-  height: 40px !important;
-  font-size: 22px !important;
-  border-radius: var(--radius-sm);
-  background: var(--primary);
-  color: var(--surface);
+  background: transparent;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-logo-img {
+  width: 114%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-title {
   color: var(--text-primary);
-  font-size: 21px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   letter-spacing: -0.5px;
   line-height: 1;
+  display: inline-block;
 }
 
 .brand-title span {
@@ -166,24 +172,6 @@
 .login-footer a:hover {
   color: var(--primary-dark);
   text-decoration: underline;
-}
-
-.login-error {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding: 11px 13px;
-  border-radius: var(--radius-sm);
-  background: var(--secondary-light);
-  color: var(--error);
-  font-size: 13px;
-}
-
-.login-error mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
 }
 
 @media (max-width: 600px) {
