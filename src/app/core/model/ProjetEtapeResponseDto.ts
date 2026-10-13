@@ -1,6 +1,6 @@
 export interface ProjetEtapeResponseDto {
   id: number;
-  statutEtape: string;
+  StatutEtape: string; // 🚀 ALIGNEMENT : Remplacement du 's' minuscule par un 'S' majuscule
   dateSoumission: string | null;
   dateValidation: string | null;
   commentaireMentor: string | null;

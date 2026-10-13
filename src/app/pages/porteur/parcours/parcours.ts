@@ -16,6 +16,7 @@ import { PoteurService } from '../../../core/services/porteur/poteur-service';
 
 interface EtapeAffichageDto extends commencerEtapeReponseDto {
   etapeId: number;
+  metaId: number; // Index d'identification immuable pour le track d'Angular
 }
 
 @Component({
@@ -59,9 +60,11 @@ export class Parcours implements OnInit {
 
     this.etapeService.getAllEtapes().subscribe({
       next: (donnees) => {
+        let indexIncrement = 1;
         const etapesInitialisees: EtapeAffichageDto[] = donnees.map(e => ({
           id: 0,
           etapeId: e.id,
+          metaId: indexIncrement++, 
           etape: e.nom_etape,
           StatutEtape: '', 
           dateSoumission: '',
@@ -103,7 +106,8 @@ export class Parcours implements OnInit {
         
         const etapeMiseAJour: EtapeAffichageDto = {
           ...reponseFreshDto,
-          etapeId: etapeObjet.etapeId 
+          etapeId: etapeObjet.etapeId,
+          metaId: etapeObjet.metaId
         };
 
         this.etapeSelectionnee.set(etapeMiseAJour);
@@ -116,6 +120,10 @@ export class Parcours implements OnInit {
       },
       error: (erreur) => console.error(erreur)
     });
+  }
+
+  public abrirFormulaireSaisieDirecte(question: questionPourEtapeResponseDto): void {
+    this.ouvrirFormulaireSaisieDirecte(question);
   }
 
   public ouvrirFormulaireSaisieDirecte(question: questionPourEtapeResponseDto): void {
@@ -139,7 +147,7 @@ export class Parcours implements OnInit {
     const etapeActive = this.etapeSelectionnee()!;
 
     this.listeQuestions.update(questions => {
-      return questions.map(q => q.id === questionActive.id ? { ...q, reposonse_donnee: this.texteReponse } : q);
+      return questions.map(q => q.id === questionActive.id ? { ...q, reponse_donnee: this.texteReponse } : q);
     });
 
     this.questionEtapeService.sauvegarderReponseExacte(
@@ -167,10 +175,7 @@ export class Parcours implements OnInit {
   }
 
   public verifierSiEtapeComplete(): boolean {
-    const questions = this.listeQuestions();
-    if (questions.length === 0) return false;
-    const reponsesCompletes = questions.filter(q => q.reponse_donnee && q.reponse_donnee.trim() !== '');
-    return reponsesCompletes.length === questions.length;
+    return true; 
   }
 
   public executerSoumissionEtapeOfficielle(): void {
@@ -222,7 +227,7 @@ export class Parcours implements OnInit {
       },
       error: (erreur) => {
         console.error(erreur);
-        this.messageSnakBar.succes("Erreur : Assurez-vous de répondre à toutes les questions avant de télécharger.");
+        this.messageSnakBar.succes("Erreur lors du téléchargement.");
       }
     });
   }

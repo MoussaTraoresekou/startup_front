@@ -58,7 +58,7 @@
           </thead>
           <tbody>
             @for (etape of etapes(); track etape.id) {
-              <tr [class.highlight-row]="etape.statutEtape === 'SOUMIS'">
+              <tr [class.highlight-row]="etape.StatutEtape === 'SOUMIS'">
                 
                 <td class="cell-primary-title">
                   <div class="step-title-flex">
@@ -72,14 +72,14 @@
                 </td>
 
                 <td class="cell-status">
-                  <span class="status-pill-badge" [class]="etape.statutEtape.toLowerCase()">
-                    {{ etape.statutEtape === 'EN_COUR' ? 'En cours' : etape.statutEtape }}
+                  <span class="status-pill-badge" [class]="etape.StatutEtape.toLowerCase()">
+                    {{ etape.StatutEtape === 'EN_COUR' ? 'En cours' : etape.StatutEtape }}
                   </span>
                 </td>
 
                 <td class="cell-actions text-right-align">
                   <!-- 🚀 LE BOUTON INTERACTIF DU WORKFLOW REEL -->
-                  @if (etape.statutEtape === 'SOUMIS') {
+                  @if (etape.StatutEtape === 'SOUMIS') {
                     <button 
                       type="button" 
                       class="btn-evaluate-trigger" 
@@ -88,7 +88,7 @@
                       <mat-icon>rate_review</mat-icon>
                       <span>Évaluer</span>
                     </button>
-                  } @else if (etape.statutEtape === 'VALIDEE') {
+                  } @else if (etape.StatutEtape === 'VALIDEE') {
                     <span class="resolved-text-badge text-success">
                       <mat-icon>check_circle</mat-icon> Validée
                     </span>

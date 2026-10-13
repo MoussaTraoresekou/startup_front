@@ -2,29 +2,33 @@
   <header class="parcours-header">
     <div class="welcome-section">
       <h1>Parcours du projet – {{ nomProjet }}</h1>
-      <p>Pilotez votre projet librement : sélectionnez n'est-ce pas n'importe quelle étape de la frise pour répondre au questionnaire.</p>
+      <p>Pilotez votre projet librement : sélectionnez n'importe quelle étape de la frise pour répondre au questionnaire.</p>
     </div>
   </header>
 
   <div class="timeline-card">
     <div class="timeline-steps">
-      @for (etape of listeEtapes(); track etape.id; let last = $last) {
-        <div class="step-container" [class.active]="etapeSelectionnee()?.id === etape.id">
+      @for (etape of listeEtapes(); track etape.metaId; let last = $last) {
+        <div class="step-container" [class.active]="etapeSelectionnee()?.etapeId === etape.etapeId">
           <div class="step" (click)="cliquerSurEtape(etape)">
             <div class="step-circle"
-              [class.completed]="etape.StatutEtape === 'TERMINE' || etape.StatutEtape === 'Validé' || etape.StatutEtape === 'VALIDEE'"
-              [class.current]="etape.StatutEtape === 'EN_COUR' || etape.StatutEtape === 'En cours'">
+              [class.completed]="etape.StatutEtape === 'VALIDE'"
+              [class.current]="etape.StatutEtape === 'EN_COUR'">
               <mat-icon>check</mat-icon>
             </div>
             <span class="step-label">{{ etape.etape }}</span>
             <span class="step-status">
-              {{ etape.StatutEtape === 'EN_COUR' ? 'En cours' : (etape.StatutEtape === 'VALIDEE' ? 'Validé' : (etape.StatutEtape || 'À commencer')) }}
+              @if (etape.StatutEtape === 'EN_COUR') { En cours }
+              @else if (etape.StatutEtape === 'VALIDE') { Validé }
+              @else if (etape.StatutEtape === 'A_REVOIR') { À revoir }
+              @else if (etape.StatutEtape === 'SOUMIS') { Soumis }
+              @else { À commencer }
             </span>
           </div>
         </div>
 
         @if (!last) {
-          <div class="step-line" [class.active]="etape.StatutEtape === 'TERMINE' || etape.StatutEtape === 'Validé' || etape.StatutEtape === 'VALIDEE'"></div>
+          <div class="step-line" [class.active]="etape.StatutEtape === 'VALIDE'"></div>
         }
       }
     </div>
@@ -110,12 +114,11 @@
 
         @if (etapeSelectionnee(); as etapeActive) {
           <div class="workflow-porteur-actions">
-            @if (etapeActive.StatutEtape === 'EN_COUR' || etapeActive.StatutEtape === 'En cours' || etapeActive.StatutEtape === 'A_CORRIGER' || !etapeActive.StatutEtape) {
+            @if (etapeActive.StatutEtape === 'EN_COUR' || etapeActive.StatutEtape === 'A_REVOIR' || !etapeActive.StatutEtape) {
               <div class="submission-banner-zone">
-                <p>Prêt à soumettre ? Une fois que vous aurez répondu à **toutes les questions**, vous pourrez transmettre l'étape complète à votre mentor.</p>
-                
+                <p>Prêt à soumettre ? Transmettez l'étape complète à votre mentor pour obtenir son évaluation.</p>
                 <button type="button" class="btn-submit-parcours-workflow" 
-                  [disabled]="chargementSoumission() || !verifierSiEtapeComplete()"
+                  [disabled]="chargementSoumission()"
                   (click)="executerSoumissionEtapeOfficielle()">
                   <mat-icon>{{ chargementSoumission() ? 'sync' : 'send' }}</mat-icon>
                   <span>{{ chargementSoumission() ? 'Envoi...' : 'Soumettre l\'étape complète au mentor' }}</span>
@@ -131,7 +134,7 @@
                 </div>
               </div>
             }
-            @if (etapeActive.StatutEtape === 'VALIDEE' || etapeActive.StatutEtape === 'Validé' || etapeActive.StatutEtape === 'TERMINE') {
+            @if (etapeActive.StatutEtape === 'VALIDE') {
               <div class="workflow-state-card mode-validated">
                 <mat-icon>check_circle</mat-icon>
                 <div>

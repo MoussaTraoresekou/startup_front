@@ -5,6 +5,7 @@ import { MentorResponseDto } from '../../model/MentorResponseDto';
 import { ProjetDetailDto } from '../../model/ProjetDetailDto';
 import { Observable } from 'rxjs';
 import { LivrableEtapeDto } from '../../model/LivrableEtapeDto';
+import { ProjetEtapeResponseDto } from '../../model/ProjetEtapeResponseDto';
 
 @Injectable({
   providedIn: 'root',
@@ -55,5 +56,9 @@ export class MentorServices {
   public getMesStartupsAssignees(): Observable<ProjetDetailDto[]> {
     return this.http.get<ProjetDetailDto[]>(`${this.baseUrl}/mes-startups`);
   }
+   
+    public getEtapesProjet(projetId: number): Observable<ProjetEtapeResponseDto[]> {
+      return this.http.get<ProjetEtapeResponseDto[]>(`${this.baseUrl}/projets/${projetId}/etapes`);
+    }
 
 }

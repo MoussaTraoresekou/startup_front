@@ -19,7 +19,6 @@ import { LivrableEtapeDto } from '../../../core/model/LivrableEtapeDto';
 })
 export class MentorProjetsComponent implements OnInit {
   private mentorService = inject(MentorServices);
-  private porteurService = inject(PoteurService);
 
   startupsAssignees = signal<ProjetDetailDto[]>([]);
   startupSelectionneeId = signal<number | null>(null);
@@ -46,7 +45,7 @@ export class MentorProjetsComponent implements OnInit {
     this.startupSelectionneeId.set(projetId);
     this.etapes.set([]); // Réinitialise la liste le temps du chargement réseau
     
-    this.porteurService.getEtapesProjet(projetId).subscribe({
+    this.mentorService.getEtapesProjet(projetId).subscribe({
       next: (etapesReelles: ProjetEtapeResponseDto[]) => {
         this.etapes.set(etapesReelles);
       },
