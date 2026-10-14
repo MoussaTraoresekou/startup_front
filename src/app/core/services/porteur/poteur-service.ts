@@ -6,6 +6,9 @@ import { Observable } from 'rxjs';
 import { ProjetEtapeResponseDto } from '../../model/ProjetEtapeResponseDto';
 import { RegisterPorteurRequestDto } from '../../model/RegisterPorteurRequestDto';
 import { PorteurResponseDto } from '../../model/PorteurResponseDto';
+import { MembreEquipeDto } from '../../model/MembreEquipeDto';
+import { OffresResponseDto } from '../../model/OffresResponseDto';
+import { OffresRequestDto } from '../../model/OffresRequestDto';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +35,14 @@ export class PoteurService {
   
   registerPorteur(porteur:RegisterPorteurRequestDto){
     return this.http.post<PorteurResponseDto>(`${this.baseUrl}/register`,porteur);
+  }
+  getMesEquipes(projet_id:number){
+          return this.http.get<MembreEquipeDto[]>(`${this.baseUrl}/projets/${projet_id}/equipe-complete`)
+  }
+  //http://localhost:8080/api/porteur/offres/publier
+  publierAppelCandidature(offre:OffresRequestDto){
+    return this.http.post<OffresResponseDto>(`${this.baseUrl}/offres/publier`,offre)
+
   }
 
 

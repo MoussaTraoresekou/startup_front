@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../core/services/notification-service';
 import { MembreEquipeDto } from '../../../core/model/MembreEquipeDto';
 import { CandidatureRecueDto } from '../../../core/model/CandidatureRecueDto';
+import { PoteurService } from '../../../core/services/porteur/poteur-service';
+import { OffresRequestDto } from '../../../core/model/OffresRequestDto';
 
 @Component({
   selector: 'app-equipe',
@@ -21,6 +23,7 @@ export class EquipeComponent implements OnInit {
   private http = inject(HttpClient);
   private route = inject(ActivatedRoute);
   private messageSnackBar = inject(NotificationService);
+  private porteurService = inject(PoteurService);
 
   projetId!: number;
   registerForm!: FormGroup;
@@ -29,9 +32,11 @@ export class EquipeComponent implements OnInit {
   afficherModalListeMembres = signal<boolean>(false);
   chargementPublication = signal<boolean>(false);
   chargementEquipe = signal<boolean>(false);
+  chargementCandidatures = signal<boolean>(false);
   
   membres = signal<MembreEquipeDto[]>([]);
   candidatures = signal<CandidatureRecueDto[]>([]);
+  offreSelectionnee = signal<CandidatureRecueDto | null>(null);
 
   ngOnInit(): void {
     const idParam = this.route.parent?.snapshot.paramMap.get('id');
@@ -48,9 +53,9 @@ export class EquipeComponent implements OnInit {
 
   public recupererEquipeEtCandidatures(): void {
     this.chargementEquipe.set(true);
+    this.chargementCandidatures.set(true);
     
-    // 📡 Récupération de l'équipe unifiée et polymorphe du backend (Porteur + Multi-Mentors + Multi-Collabs)
-    this.http.get<MembreEquipeDto[]>(`http://localhost:8080/api/porteur/projets/${this.projetId}/equipe-complete`).subscribe({
+    this.porteurService.getMesEquipes(this.projetId).subscribe({
       next: (donnees) => {
         this.membres.set(donnees);
         this.chargementEquipe.set(false);
@@ -58,20 +63,31 @@ export class EquipeComponent implements OnInit {
       error: (err) => {
         console.error(err);
         this.chargementEquipe.set(false);
-        // Fallback de secours en cas d'absence de serveur
         this.membres.set([
           { id: 1, nom: 'Sangaré', prenom: 'Kadiatou', roleEcosysteme: 'PORTEUR', specialite: 'Fondateur Principal' },
           { id: 2, nom: 'Traoré', prenom: 'Ibrahim', roleEcosysteme: 'MENTOR', specialite: 'Mentor Technique' },
-          { id: 3, nom: 'Diallo', prenom: 'Moussa', roleEcosysteme: 'COLLABORATEUR', specialite: 'Développeur Angular' },
-          { id: 4, nom: 'Cissé', prenom: 'Fatoumata', roleEcosysteme: 'COLLABORATEUR', specialite: 'UI/UX Designer' }
+          { id: 3, nom: 'Diallo', prenom: 'Moussa', roleEcosysteme: 'COLLABORATEUR', specialite: 'Développeur Angular' }
         ]);
       }
     });
 
-    // Simulation/Chargement des candidatures en attente
-    this.candidatures.set([
-      { id: 101, collaborateurNom: 'Coulibaly', collaborateurPrenom: 'Abdoulaye', collaborateurSpecialite: 'Développeur Spring Boot', dateCreation: '2026-10-13T10:00:00', motivation: 'Je souhaite participer à la conception de l\'API.' }
-    ]);
+    this.http.get<CandidatureRecueDto[]>(`http://localhost:8080/api/porteur/projets/${this.projetId}/candidatures-recues`).subscribe({
+      next: (donnees) => {
+        this.candidatures.set(donnees);
+        this.chargementCandidatures.set(false);
+        if (donnees.length > 0 && !this.offreSelectionnee()) {
+          this.offreSelectionnee.set(donnees[0]);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.chargementCandidatures.set(false);
+      }
+    });
+  }
+
+  public ouvrirLiseuseOffre(candidature: CandidatureRecueDto): void {
+    this.offreSelectionnee.set(candidature);
   }
 
   public basculerVoletAppel(): void {
@@ -91,12 +107,13 @@ export class EquipeComponent implements OnInit {
       projetId: this.projetId
     };
 
-    this.http.post('http://localhost:8080/api/porteur/offres/publier', payload).subscribe({
+    this.porteurService.publierAppelCandidature(payload as OffresRequestDto).subscribe({
       next: () => {
         this.chargementPublication.set(false);
         this.messageSnackBar.succes("Votre appel à candidature a été publié avec succès au sein de l'incubateur.");
         this.registerForm.reset();
         this.afficherFormulaireAppel.set(false);
+        this.recupererEquipeEtCandidatures();
       },
       error: (err) => {
         this.chargementPublication.set(false);
@@ -106,8 +123,17 @@ export class EquipeComponent implements OnInit {
   }
 
   public traiterArbitrageCandidature(id: number, decision: 'accepter' | 'refuser'): void {
-    this.candidatures.update(items => items.filter(c => c.id !== id));
-    this.messageSnackBar.succes(`La candidature a été traitée avec succès ("${decision}").`);
-    this.recupererEquipeEtCandidatures();
+    const url = `http://localhost:8080/api/porteur/candidatures/${id}/${decision}`;
+    
+    this.http.put(url, {}).subscribe({
+      next: () => {
+        this.messageSnackBar.succes(`La candidature a été validée avec succès ("${decision}").`);
+        this.offreSelectionnee.set(null);
+        this.recupererEquipeEtCandidatures();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 }
