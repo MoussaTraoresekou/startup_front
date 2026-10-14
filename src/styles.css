@@ -18,7 +18,7 @@
   --text-secondary: #6B7280;
 
   --success: #059669;
-  --error: #DC2626;
+  --error: red;
 
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -49,4 +49,55 @@ body {
 
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+/* ==========================================================================
+   CONFIGURATION DES COULEURS DES SNACKBARS MAT-MATERIAL VIA LES VARIABLES
+   ========================================================================== */
+
+/* 🟢 SNACKBAR SUCCÈS : Vert Émeraude */
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__surface {
+  background-color: var(--success) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2) !important;
+}
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__label {
+  color: var(--surface) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+.mat-mdc-snack-bar-container.snackbar-success .mdc-snackbar__button {
+  color: var(--surface) !important;
+  font-weight: 700 !important;
+}
+
+/* 🔴 SNACKBAR ERREUR : Rouge Alerte */
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__surface {
+  background-color: var(--error) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2) !important;
+}
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__label {
+  color: var(--surface) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+.mat-mdc-snack-bar-container.snackbar-error .mdc-snackbar__button {
+  color: var(--surface) !important;
+  font-weight: 700 !important;
+}
+
+/* 🔵 SNACKBAR INFO : Anthracite Sobre */
+.mat-mdc-snack-bar-container.snackbar-info .mdc-snackbar__surface {
+  background-color: var(--dark) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 12px rgba(31, 41, 55, 0.15) !important;
+}
+.mat-mdc-snack-bar-container.snackbar-info .mdc-snackbar__label {
+  color: var(--surface) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+.mat-mdc-snack-bar-container.snackbar-info .mdc-snackbar__button {
+  color: var(--primary) !important;
+  font-weight: 700 !important;
 }

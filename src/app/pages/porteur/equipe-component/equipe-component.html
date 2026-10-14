@@ -1,0 +1,289 @@
+<div class="equipe-container">
+
+  <!-- En-tête principal -->
+  <header class="equipe-header">
+    <div>
+      <span class="section-eyebrow">ESPACE PROJET</span>
+      <h1>Mon équipe</h1>
+      <p>Gérez vos collaborateurs et trouvez les profils dont votre projet a besoin.</p>
+    </div>
+
+    @if (!afficherFormulaireAppel()) {
+      <button type="button" mat-flat-button class="btn-trigger-call" (click)="basculerVoletAppel()">
+        <mat-icon>campaign</mat-icon> Lancer un appel à candidature
+      </button>
+    }
+  </header>
+
+  <!-- Section : Les membres de l'équipe -->
+  <section class="content-card">
+    <div class="card-heading">
+      <div class="heading-icon green-icon"><mat-icon>groups</mat-icon></div>
+      <div class="heading-text">
+        <h2>Les membres de mon équipe</h2>
+        <p>Les personnes qui contribuent au développement du projet.</p>
+      </div>
+      <span class="count-badge">{{ membres().length }}</span>
+    </div>
+
+    @if (chargementEquipe()) {
+      <div class="loading-state">
+        <mat-icon class="loading-icon">sync</mat-icon>
+        <p>Chargement de l'équipe...</p>
+      </div>
+    } @else {
+      @if (membres().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon"><mat-icon>person_add</mat-icon></div>
+          <h3>Aucun membre pour le moment</h3>
+          <p>Les membres de votre équipe apparaîtront ici.</p>
+        </div>
+      } @else {
+        <div class="members-grid">
+          @for (membre of membres() | slice:0:3; track membre.id) {
+            <article class="member-card">
+              <div class="member-avatar"><mat-icon>person</mat-icon></div>
+              <div class="member-info">
+                <h3>{{ membre.prenom }} {{ membre.nom }}</h3>
+                <span class="role-badge" 
+                      [class.role-founder]="membre.roleEcosysteme === 'PORTEUR'" 
+                      [class.role-mentor]="membre.roleEcosysteme === 'MENTOR'" 
+                      [class.role-collaborator]="membre.roleEcosysteme === 'COLLABORATEUR'">
+                  @if (membre.roleEcosysteme === 'PORTEUR') { Porteur de projet }
+                  @else if (membre.roleEcosysteme === 'MENTOR') { Mentor }
+                  @else if (membre.roleEcosysteme === 'COLLABORATEUR') { Collaborateur }
+                  @else { {{ membre.roleEcosysteme }} }
+                </span>
+                <p>{{ membre.specialite || 'Spécialité non renseignée' }}</p>
+              </div>
+            </article>
+          }
+        </div>
+
+        @if (membres().length > 3) {
+          <div class="card-bottom-action">
+            <button type="button" class="btn-outline" (click)="basculerModalMembres()">
+              <mat-icon>groups</mat-icon> Voir tous les membres ({{ membres().length }})
+            </button>
+          </div>
+        }
+      }
+    }
+  </section>
+
+  <!-- Section : Candidatures reçues -->
+  <section class="content-card applications-card">
+    <div class="card-heading">
+      <div class="heading-icon orange-icon"><mat-icon>person_search</mat-icon></div>
+      <div class="heading-text">
+        <h2>Candidatures reçues</h2>
+        <p>Cliquez sur un profil pour ouvrir son dossier complet de recrutement.</p>
+      </div>
+      <span class="count-badge orange-count">{{ candidatures().length }}</span>
+    </div>
+
+    @if (candidatures().length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon orange-empty-icon"><mat-icon>inbox</mat-icon></div>
+        <h3>Aucune candidature reçue</h3>
+        <p>Les candidatures à vos appels apparaîtront ici.</p>
+      </div>
+    } @else {
+      <div class="recruitment-split-view">
+        
+        <!-- Liste latérale des candidats -->
+        <div class="applicants-sidebar-list">
+          @for (candidature of candidatures(); track candidature.id) {
+            <div class="mini-applicant-row" 
+                 [class.selected-row]="offreSelectionnee()?.id === candidature.id" 
+                 (click)="ouvrirLiseuseOffre(candidature)">
+              <div class="mini-avatar">{{ candidature.collaborateurPrenom | slice:0:1 }}{{ candidature.collaborateurNom | slice:0:1 }}</div>
+              <div class="mini-meta">
+                <h4>{{ candidature.collaborateurPrenom }} {{ candidature.collaborateurNom }}</h4>
+                <span class="mini-tag">{{ candidature.collaborateurSpecialite }}</span>
+              </div>
+              <mat-icon class="arrow-right-icon">chevron_right</mat-icon>
+            </div>
+          }
+        </div>
+
+        <!-- Détail du dossier sélectionné -->
+        <div class="applicant-big-dossier">
+          @if (offreSelectionnee(); as selected) {
+            <div class="dossier-wrapper">
+              
+              <header class="dossier-header-profile">
+                <div class="big-avatar">{{ selected.collaborateurPrenom | slice:0:1 }}{{ selected.collaborateurNom | slice:0:1 }}</div>
+                <div>
+                  <h2>{{ selected.collaborateurPrenom }} {{ selected.collaborateurNom }}</h2>
+                  <span class="badge-specialite-premium">{{ selected.collaborateurSpecialite }}</span>
+                  <p class="postulation-target-text">A postulé à votre offre : <strong>{{ selected.offresTitre }}</strong></p>
+                </div>
+              </header>
+
+              <div class="dossier-body-scroll">
+                <div class="dossier-section-block">
+                  <h3><mat-icon>contact_mail</mat-icon> Coordonnées de contact</h3>
+                  <div class="contact-grid-info">
+                    <p><mat-icon>email</mat-icon> {{ selected.collaborateurEmail }}</p>
+                    <p><mat-icon>phone</mat-icon> +223 {{ selected.collaborateurTelephone }}</p>
+                    @if (selected.collaborateurLienPortfolio) {
+                      <a [href]="selected.collaborateurLienPortfolio" target="_blank" rel="noopener noreferrer" class="dossier-portfolio-url">
+                        <mat-icon>link</mat-icon> Consulter son Portfolio / GitHub
+                      </a>
+                    }
+                  </div>
+                </div>
+
+                <div class="dossier-section-block">
+                  <h3><mat-icon>assignment_ind</mat-icon> Biographie & Parcours</h3>
+                  <p class="text-paragraph-content">{{ selected.collaborateurBiographie }}</p>
+                </div>
+
+                <div class="dossier-section-block motivation-highlight-box">
+                  <h3><mat-icon>chat_bubble</mat-icon> Note de motivation rédigée</h3>
+                  <p class="text-paragraph-content motivation-text-p">« {{ selected.motivation }} »</p>
+                  <small class="date-received-footer">Reçue le {{ selected.dateCreation | date:'dd/MM/yyyy à HH:mm' }}</small>
+                </div>
+              </div>
+
+              <footer class="dossier-actions-bar">
+                @if (selected.statuCandidature === 'EN_ATTENTE') {
+                  <button type="button" class="btn-dossier-reject" (click)="traiterArbitrageCandidature(selected.id, 'refuser')">
+                    <mat-icon>close</mat-icon> Décliner la candidature
+                  </button>
+                  <button type="button" class="btn-dossier-accept" (click)="traiterArbitrageCandidature(selected.id, 'accepter')">
+                    <mat-icon>check</mat-icon> Accepter dans l'équipe
+                  </button>
+                } @else {
+                  <span class="status-badge-archive" [class.badge-archived-success]="selected.statuCandidature === 'ACCEPTEE'" [class.badge-archived-danger]="selected.statuCandidature === 'REFUSEE'">
+                    <mat-icon>{{ selected.statuCandidature === 'ACCEPTEE' ? 'done_all' : 'block' }}</mat-icon>
+                    {{ selected.statuCandidature === 'ACCEPTEE' ? 'Candidature Acceptée' : 'Candidature Refusée' }}
+                  </span>
+                }
+              </footer>
+
+            </div>
+          } @else {
+            <div class="dossier-empty-prompt">
+              <mat-icon>arrow_back</mat-icon>
+              <h3>Sélectionnez un candidat</h3>
+              <p>Cliquez sur un profil dans la liste de gauche pour inspecter sa biographie, ses coordonnées et ses motivations.</p>
+            </div>
+          }
+        </div>
+
+      </div>
+    }
+  </section>
+
+</div>
+
+<!-- Modal : Nouvel appel à candidature -->
+@if (afficherFormulaireAppel()) {
+  <div class="call-modal-overlay" (click)="basculerVoletAppel()">
+    <section class="call-modal-window" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="call-modal-title">
+      <header class="call-modal-header">
+        <div class="call-modal-heading">
+          <div class="call-modal-icon"><mat-icon>campaign</mat-icon></div>
+          <div>
+            <h2 id="call-modal-title">Nouvel appel à candidature</h2>
+            <p>Trouvez les compétences nécessaires pour faire avancer votre projet.</p>
+          </div>
+        </div>
+        <button type="button" class="call-modal-close" aria-label="Fermer la fenêtre" (click)="basculerVoletAppel()"><mat-icon>close</mat-icon></button>
+      </header>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmitAppel()" class="embedded-form call-modal-body">
+        <div class="form-intro"><span class="required-indicator">*</span> Champs obligatoires</div>
+        
+        <div class="form-group">
+          <label for="titre">Titre de l'appel <span class="required-indicator">*</span></label>
+          <input id="titre" type="text" formControlName="titre" placeholder="Ex. Recherche d'un développeur web" autocomplete="off" />
+          @if (registerForm.get('titre')?.touched && registerForm.get('titre')?.invalid) {
+            <small class="invalid-feedback">Le titre est obligatoire et doit contenir au moins 2 caractères.</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="profilRecherche">Profil recherché <span class="required-indicator">*</span></label>
+          <input id="profilRecherche" type="text" formControlName="profilRecherche" placeholder="Ex. Développeur Angular" autocomplete="off" />
+          @if (registerForm.get('profilRecherche')?.touched && registerForm.get('profilRecherche')?.invalid) {
+            <small class="invalid-feedback">Le profil recherché est obligatoire et doit contenir au moins 5 caractères.</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="description">
+            Description de la mission
+            <span class="required-indicator">*</span>
+          </label>
+          <textarea
+            id="description"
+            formControlName="description"
+            rows="5"
+            placeholder="Détaillez ici les exigences techniques et la mission..."
+          ></textarea>
+          @if (registerForm.get('description')?.touched && registerForm.get('description')?.invalid) {
+            <small class="invalid-feedback">
+              La description est obligatoire et doit contenir au moins 10 caractères.
+            </small>
+          }
+        </div>
+
+        <footer class="form-actions-row">
+          <button type="button" class="btn-cancel" (click)="basculerVoletAppel()">
+            Annuler
+          </button>
+          
+          <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || chargementPublication()">
+            <mat-icon>{{ chargementPublication() ? 'sync' : 'publish' }}</mat-icon>
+            {{ chargementPublication() ? 'Publication en cours...' : 'Publier l\'appel' }}
+          </button>
+        </footer>
+      </form>
+    </section>
+  </div>
+}
+
+<!-- Modal : Liste complète des membres -->
+@if (afficherModalListeMembres()) {
+  <div class="call-modal-overlay" (click)="basculerModalMembres()">
+    <section class="call-modal-window modal-extended-view" (click)="$event.stopPropagation()">
+      <header class="call-modal-header">
+        <div class="call-modal-heading">
+          <div class="call-modal-icon group-icon-box">
+            <mat-icon>groups</mat-icon>
+          </div>
+          <div>
+            <h2>Membres de la startup ({{ membres().length }})</h2>
+            <p>Liste complète du collectif assigné à ce projet d'incubation.</p>
+          </div>
+        </div>
+        <button type="button" class="call-modal-close" (click)="basculerModalMembres()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </header>
+      
+      <main class="modal-list-body">
+        @for (m of membres(); track m.id) {
+          <div class="extended-member-row">
+            <div class="extended-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="extended-meta">
+              <h4>{{ m.prenom }} {{ m.nom }}</h4>
+              <p>{{ m.specialite || 'Spécialité non renseignée' }}</p>
+              <span class="extended-badge" 
+                    [class.founder-b]="m.roleEcosysteme === 'PORTEUR'"
+                    [class.mentor-b]="m.roleEcosysteme === 'MENTOR'"
+                    [class.collab-b]="m.roleEcosysteme === 'COLLABORATEUR'">
+                {{ m.roleEcosysteme }}
+              </span>
+            </div>
+          </div>
+        }
+      </main>
+    </section>
+  </div>
+}

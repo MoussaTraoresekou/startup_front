@@ -3,7 +3,7 @@
   <!-- BARRE DE NAVIGATION HAUTE -->
   <header class="landing-navbar">
     <div class="nav-container">
-      <div class="brand-logo" routerLink="/">
+      <a class="brand-logo" routerLink="/" aria-label="Accueil Entrepreneur360">
         <div class="brand-logo-frame">
           <img src="/images/logo_startup.png" alt="Logo Entrepreneur360" class="brand-logo-img" />
         </div>
@@ -11,112 +11,72 @@
           <span class="title">Entrepreneur<span>360</span></span>
           <span class="subtitle">Votre projet, étape par étape</span>
         </div>
-      </div>
+      </a>
 
       <div class="nav-actions">
         <a mat-button routerLink="/auth/login" class="btn-login">
           <mat-icon>login</mat-icon> Se connecter
         </a>
-        <a mat-flat-button class="btn-signup" style="background-color: var(--primary); color: var(--surface);" routerLink="/auth/register">
-          Créer un compte
-        </a>
       </div>
     </div>
   </header>
 
-  <!-- SECTION HERO (PRÉSENTATION PRINCIPALE) -->
+  <!-- SECTION HERO (PRÉSENTATION PRINCIPALE CIBLÉE) -->
   <section class="hero-section">
     <div class="hero-content">
-      <span class="badge-hero">
-        <mat-icon>auto_awesome</mat-icon> Plateforme d'Accompagnement Écosystémique
-      </span>
       <h1>Transformez votre idée en une <span>entreprise florissante</span></h1>
-      <p class="hero-description">
-        Entrepreneur360 vous guide à chaque étape : de l'idée initiale jusqu'à la formalisation, le mentorat et la recherche de financement.
-      </p>
-
-      <div class="hero-buttons">
-        <a mat-flat-button class="btn-hero-primary" style="background-color: var(--primary); color: var(--surface);" routerLink="/auth/register">
-          Commencer mon parcours <mat-icon>arrow_forward</mat-icon>
-        </a>
-        <a mat-stroked-button class="btn-hero-secondary" style="color: var(--primary); border-color: var(--primary);" routerLink="/auth/login">
-          Espace membre
-        </a>
-      </div>
     </div>
   </section>
-
-  <!-- LE PARCOURS EN 4 ÉTAPES -->
-  <section class="workflow-section">
-    <div class="section-title">
-      <h2>Un parcours structuré vers le succès</h2>
-      <p>Chaque étape vous rapproche de la concrétisation de votre vision.</p>
-    </div>
-
-    <div class="workflow-grid">
-      @for (step of workflowSteps; track step.number) {
-      <div class="workflow-card">
-        <div class="step-badge">{{ step.number }}</div>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.desc }}</p>
-      </div>
-      }
-    </div>
-  </section>
-
   <!-- SÉLECTION DES 4 PROFILS UTILISATEURS ÉCOSYSTÉMIQUES -->
   <section class="profiles-section">
     <div class="section-title">
       <h2>Quel est votre profil ?</h2>
-      <p>Rejoignez la communauté d'innovation et poursuivez votre parcours.</p>
     </div>
-
-    <div class="profiles-grid">
-      
+    <div class="profiles-grid">  
       <!-- Profil 1 : Porteur de Projet -->
       <div class="profile-card">
-        <div class="profile-icon" style="background: var(--primary-light); color: var(--primary-dark);">
+        <div class="profile-icon project-icon">
           <mat-icon>lightbulb</mat-icon>
         </div>
         <h3>Porteur de Projet</h3>
         <p>Vous avez une idée ou une startup en cours de création et vous souhaitez être accompagné de A à Z.</p>
-        <a mat-flat-button class="btn-profile" style="background-color: var(--primary); color: var(--surface);" routerLink="/auth/porteur_register">
+        <a mat-flat-button class="btn-profile btn-project" routerLink="/auth/porteur_register">
           Créer mon profil
         </a>
       </div>
 
       <!-- Profil 2 : Mentor / Formateur -->
       <div class="profile-card">
-        <div class="profile-icon" style="background: var(--secondary-light); color: var(--secondary-dark);">
+        <div class="profile-icon mentor-icon">
           <mat-icon>school</mat-icon>
         </div>
         <h3>Mentor / Formateur</h3>
-        <p>Partagez votre expertise, validez les livrables d'étapes et coachez la nouvelle génération d'entrepreneurs.</p>
-        <a mat-flat-button class="btn-profile" style="background-color: var(--secondary); color: var(--surface);" routerLink="/auth/mentor_register">
+        <p>Partagez votre expertise, valisez les livrables d'étapes et coachez la nouvelle génération d'entrepreneurs.</p>
+        <a mat-flat-button class="btn-profile btn-mentor" routerLink="/auth/mentor_register">
           Devenir Mentor
         </a>
       </div>
 
-      <!-- Profil 3 : Partenaire Financier -->
+      <!-- Profil 3 : Partenaire Financier (Investisseur) -->
       <div class="profile-card">
-        <div class="profile-icon" style="background: var(--primary-light); color: var(--primary-dark);">
+        <div class="profile-icon investor-icon">
           <mat-icon>monetization_on</mat-icon>
         </div>
         <h3>Partenaire Financier</h3>
         <p>Accédez à un catalogue de projets qualifiés, analysez les fiches de formalisation et financez l'innovation.</p>
-        <a mat-flat-button class="btn-profile" style="background-color: var(--primary); color: var(--surface);" routerLink="/auth/register">
+        <a mat-flat-button class="btn-profile btn-investor" routerLink="/auth/register">
           Nous rejoindre
         </a>
       </div>
 
       <!-- Profil 4 : Collaborateur -->
       <div class="profile-card">
-        <div class="profile-icon" style="background: var(--background); border: 1px solid var(--border); color: var(--dark);">
+        <div class="profile-icon collab-icon">
           <mat-icon>groups</mat-icon>
         </div>
         <h3>Collaborateur</h3>
         <p>Partagez votre expertise en participant activement à des projets innovants de l'écosystème.</p>
-        <a mat-flat-button class="btn-profile" style="background-color: var(--dark); color: var(--surface);" routerLink="/auth/collaborateur_register">
+        <a mat-flat-button class="btn-profile btn-collab" routerLink="/auth/collaborateur_register">
           Nous rejoindre
         </a>
       </div>
@@ -124,29 +84,4 @@
     </div>
   </section>
 
-  <!-- CALL TO ACTION FINAL -->
-  <section class="cta-section">
-    <div class="cta-box" style="background: linear-gradient(135deg, var(--primary-dark), var(--primary)); border-radius: var(--radius-lg);">
-      <h2>Prêt à propulser votre entreprise ?</h2>
-      <p>Inscrivez-vous dès aujourd'hui pour structurer votre dossier et accéder aux mentors et investisseurs.</p>
-      <a mat-flat-button class="btn-cta" style="height: 48px; font-weight: 600; border-radius: var(--radius-sm); background-color: var(--surface); color: var(--primary-dark);" routerLink="/auth/register">
-        Créer mon compte gratuitement
-      </a>
-    </div>
-  </section>
-
-  <!-- PIED DE PAGE -->
-  <footer class="landing-footer" style="margin-top: 40px; padding: 24px; border-top: 1px solid var(--border); text-align: center;">
-    <div class="footer-container">
-      <div class="footer-brand" style="display: flex; flex-direction: column; align-items: center">
-        <div class="brand-logo">
-          <div class="brand-logo-frame footer-frame" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-            <img src="/images/logo_startup.png" alt="Logo Entrepreneur360" class="brand-logo-img" style="width: 100%; height: 100%; object-fit: contain;" />
-          </div>
-          <span class="title" style="color: var(--text-primary); font-weight: 700;">Entrepreneur<span style="color: var(--primary);">360</span></span>
-        </div>
-        <p style="color: var(--text-secondary); font-size: 12px; margin: 0;">© 2026 Entrepreneur360. Tous droits réservés.</p>
-      </div>
-    </div>
-  </footer>
 </div>

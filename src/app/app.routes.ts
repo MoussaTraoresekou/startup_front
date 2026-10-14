@@ -75,8 +75,8 @@ export const routes: Routes = [
           {
             path: 'equipe',
             loadComponent: () =>
-              import('./pages/porteur/equipe/equipe').then(
-                (m) => m.Equipe
+              import('./pages/porteur/equipe-component/equipe-component').then(
+                (m) => m.EquipeComponent
               ),
           },
           {
@@ -212,6 +212,15 @@ export const routes: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+            // À ajouter dans les children de 'collaborateur' dans app.routes.ts :
+      {
+        path: 'offres',
+        loadComponent: () =>
+          import('./pages/collaborateur/offre/offre').then(
+            (m) => m.OffresComponent
+          ),
+      },
+
       {
         path: 'dashboard',
         loadComponent: () =>
