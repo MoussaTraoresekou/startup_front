@@ -45,7 +45,8 @@
             <span class="question-text">{{ question.libelle }}</span>
 
             <div class="question-actions-right">
-              @if (question.reponse_donnee) {
+              @if(etapeSelectionnee()?.StatutEtape!=="VALIDE"){
+                     @if (question.reponse_donnee) {
                 <button mat-icon-button class="btn-pencil-edit" title="Modifier la réponse"
                   (click)="$event.stopPropagation(); ouvrirFormulaireSaisieDirecte(question)">
                   <mat-icon>edit</mat-icon>
@@ -57,6 +58,8 @@
                   radio_button_unchecked
                 </mat-icon>
               }
+              }
+              
             </div>
           </div>
         } @empty {
@@ -81,10 +84,16 @@
           </div>
 
           <div class="form-actions-row">
-            <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">Annuler</button>
-            <button mat-flat-button class="btn-submit-reply" (click)="enregistrerReponse()">
-              {{ reponseExistante ? 'Mettre à jour' : 'Enregistrer' }}
-            </button>
+            @if(etapeSelectionnee()?.StatutEtape=="VALIDE"){
+               <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">retour</button>
+            }@else {
+               <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">annuler</button>
+               <button mat-flat-button class="btn-submit-reply" (click)="enregistrerReponse()">
+                     {{ reponseExistante ? 'Mettre à jour' : 'Enregistrer' }}
+              </button>
+            }
+            
+            
           </div>
         </div>
       } @else {
@@ -95,7 +104,7 @@
           <div class="detail-titles">
             <h3>Étape sélectionnée</h3>
             <h2>{{ etapeSelectionnee()?.etape }}</h2>
-            <p>Cette étape est active. Cliquez simplement sur une question du volet de gauche pour ouvrir son champ de réponse.</p>
+            <p>Cette étape est active. Cliquez simplement sur une question de la partie de gauche pour ouvrir son champ de réponse.</p>
           </div>
         </div>
 
