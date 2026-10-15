@@ -1,0 +1,82 @@
+<div class="app-macro-workspace-layout">
+
+  <!-- 🧭 SIDEBAR VERTE FIGÉE À GAUCHE -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-icon">
+        <img
+          src="/images/logo_startup.png"
+          alt="Logo Entrepreneur360"
+          class="brand-logo"
+        />
+      </div>
+
+      <div class="brand-text">
+        <h1>Entrepreneur360</h1>
+        <span>Votre projet, étape par étape</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="mes-projets"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>dashboard</mat-icon>
+        <span>Accueil</span>
+      </a>
+
+      <a routerLink="actualites"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>newspaper</mat-icon>
+        <span>Actualités</span>
+      </a>
+
+      <a routerLink="notifications"
+         routerLinkActive="active"
+         class="nav-item notification-link">
+        <mat-icon>notifications</mat-icon>
+        <span>Notifications</span>
+        @if (sseService.compteurNonLues() > 0) {
+          <span class="sidebar-notification-badge">
+            {{ sseService.compteurNonLues() }}
+          </span>
+        }
+      </a>
+
+      <a routerLink="profil"
+         routerLinkActive="active"
+         class="nav-item">
+        <mat-icon>person</mat-icon>
+        <span>Mon profil</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer-profile">
+      <button
+        type="button"
+        class="btn-sidebar-logout"
+        [disabled]="deconnexionEnCours"
+        (click)="deconnexion()">
+        <mat-icon>logout</mat-icon>
+        <span>
+          {{ deconnexionEnCours ? 'Déconnexion...' : 'Déconnexion' }}
+        </span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- 🔵 LE VIEWPORT PREND TOUTE LA DROITE SOUS VOTRE PROPRE NAVBAR INTEGRÉE -->
+  <main class="workspace-central-viewport">
+    
+    <!-- 🌟 APPEL DIRECT DE VOTRE COMPOSANT NAVBAR EXISTANT -->
+    <app-navbar-layout></app-navbar-layout>
+
+    <!-- ZONE DE RENDU SCROLLABLE POUR VOTRE DOUBLE PANNEAU -->
+    <div class="workspace-page-content">
+      <router-outlet></router-outlet>
+    </div>
+
+  </main>
+
+</div>

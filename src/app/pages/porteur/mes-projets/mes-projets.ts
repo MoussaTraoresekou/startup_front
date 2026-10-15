@@ -1,6 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ProjetFormAdd } from './projet-form-add/projet-form-add';
@@ -10,73 +12,88 @@ import { BarreRecherche } from './barre-recherche/barre-recherche';
 import { FiltreSecteur } from './filtre-secteur/filtre-secteur';
 import { ProjetService } from '../../../core/services/projet-service';
 import { ProjetResponse } from '../../../core/model/ProjetResponse';
+import { OffresResponseDto } from '../../../core/model/OffresResponseDto';
 import { NotificationService } from '../../../core/services/notification-service';
-import { ProjetEtapeService } from '../../../core/services/ProjetEtape/projet-etape-service';
-import { NavbarLayout } from '../../../layout/navbar-layout/navbar-layout';
+
 @Component({
   selector: 'app-mes-projets',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-    ProjetFormAdd,
-    ProjetFormEdit,
-    ProjetCard,
-    BarreRecherche, FiltreSecteur,
-    //NavbarLayout
-],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatButtonModule, ProjetFormAdd, ProjetCard],
   templateUrl: './mes-projets.html',
   styleUrl: './mes-projets.css'
 })
-export class MesProjets  {
-
+export class MesProjets implements OnInit {
   private projetService = inject(ProjetService);
-  private router = inject(Router);
-  projets = signal<ProjetResponse[]>([])
-  formulaireVisible = false
-  formulaireVisibleforEdit = false
-  messageSnackBar = inject(NotificationService)
-  private questionService=inject(ProjetEtapeService)
-  constructor() {
-    this.chargerProjet("","")
+  private http = inject(HttpClient);
+    // À ajouter à côté de votre signal projets = signal<...>([]);
+  disponible = signal<boolean>(true);
+
+  messageSnackBar = inject(NotificationService);
+
+  projets = signal<ProjetResponse[]>([]);
+  offresEcosysteme = signal<OffresResponseDto[]>([]);
+  offreSelectionnee = signal<OffresResponseDto | null>(null);
+  
+  motivationTexte: string = '';
+  formulaireVisible = false;
+  chargementPostuler = false;
+
+  ngOnInit(): void {
+    this.chargerProjet("", "");
+    this.chargerOffresDeLEcosysteme();
   }
-  chargerProjet(secteur: string, titre:string) {
-    this.projetService.getProjetsDuPorteur().subscribe(
-      {
-        next: (response) => {
-          console.log(response)
-          if (secteur === "" ||titre==="") {
-            console.log("lllflf")
-            this.projets.set(response)
 
-          } else {
-            console.log("diffent")
-
-            this.projets.set(response.filter((projet) => 
-              projet.secteur.toLowerCase().includes(secteur.toLowerCase())||projet.secteur.toLowerCase().includes(titre.toLowerCase())))
-
-          }
-
+  public chargerProjet(secteur: string, titre: string): void {
+    this.projetService.getProjetsDuPorteur().subscribe({
+      next: (response) => {
+        if (secteur === "" || titre === "") {
+          this.projets.set(response);
+        } else {
+          this.projets.set(response.filter((projet) =>
+            projet.secteur.toLowerCase().includes(secteur.toLowerCase()) || 
+            projet.secteur.toLowerCase().includes(titre.toLowerCase())
+          ));
         }
       }
-    )
+    });
   }
-  //se declenche lors d'un clique le bouton ajouter
-  ouverFermer() {
-    this.formulaireVisible = true
+
+  public chargerOffresDeLEcosysteme(): void {
+    this.http.get<OffresResponseDto[]>('http://localhost:8080/api/porteur/offres/ecosysteme').subscribe({
+      next: (donnees) => this.offresEcosysteme.set(donnees),
+      error: (err) => console.error(err)
+    });
   }
-  fermerModal(val: boolean) {
-    this.formulaireVisible = val
+
+  public ouvrirLiseuseOffre(offre: OffresResponseDto): void {
+    this.offreSelectionnee.set(offre);
+    this.motivationTexte = '';
   }
-  //cett fonction met à jour la lsite des conseils et ferme le modal
-  AjoutEffectuer() {
-    this.formulaireVisible = false
-    this.chargerProjet("","")
-    this.messageSnackBar.succes("projet posté avec succes!")
+
+  public fermerLiseuseOffre(): void {
+    this.offreSelectionnee.set(null);
+    this.motivationTexte = '';
   }
-  creerProjet() {
-    this.formulaireVisible=true
+
+  public soumettreCandidature(): void {
+    const offreActive = this.offreSelectionnee();
+    if (!offreActive || !this.motivationTexte.trim() || this.chargementPostuler) return;
+    this.chargementPostuler = true;
+
+    const payload = { motivation: this.motivationTexte, offresId: offreActive.id };
+
+    this.http.post('http://localhost:8080/api/porteur/offres/postuler', payload).subscribe({
+      next: () => {
+        this.chargementPostuler = false;
+        this.messageSnackBar.succes(`Candidature pour "${offreActive.titre}" transmise.`);
+        this.fermerLiseuseOffre();
+        this.chargerOffresDeLEcosysteme();
+      },
+      error: (err) => { this.chargementPostuler = false; console.error(err); }
+    });
   }
-  
+
+  public creerProjet(): void { this.formulaireVisible = true; }
+  public fermerModal(val: boolean): void { this.formulaireVisible = val; }
+  public AjoutEffectuer(): void { this.formulaireVisible = false; this.chargerProjet("", ""); }
 }

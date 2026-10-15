@@ -102,7 +102,7 @@ export class Parcours implements OnInit {
 
     this.projetEtapeService.commcerEtape(projetEtapeRequest).subscribe({
       next: (reponseFreshDto: commencerEtapeReponseDto) => {
-        this.messageSnakBar.succes("L'étape " + nom_etape + " est lancée !");
+        //this.messageSnakBar.succes("L'étape " + nom_etape + " est lancée !");
         
         const etapeMiseAJour: EtapeAffichageDto = {
           ...reponseFreshDto,
@@ -111,6 +111,7 @@ export class Parcours implements OnInit {
         };
 
         this.etapeSelectionnee.set(etapeMiseAJour);
+        console.log("etape selectionnée" +this.etapeSelectionnee()?.StatutEtape)
 
         this.listeEtapes.update(etapes => 
           etapes.map(e => e.etapeId === etapeObjet.etapeId ? etapeMiseAJour : e)

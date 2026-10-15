@@ -1,86 +1,156 @@
-<div class="projects-page">
-  <header class="page-header">
+<div class="projects-page-workspace">
 
-    <div class="page-title">
-      <span class="eyebrow">MON ESPACE</span>
-      
-      <h1>Mes projets</h1>
-      <p>
-        Retrouvez vos projets et suivez leur évolution
-        étape par étape.
-      </p>
+  <!-- 👤 RANGÉE INFOS ENTREPRENEUR -->
+  <section class="workspace-user-profile-row">
+    
+    <div class="user-meta-kpi-card">
+      <div class="kpi-icon-frame green-frame"><mat-icon>rocket_launch</mat-icon></div>
+      <div class="kpi-meta-text">
+        <span class="kpi-digit-value">{{ projets().length }}</span>
+        <span class="kpi-text-label">{{ projets().length > 1 ? 'Startups créées' : 'Startup créée' }}</span>
+      </div>
     </div>
-    <button mat-flat-button class="new-project-btn" type="button" (click)="creerProjet()">
-      <mat-icon>add</mat-icon>
-      Nouveau projet
-    </button>
 
-  </header>
-  <section class="toolbar-section">
+    <div class="user-meta-kpi-card">
+      <div class="kpi-icon-frame dark-frame"><mat-icon>psychology</mat-icon></div>
+      <div class="kpi-meta-text">
+        <span class="kpi-string-value">Angular</span>
+        <span class="kpi-text-label">Mon expertise</span>
+      </div>
+    </div>
 
-    <app-barre-recherche (chercherPartitreOnClick)="chargerProjet($event,$event)"></app-barre-recherche>
-
-    <app-filtre-secteur (filtrEmitclic)="chargerProjet($event,$event)"/>
+    <div class="user-meta-kpi-card">
+      <div class="kpi-icon-frame orange-frame"><mat-icon>assignment_ind</mat-icon></div>
+      <div class="kpi-meta-text">
+        <span class="kpi-digit-value">2</span>
+        <span class="kpi-text-label">Projets tiers rejoints</span>
+      </div>
+    </div>
 
   </section>
-  <div class="projects-header">
-    <div>
-      <h2>Vos projets</h2>
 
-      <span>
-        {{ projets().length }}
-        {{ projets().length > 1 ? 'projets' : 'projet' }}
-      </span>
-    </div>
+  <!-- 🎛️ CONTENEUR DOUBLE PANNEAU (SPLIT LAYOUT) -->
+  <div class="workspace-split-body">
+    
+    <!-- PANNEAU GAUCHE : VOS PROJETS -->
+    <section class="workspace-panel panel-left-projects">
+      <div class="panel-section-heading">
+        <div class="heading-title-box">
+          <mat-icon class="icon-projects">folder</mat-icon>
+          <h2>Mes startups</h2>
+        </div>
+        
+        <!-- 🚀 LE BOUTON EST REPLACÉ ICI DE MANIÈRE COMPACTE ET DESIGN -->
+        <button mat-flat-button class="btn-panel-header-add" type="button" (click)="creerProjet()">
+          <mat-icon>add</mat-icon>
+          <span>Nouveau</span>
+        </button>
+      </div>
+
+      <div class="panel-scrollable-content">
+        @if (projets().length > 0) {
+          <div class="projects-vertical-stack">
+            @for (item of projets(); track item.id) {
+              <article class="project-card-wrapper">
+                <app-projet-card [projet]="item"></app-projet-card>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="empty-state-container-compact">
+            <div class="empty-icon-frame"><mat-icon>folder_off</mat-icon></div>
+            <h3>Aucune startup enregistrée</h3>
+            <p>Donnez vie à vos ambitions en créant votre premier projet.</p>
+            <button mat-stroked-button class="btn-empty-action" type="button" (click)="creerProjet()">
+              <mat-icon>add</mat-icon><span>Créer un projet</span>
+            </button>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- PANNEAU DROIT : OPPORTUNITÉS -->
+    <section class="workspace-panel panel-right-opportunities">
+      <div class="panel-section-heading">
+        <div class="heading-title-box">
+          <mat-icon class="icon-opps">campaign</mat-icon>
+          <h2>Les offres disponibles</h2>
+        </div>
+      </div>
+      
+      <div class="panel-scrollable-content">
+        @if (offresEcosysteme().length > 0) {
+          <div class="opportunities-vertical-stack">
+            @for (offre of offresEcosysteme(); track offre.id) {
+              <article class="opportunity-row-card">
+                <div class="opp-left-brief">
+                  <span class="opp-startup-badge"><mat-icon>token</mat-icon>{{ offre.projetTitre }}</span>
+                  <h3>{{ offre.titre }}</h3>
+                  <p class="opp-description">{{ offre.description | slice:0:120 }}...</p>
+                  <small class="opp-meta-date">Publié par {{ offre.porteurPrenom }} {{ offre.porteurNom }}</small>
+                </div>
+                <div class="opp-right-action">
+                  <button mat-flat-button class="btn-opp-discover" (click)="ouvrirLiseuseOffre(offre)">
+                    <mat-icon>assignment_turned_in</mat-icon>
+                    <span>Postuler</span>
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="empty-state-container-compact">
+            <div class="empty-icon-frame"><mat-icon>campaign</mat-icon></div>
+            <h3>Flux d'opportunités vide</h3>
+            <p>Aucun appel ouvert lancé par les autres startups pour le moment.</p>
+          </div>
+        }
+      </div>
+    </section>
 
   </div>
-  <section class="projects-list">
 
-    @if (projets().length > 0) {
-
-    @for (item of projets(); track item.id) {
-
-    <article class="project-card">
-
-      <app-projet-card [projet]="item">
-      </app-projet-card>
-
-    </article>
-
-    }
-    } @else {
-
-    <div class="empty-state-box">
-
-      <div class="empty-icon-container">
-        <mat-icon>folder_open</mat-icon>
+  <!-- LISEUSE MODALE DE POSTULATION -->
+  @if (offreSelectionnee(); as offreActive) {
+    <div class="modal-overlay-motivation" (click)="fermerLiseuseOffre()">
+      <div class="modal-window-motivation" (click)="$event.stopPropagation()">
+        <header class="modal-header-motivation">
+          <div class="modal-titles-motivation">
+            <span class="modal-eyebrow-motivation">{{ offreActive.projetTitre }}</span>
+            <h2>Postuler au rôle de : {{ offreActive.titre }}</h2>
+          </div>
+          <button mat-icon-button class="btn-close-motivation" (click)="fermerLiseuseOffre()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </header>
+        <main class="modal-body-motivation">
+          <div class="info-block-motivation">
+            <h3><mat-icon>description</mat-icon> Rappel de la mission</h3>
+            <p>{{ offreActive.description }}</p>
+          </div>
+          <div class="info-block-motivation">
+            <h3><mat-icon>construction</mat-icon> Profil recherché</h3>
+            <p>{{ offreActive.profilRecherche }}</p>
+          </div>
+          <div class="form-zone-motivation">
+            <label for="motivationInput">Rédigez votre note de motivation <span class="required-star">*</span></label>
+            <div class="textarea-frame-motivation">
+              <textarea id="motivationInput" [(ngModel)]="motivationTexte" placeholder="Expliquez vos motivations..." rows="4"></textarea>
+            </div>
+          </div>
+        </main>
+        <footer class="modal-footer-motivation">
+          <button mat-button class="btn-cancel-motivation" (click)="fermerLiseuseOffre()">Annuler</button>
+          <button mat-flat-button class="btn-send-motivation" [disabled]="!motivationTexte.trim() || chargementPostuler" (click)="soumettreCandidature()">
+            <span>Soumettre</span>
+          </button>
+        </footer>
       </div>
-      <h3>Aucun projet</h3>
-
-      <p>
-        Vous n'avez pas encore enregistré de projet
-        dans votre incubateur.
-      </p>
-
-      <button mat-stroked-button type="button" (click)="creerProjet()">
-        <mat-icon>add</mat-icon>
-        Créer mon premier projet
-      </button>
-
     </div>
-
-    }
-
-  </section>
+  }
 
 </div>
+
 @if (formulaireVisible) {
-
-<app-projet-form-add (fermerClic)="fermerModal($event)" (ajoutReussiMisAjourClic)="AjoutEffectuer()" />
-
-}
-@if (formulaireVisibleforEdit) {
-
-<app-projet-form-edit></app-projet-form-edit>
-
+  <app-projet-form-add (fermerClic)="fermerModal($event)" (ajoutReussiMisAjourClic)="AjoutEffectuer()" />
 }

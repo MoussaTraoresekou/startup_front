@@ -3,6 +3,7 @@ import { authGuard } from './core/guard/auth-ghard-guard';
 import { roleGuard } from './core/guard/role-ghard-guard';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { AccueilGlobal } from './shared/acceil-global/acceil-global';
+import { EcosystemeLayout } from './pages/porteur/ecosysteme-layout/ecosysteme-layout';
 
 export const routes: Routes = [
   {
@@ -37,11 +38,18 @@ export const routes: Routes = [
         (m) => m.RegisterPorteur
       ),
   },
+  
   {
     path: 'porteur',
+    component: EcosystemeLayout,
     canActivate: [authGuard, roleGuard],
     data: { role: 'PORTEUR' },
     children: [
+      {
+        path: '',
+        redirectTo: 'mes-projets',
+        pathMatch: 'full',
+      },
       {
         path: 'mes-projets',
         loadComponent: () =>
@@ -50,95 +58,108 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'projets/:id',
-        component: MainLayout,
-        children: [
-          {
-            path: '',
-            redirectTo: 'dashboard',
-            pathMatch: 'full',
-          },
-          {
-            path: 'dashboard',
-            loadComponent: () =>
-              import('./pages/dashboard/dashboard').then(
-                (m) => m.Dashboard
-              ),
-          },
-          {
-            path: 'parcours',
-            loadComponent: () =>
-              import('./pages/porteur/parcours/parcours').then(
-                (m) => m.Parcours
-              ),
-          },
-          {
-            path: 'equipe',
-            loadComponent: () =>
-              import('./pages/porteur/equipe-component/equipe-component').then(
-                (m) => m.EquipeComponent
-              ),
-          },
-          {
-            path: 'mentor',
-            loadComponent: () =>
-              import('./pages/porteur/mentor/mentor').then(
-                (m) => m.PorteurMentorsComponent
-              ),
-          },
-          {
-            path: 'financement',
-            loadComponent: () =>
-              import('./pages/financement/financement').then(
-                (m) => m.Financement
-              ),
-          },
-          {
-            path: 'notifications',
-            loadComponent: () =>
-              import(
-                './pages/mentors/notifications/notifications-component/notifications-component'
-              ).then((m) => m.NotificationsComponent),
-          },
-          {
-            path: 'taches',
-            loadComponent: () =>
-              import('./pages/porteur/taches/taches').then(
-                (m) => m.Taches
-              ),
-          },
-          {
-            path: 'discussion',
-            loadComponent: () =>
-              import('./pages/porteur/discussion/discussion').then(
-                (m) => m.Discussion
-              ),
-          },
-          {
-            path: 'actualites',
-            loadComponent: () =>
-              import('./pages/actualites/actualites').then(
-                (m) => m.Actualites
-              ),
-          },
-          {
-            path: 'formations',
-            loadComponent: () =>
-              import('./pages/formations/formations').then(
-                (m) => m.Formations
-              ),
-          },
-          {
-            path: 'profil',
-            loadComponent: () =>
-              import('./pages/porteur/profil/profil').then(
-                (m) => m.Profil
-              ),
-          },
-        ],
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/mentors/notifications/notifications-component/notifications-component'
+          ).then((m) => m.NotificationsComponent),
+      },
+    ]
+  },
+
+  // 🧭 NIVEAU 2 : À l'intérieur d'un projet du Porteur (Sidebar Projet Intérieure)
+  {
+    path: 'porteur/projets/:id',
+    component: MainLayout,
+    canActivate: [authGuard, roleGuard],
+    data: { role: 'PORTEUR' },
+    children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full',
+      },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard').then(
+            (m) => m.Dashboard
+          ),
+      },
+      {
+        path: 'parcours',
+        loadComponent: () =>
+          import('./pages/porteur/parcours/parcours').then(
+            (m) => m.Parcours
+          ),
+      },
+      {
+        path: 'equipe',
+        loadComponent: () =>
+          import('./pages/porteur/equipe-component/equipe-component').then(
+            (m) => m.EquipeComponent
+          ),
+      },
+      {
+        path: 'mentor',
+        loadComponent: () =>
+          import('./pages/porteur/mentor/mentor').then(
+            (m) => m.PorteurMentorsComponent
+          ),
+      },
+      {
+        path: 'financement',
+        loadComponent: () =>
+          import('./pages/financement/financement').then(
+            (m) => m.Financement
+          ),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import(
+            './pages/mentors/notifications/notifications-component/notifications-component'
+          ).then((m) => m.NotificationsComponent),
+      },
+      {
+        path: 'taches',
+        loadComponent: () =>
+          import('./pages/porteur/taches/taches').then(
+            (m) => m.Taches
+          ),
+      },
+      {
+        path: 'discussion',
+        loadComponent: () =>
+          import('./pages/porteur/discussion/discussion').then(
+            (m) => m.Discussion
+          ),
+      },
+      {
+        path: 'actualites',
+        loadComponent: () =>
+          import('./pages/actualites/actualites').then(
+            (m) => m.Actualites
+          ),
+      },
+      {
+        path: 'formations',
+        loadComponent: () =>
+          import('./pages/formations/formations').then(
+            (m) => m.Formations
+          ),
+      },
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./pages/porteur/profil/profil').then(
+            (m) => m.Profil
+          ),
       },
     ],
   },
+
+  // RÔLE MENTOR (CONSERVÉ)
   {
     path: 'mentor',
     component: MainLayout,
@@ -201,6 +222,8 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // RÔLE COLLABORATEUR (CONSERVÉ)
   {
     path: 'collaborateur',
     component: MainLayout,
@@ -212,7 +235,6 @@ export const routes: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
-            // À ajouter dans les children de 'collaborateur' dans app.routes.ts :
       {
         path: 'offres',
         loadComponent: () =>
@@ -220,7 +242,6 @@ export const routes: Routes = [
             (m) => m.OffresComponent
           ),
       },
-
       {
         path: 'dashboard',
         loadComponent: () =>
@@ -251,6 +272,8 @@ export const routes: Routes = [
       },
     ],
   },
+
+  // RÔLE ADMIN (CONSERVÉ)
   {
     path: 'admin',
     component: MainLayout,
@@ -297,45 +320,6 @@ export const routes: Routes = [
             './pages/mentors/notifications/notifications-component/notifications-component'
           ).then((m) => m.NotificationsComponent),
       },
-      {
-        path: 'evenements',
-        loadComponent: () =>
-          import('./pages/actualites/actualites').then(
-            (m) => m.Actualites
-          ),
-      },
-      {
-        path: 'formations',
-        loadComponent: () =>
-          import('./pages/actualites/actualites').then(
-            (m) => m.Actualites
-          ),
-      },
-      {
-        path: 'financements',
-        loadComponent: () =>
-          import('./pages/actualites/actualites').then(
-            (m) => m.Actualites
-          ),
-      },
-      {
-        path: 'actualites',
-        loadComponent: () =>
-          import('./pages/actualites/actualites').then(
-            (m) => m.Actualites
-          ),
-      },
-      {
-        path: 'profil',
-        loadComponent: () =>
-          import('./pages/porteur/profil/profil').then(
-            (m) => m.Profil
-          ),
-      },
     ],
-  },
-  {
-    path: '**',
-    redirectTo: '',
   },
 ];
