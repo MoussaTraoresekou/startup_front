@@ -23,8 +23,8 @@ export class PoteurService {
     return this.http.post<{ message: string }>(`${this.baseUrl}/solliciter-mentor`, invitation);
   }
   
-  public soumettreEtape(projetEtapeId: number): Observable<string> {
-    return this.http.put(`${this.baseUrl}/projet-etapes/${projetEtapeId}/soumettre`, {}, { responseType: 'text' });
+  public soumettreEtape(projetEtapeId: number) {
+    return this.http.put<{message:string}>(`${this.baseUrl}/projet-etapes/${projetEtapeId}/soumettre`, {});
   }
     /**
    *  REAL DATA : Récupère la liste réelle des étapes associées à un projet précis
