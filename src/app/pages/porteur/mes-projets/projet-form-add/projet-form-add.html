@@ -1,105 +1,236 @@
 <div class="modal-overlay" (click)="fermerModale()">
   <div class="project-card" (click)="$event.stopPropagation()">
+
     <div class="modal-header">
       <div class="brand-logo">
-        <mat-icon class="brand-icon">rocket_launch</mat-icon>
-        <span class="brand-title">Nouveau <span>Projet</span></span>
+        <div class="brand-logo-frame">
+          <img
+            src="/images/logo_startup.png"
+            alt="Logo Entrepreneur360"
+            class="brand-logo-img"
+          />
+        </div>
+
+        <span class="brand-title">
+          Entrepreneur<span>360</span>
+        </span>
       </div>
-      <button mat-icon-button type="button" class="close-btn" aria-label="Fermer" [disabled]="chargement" (click)="fermerModale()">
+
+      <button
+        mat-icon-button
+        type="button"
+        class="close-btn"
+        aria-label="Fermer la fenêtre"
+        [disabled]="chargement"
+        (click)="fermerModale()"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
     <div class="modal-intro">
-      <h1>Propulsez une idée</h1>
-      <p>Renseignez les détails de la startup</p>
+      <p>Renseignez les détails de votre startup pour commencer l'aventure.</p>
     </div>
-    <form [formGroup]="projectForm" (ngSubmit)="soumettreProjet()" class="project-form">
+
+    <form
+      [formGroup]="projectForm"
+      (ngSubmit)="soumettreProjet()"
+      class="project-form"
+    >
+
       <div class="form-row">
-        <div class="field-group">
-          <label for="nomProjet">Nom du projet <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>business_center</mat-icon>
-            <input id="nomProjet" type="text" formControlName="nom" placeholder="Ex. Waati Delivery" />
-            
-          </div>
-          @if(projectForm.get("nom")?.invalid&&projectForm.get("nom")?.touched){
-                   <small class="invalid-feedbacks"> le nom est requis</small>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>business_center</mat-icon>
+
+          <input
+            matInput
+            id="nomProjet"
+            type="text"
+            formControlName="nom"
+            placeholder="Nom du projet *"
+            maxlength="100"
+            autocomplete="off"
+          />
+
+          @if (projectForm.get('nom')?.hasError('required')
+            && projectForm.get('nom')?.touched) {
+            <mat-error>Le nom du projet est obligatoire.</mat-error>
+          }
+
+          @if (projectForm.get('nom')?.hasError('maxlength')) {
+            <mat-error>Le nom ne doit pas dépasser 100 caractères.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-icon matPrefix>category</mat-icon>
+
+          <mat-select
+            id="secteurProjet"
+            formControlName="secteur"
+            placeholder="Secteur d'activité *"
+          >
+            @for (secteur of listeSecteurs(); track secteur.id) {
+              <mat-option [value]="secteur.id">
+                {{ secteur.secteur }}
+              </mat-option>
             }
-        </div>
-        <div class="field-group">
-          <label for="secteurProjet">Secteur d'activité <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>Secteur Activité</mat-icon>
-            <mat-select id="secteurProjet" formControlName="secteur" placeholder="Sélectionner...">
-                @for (secteur of listeSecteurs(); track secteur.id) {
-                    <mat-option [value]="secteur.id">{{secteur.secteur}}</mat-option>
-                }
-            </mat-select>
-            
-          </div>
-          @if(projectForm.get("secteur")?.invalid&&projectForm.get("secteur")?.touched){
-                   <small class="invalid-feedbacks"> le secteur est requis</small>
-            }
-        </div>
+          </mat-select>
+
+          @if (projectForm.get('secteur')?.hasError('required')
+            && projectForm.get('secteur')?.touched) {
+            <mat-error>Veuillez sélectionner un secteur.</mat-error>
+          }
+        </mat-form-field>
+
       </div>
 
-      <!-- Ligne 2 : Quota & Offre investisseur -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>monetization_on</mat-icon>
+
+        <input
+          matInput
+          id="quotaPropose"
+          type="text"
+          formControlName="quota"
+          placeholder="Quota et offre investisseur"
+          maxlength="500"
+          autocomplete="off"
+        />
+
+        <mat-hint>
+          Exemple : 15 % du capital contre un accompagnement de 10M FCFA.
+        </mat-hint>
+
+        @if (projectForm.get('quota')?.hasError('required')
+          && projectForm.get('quota')?.touched) {
+          <mat-error>Veuillez renseigner l'offre proposée.</mat-error>
+        }
+
+        @if (projectForm.get('quota')?.hasError('maxlength')) {
+          <mat-error>Le texte ne doit pas dépasser 500 caractères.</mat-error>
+        }
+      </mat-form-field>
+
       <div class="field-group">
-        <label for="quotaPropose">Quota & Offre investisseur</label>
-        <div class="input-wrapper">
-          <mat-icon>monetization_on</mat-icon>
-          <input id="quotaPropose" type="text" formControlName="quota" placeholder="Ex. 15% du capital cédé contre un accompagnement de 10M FCFA" />
-        </div>
-         @if(projectForm.get("quota")?.invalid&&projectForm.get("quota")?.touched){
-                   <small class="invalid-feedbacks"> le quota est requis</small>
-            }
-      </div>
-      <div class="field-group">
-        <label for="pitchFile">Document ou Vidéo du Pitch (PDF)</label>
-        <input id="pitchFile" type="file" accept=".pdf,.ppt,.pptx,.mp4,.mov,.avi,video/*" class="hidden-file-input" [disabled]="chargement" (change)="onFileSelected($event)" />
-        <label for="pitchFile" class="file-upload-zone" [class.has-file]="fichierPitch">
+        <input
+          #pitchInput
+          id="pitchFile"
+          type="file"
+          accept=".pdf,.ppt,.pptx,.mp4,.mov,.avi,video/*"
+          class="hidden-file-input"
+          [disabled]="chargement"
+          (change)="onFileSelected($event)"
+        />
+
+        <label
+          for="pitchFile"
+          class="file-upload-zone"
+          [class.has-file]="fichierPitch"
+        >
           <div class="upload-content">
             <div class="upload-icon">
-              <mat-icon>{{ fichierPitch?.type?.startsWith('video/') ? 'movie' : (fichierPitch ? 'description' : 'cloud_upload') }}</mat-icon>
+              <mat-icon>
+                {{
+                  fichierPitch?.type?.startsWith('video/')
+                    ? 'movie'
+                    : fichierPitch
+                      ? 'description'
+                      : 'cloud_upload'
+                }}
+              </mat-icon>
             </div>
+
             <div class="upload-text">
               @if (fichierPitch) {
-                <span class="upload-title filename">{{ fichierPitch.name }}</span>
-                <span class="upload-hint">{{ (fichierPitch.size / 1024 / 1024) | number:'1.1-2' }} MB • Cliquez pour remplacer</span>
+                <span class="upload-title filename">
+                  {{ fichierPitch.name }}
+                </span>
+
+                <span class="upload-hint">
+                  {{ (fichierPitch.size / 1024 / 1024) | number:'1.1-2' }}
+                  MB — Cliquez pour remplacer
+                </span>
               } @else {
-                <span class="upload-title">Cliquez pour importer <span>un fichier</span></span>
-                <span class="upload-hint">PDF, PPTX ou Vidéo MP4/MOV (max. 50MB)</span>
+                <span class="upload-title">
+                  Document ou vidéo de présentation
+                </span>
+
+                <span class="upload-hint">
+                  PDF, PPT, PPTX ou vidéo MP4/MOV (max. 50 MB)
+                </span>
               }
             </div>
           </div>
 
           @if (fichierPitch && !chargement) {
-            <button type="button" class="remove-file-btn" aria-label="Supprimer le fichier" (click)="supprimerFichier($event)">
+            <button
+              mat-icon-button
+              type="button"
+              class="remove-file-btn"
+              aria-label="Supprimer le fichier"
+              (click)="supprimerFichier($event); pitchInput.value = ''"
+            >
               <mat-icon>close</mat-icon>
             </button>
           }
         </label>
       </div>
-      <div class="field-group">
-        <label for="descriptionProjet">Description du projet</label>
-        <div class="input-wrapper textarea-wrapper">
-          <mat-icon>description</mat-icon>
-          <textarea id="descriptionProjet" formControlName="description" placeholder="Objectifs majeurs et vision de la startup..." rows="3"></textarea>
-           
-        </div>
-        @if(projectForm.get("description")?.invalid&&projectForm.get("description")?.touched){
-                   <small class="invalid-feedbacks"> la description est requise</small>
-            }
-      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-icon matPrefix>description</mat-icon>
+
+        <textarea
+          matInput
+          id="descriptionProjet"
+          formControlName="description"
+          placeholder="Description du projet : objectifs, besoins et vision..."
+          rows="4"
+          maxlength="2000"
+        ></textarea>
+
+        <mat-hint align="end">
+          {{ projectForm.get('description')?.value?.length || 0 }}/2000
+        </mat-hint>
+
+        @if (projectForm.get('description')?.hasError('required')
+          && projectForm.get('description')?.touched) {
+          <mat-error>La description du projet est obligatoire.</mat-error>
+        }
+
+        @if (projectForm.get('description')?.hasError('maxlength')) {
+          <mat-error>La description ne doit pas dépasser 2000 caractères.</mat-error>
+        }
+      </mat-form-field>
+
       <div class="modal-actions">
-        <button type="button" class="btn-cancel" [disabled]="chargement" (click)="fermerModale()">Annuler</button>
-        <button type="submit" class="btn-submit" [disabled]="projectForm.invalid || chargement">
-          {{ chargement ? 'Traitement en cours...' : 'Créer' }}
+        <button
+          mat-stroked-button
+          type="button"
+          class="btn-cancel"
+          [disabled]="chargement"
+          (click)="fermerModale()"
+        >
+          Annuler
+        </button>
+
+        <button
+          mat-flat-button
+          type="submit"
+          class="btn-submit"
+          [disabled]="projectForm.invalid || chargement"
+        >
+          @if (chargement) {
+            <mat-spinner diameter="18"></mat-spinner>
+            <span>Traitement en cours...</span>
+          } @else {
+            <mat-icon>add_circle</mat-icon>
+            <span>Créer le projet</span>
+          }
         </button>
       </div>
 
     </form>
-
   </div>
 </div>

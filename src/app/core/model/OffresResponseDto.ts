@@ -9,4 +9,5 @@ export interface OffresResponseDto {
   projetTitre: string;
   porteurPrenom: string;
   porteurNom: string;
+  specialite:string
 }

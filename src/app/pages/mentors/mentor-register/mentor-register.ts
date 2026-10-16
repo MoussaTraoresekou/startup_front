@@ -13,12 +13,21 @@ import { MentorResponseDto } from '../../../core/model/MentorResponseDto';
 import { SecteurService } from '../../../core/services/secteur/secteur-service';
 import { SecteurReponse } from '../../../core/model/secteurReponse';
 import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-register-mentor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatButtonModule,MatSelectModule],
-  templateUrl: './mentor-register.html',
+imports: [
+  CommonModule,
+  ReactiveFormsModule,
+  MatIconModule,
+  MatButtonModule,
+  MatSelectModule,
+  MatFormFieldModule,
+  MatInputModule
+],  templateUrl: './mentor-register.html',
   styleUrls: ['./mentor-register.css']
 })
 export class MentorRegister {

@@ -3,4 +3,5 @@ export interface OffresRequestDto {
     description:string;
     profilRecherche:string;
     projetId:number;
+    specialite:number
 }
