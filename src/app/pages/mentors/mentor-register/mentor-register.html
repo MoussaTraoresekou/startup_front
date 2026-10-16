@@ -1,188 +1,374 @@
 <div class="login-container">
   <div class="project-card">
 
+    <!-- EN-TÊTE -->
     <div class="login-header">
       <a routerLink="/" class="brand-logo">
-        <mat-icon class="brand-icon">rocket_launch</mat-icon>
-        <span class="brand-title">Entrepreneur<span>360</span></span>
+        <div class="brand-logo-frame">
+          <img
+            src="/images/logo_startup.png"
+            alt="Logo Entrepreneur360"
+            class="brand-logo-img"
+          />
+        </div>
+
+        <span class="brand-title">
+          Entrepreneur<span>360</span>
+        </span>
       </a>
-      <h1>Rejoindre l'incubateur</h1>
-      <p>Créez votre profil d'expert ou mentor d'accompagnement</p>
+
+      <h1>Inscription du mentor</h1>
+      <p>Créez votre compte mentor pour partager vos connaissances</p>
     </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="project-form">
+    <!-- FORMULAIRE -->
+    <form
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()"
+      class="project-form"
+    >
 
+      <!-- PRÉNOM ET NOM -->
       <div class="form-row">
-        <div class="field-group">
-          <label for="prenom">Prénom <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>person</mat-icon>
-            <input id="prenom" type="text" formControlName="prenom" placeholder="Ex. Moussa" />
-          </div>
-          @if (registerForm.get("prenom")?.invalid && registerForm.get("prenom")?.touched) {
-          <small class="invalid-feedbacks">Le prénom est requis (2 caractères min.)</small>
-          }
-        </div>
 
-        <div class="field-group">
-          <label for="nom">Nom <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>badge</mat-icon>
-            <input id="nom" type="text" formControlName="nom" placeholder="Ex. Traoré" />
-          </div>
-          @if (registerForm.get("nom")?.invalid && registerForm.get("nom")?.touched) {
-          <small class="invalid-feedbacks">Le nom est requis (2 caractères min.)</small>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Prénom</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+
+          <input
+            matInput
+            id="prenom"
+            type="text"
+            formControlName="prenom"
+            placeholder="Ex. Moussa"
+            autocomplete="given-name"
+            required
+          />
+
+          @if (registerForm.get('prenom')?.hasError('required')
+            && registerForm.get('prenom')?.touched) {
+            <mat-error>Le prénom est requis</mat-error>
           }
-        </div>
+
+          @if (registerForm.get('prenom')?.hasError('minlength')
+            && registerForm.get('prenom')?.touched) {
+            <mat-error>Le prénom doit contenir au moins 2 caractères</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom</mat-label>
+          <mat-icon matPrefix>badge</mat-icon>
+
+          <input
+            matInput
+            id="nom"
+            type="text"
+            formControlName="nom"
+            placeholder="Ex. Traoré"
+            autocomplete="family-name"
+            required
+          />
+
+          @if (registerForm.get('nom')?.hasError('required')
+            && registerForm.get('nom')?.touched) {
+            <mat-error>Le nom est requis</mat-error>
+          }
+
+          @if (registerForm.get('nom')?.hasError('minlength')
+            && registerForm.get('nom')?.touched) {
+            <mat-error>Le nom doit contenir au moins 2 caractères</mat-error>
+          }
+        </mat-form-field>
+
       </div>
-      <div class="field-group">
-        <label for="nom">Secteur <span>*</span></label>
-        <div class="input-wrapper">
-          <mat-icon>Secteur Activité</mat-icon>
-          <mat-select id="secteurProjet" formControlName="secteur" placeholder="Sélectionner...">
-            @for (secteur of listeSecteur(); track secteur.id) {
-            <mat-option [value]="secteur.id">{{secteur.secteur}}</mat-option>
-            }
-          </mat-select>
 
-        </div>
-        @if (registerForm.get("secteur")?.invalid && registerForm.get("secteur")?.touched) {
-        <small class="invalid-feedbacks">Le secteur est requis </small>
+      <!-- SECTEUR D'ACTIVITÉ -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Secteur d'activité</mat-label>
+        <mat-icon matPrefix>business_center</mat-icon>
+
+        <mat-select
+          id="secteurProjet"
+          formControlName="secteur"
+          placeholder="Sélectionner un secteur"
+          required
+        >
+          @for (secteur of listeSecteur(); track secteur.id) {
+            <mat-option [value]="secteur.id">
+              {{ secteur.secteur }}
+            </mat-option>
+          }
+        </mat-select>
+
+        @if (registerForm.get('secteur')?.hasError('required')
+          && registerForm.get('secteur')?.touched) {
+          <mat-error>Veuillez sélectionner un secteur</mat-error>
         }
-      </div>
+      </mat-form-field>
 
-
+      <!-- EMAIL ET TÉLÉPHONE -->
       <div class="form-row">
-        <div class="field-group">
-          <label for="email">Adresse e-mail <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>email</mat-icon>
-            <input id="email" type="email" formControlName="email" placeholder="mentor@exemple.com" />
-          </div>
-          @if (registerForm.get("email")?.invalid && registerForm.get("email")?.touched) {
-          <small class="invalid-feedbacks">Un email valide est requis</small>
-          }
-        </div>
 
-        <div class="field-group">
-          <label for="telephone">Numéro de téléphone <span>*</span></label>
-          <div class="input-wrapper">
-            <mat-icon>phone</mat-icon>
-            <input id="telephone" type="tel" formControlName="telephone" placeholder="Ex. +223 66 59 45 81" />
-          </div>
-          @if (registerForm.get("telephone")?.invalid && registerForm.get("telephone")?.touched) {
-          <small class="invalid-feedbacks">Le numéro de téléphone est requis</small>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Adresse e-mail</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+
+          <input
+            matInput
+            id="email"
+            type="email"
+            formControlName="email"
+            placeholder="mentor@exemple.com"
+            autocomplete="email"
+            required
+          />
+
+          @if (registerForm.get('email')?.hasError('required')
+            && registerForm.get('email')?.touched) {
+            <mat-error>L'adresse e-mail est requise</mat-error>
           }
-        </div>
+
+          @if (registerForm.get('email')?.hasError('email')
+            && registerForm.get('email')?.touched) {
+            <mat-error>Veuillez saisir une adresse e-mail valide</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Numéro de téléphone</mat-label>
+          <mat-icon matPrefix>phone</mat-icon>
+
+          <input
+            matInput
+            id="telephone"
+            type="tel"
+            formControlName="telephone"
+            placeholder="Ex. +223 66 59 45 81"
+            autocomplete="tel"
+            required
+          />
+
+          @if (registerForm.get('telephone')?.hasError('required')
+            && registerForm.get('telephone')?.touched) {
+            <mat-error>Le numéro de téléphone est requis</mat-error>
+          }
+        </mat-form-field>
+
       </div>
 
-      <div class="field-group">
-        <label for="motDePass">Mot de passe <span>*</span></label>
-        <div class="input-wrapper">
-          <mat-icon>lock</mat-icon>
-          <input id="motDePass" [type]="hidePassword ? 'password' : 'text'" formControlName="motDePass"
-            placeholder="Sécurisez votre compte..." />
-          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button"
-            class="toggle-password-btn">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-          </button>
-        </div>
-        @if (registerForm.get("motDePass")?.invalid && registerForm.get("motDePass")?.touched) {
-        <small class="invalid-feedbacks">Le mot de passe est requis (6 caractères min.)</small>
+      <!-- MOT DE PASSE -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <mat-icon matPrefix>lock</mat-icon>
+
+        <input
+          matInput
+          id="motDePass"
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="motDePass"
+          placeholder="Au moins 6 caractères"
+          autocomplete="new-password"
+          required
+        />
+
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          class="toggle-password-btn"
+          aria-label="Afficher ou masquer le mot de passe"
+          (click)="hidePassword = !hidePassword"
+        >
+          <mat-icon>
+            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        @if (registerForm.get('motDePass')?.hasError('required')
+          && registerForm.get('motDePass')?.touched) {
+          <mat-error>Le mot de passe est requis</mat-error>
         }
-      </div>
 
-      <!-- INTERFACE DÉPOT : CV -->
+        @if (registerForm.get('motDePass')?.hasError('minlength')
+          && registerForm.get('motDePass')?.touched) {
+          <mat-error>Le mot de passe doit contenir au moins 6 caractères</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- CURRICULUM VITAE -->
       <div class="field-group">
-        <label>Curriculum Vitae (Format PDF requis) <span>*</span></label>
-        <input id="cvFile" type="file" accept=".pdf" class="hidden-file-input" [disabled]="chargementCV || chargement"
-          (change)="onFileSelected($event, 'cvUrl')" />
-        <label for="cvFile" class="file-upload-zone" [class.has-file]="fichierCV">
+        <label class="upload-label">
+          Curriculum Vitae <span class="required-mark">*</span>
+        </label>
+        <p class="upload-description">Format PDF uniquement, 10 Mo maximum</p>
+
+        <input
+          id="cvFile"
+          type="file"
+          accept=".pdf,application/pdf"
+          class="hidden-file-input"
+          [disabled]="chargementCV || chargement"
+          (change)="onFileSelected($event, 'cvUrl')"
+        />
+
+        <label
+          for="cvFile"
+          class="file-upload-zone"
+          [class.has-file]="fichierCV"
+          [class.is-loading]="chargementCV"
+        >
           <div class="upload-content">
             <div class="upload-icon">
-              <mat-icon>{{ chargementCV ? 'hourglass_top' : (fichierCV ? 'description' : 'cloud_upload') }}</mat-icon>
+              <mat-icon>
+                {{ chargementCV
+                  ? 'hourglass_top'
+                  : (fichierCV ? 'description' : 'cloud_upload') }}
+              </mat-icon>
             </div>
+
             <div class="upload-text">
               @if (chargementCV) {
-              <span class="upload-title">Téléversement vers Supabase...</span>
-              <span class="upload-hint">Veuillez patienter</span>
+                <span class="upload-title">Téléversement en cours...</span>
+                <span class="upload-hint">Veuillez patienter</span>
               } @else if (fichierCV) {
-              <span class="upload-title filename">{{ fichierCV.name }}</span>
-              <span class="upload-hint">Stocké avec succès • Remplacer</span>
+                <span class="upload-title filename">{{ fichierCV.name }}</span>
+                <span class="upload-hint">Fichier sélectionné · Cliquez pour remplacer</span>
               } @else {
-              <span class="upload-title">Cliquez pour importer <span>votre CV</span></span>
-              <span class="upload-hint">Document PDF uniquement (max. 10MB)</span>
+                <span class="upload-title">Importer votre CV</span>
+                <span class="upload-hint">Cliquez ici pour sélectionner un fichier PDF</span>
               }
             </div>
           </div>
+
           @if (fichierCV && !chargementCV && !chargement) {
-          <button type="button" class="remove-file-btn" aria-label="Supprimer le fichier"
-            (click)="supprimerFichier($event, 'cvUrl')">
-            <mat-icon>close</mat-icon>
-          </button>
+            <button
+              type="button"
+              class="remove-file-btn"
+              aria-label="Supprimer le CV"
+              (click)="supprimerFichier($event, 'cvUrl')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
           }
         </label>
-        @if (registerForm.get("cvUrl")?.invalid && registerForm.get("cvUrl")?.touched && !chargementCV) {
-        <small class="invalid-feedbacks">Le dépôt de votre CV au format PDF est obligatoire</small>
+
+        @if (registerForm.get('cvUrl')?.invalid
+          && registerForm.get('cvUrl')?.touched
+          && !chargementCV) {
+          <p class="invalid-feedbacks">Le dépôt de votre CV au format PDF est obligatoire</p>
         }
       </div>
 
-      <!-- INTERFACE DÉPOT : DIPLÔME -->
+      <!-- DIPLÔME -->
       <div class="field-group">
-        <label>Diplôme le plus élevé (Format PDF requis) <span>*</span></label>
-        <input id="diplomeFile" type="file" accept=".pdf" class="hidden-file-input"
-          [disabled]="chargementDiplome || chargement" (change)="onFileSelected($event, 'diplomeUrl')" />
-        <label for="diplomeFile" class="file-upload-zone" [class.has-file]="fichierDiplome">
+        <label class="upload-label">
+          Diplôme le plus élevé <span class="required-mark">*</span>
+        </label>
+        <p class="upload-description">Format PDF uniquement, 10 Mo maximum</p>
+
+        <input
+          id="diplomeFile"
+          type="file"
+          accept=".pdf,application/pdf"
+          class="hidden-file-input"
+          [disabled]="chargementDiplome || chargement"
+          (change)="onFileSelected($event, 'diplomeUrl')"
+        />
+
+        <label
+          for="diplomeFile"
+          class="file-upload-zone"
+          [class.has-file]="fichierDiplome"
+          [class.is-loading]="chargementDiplome"
+        >
           <div class="upload-content">
             <div class="upload-icon">
-              <mat-icon>{{ chargementDiplome ? 'hourglass_top' : (fichierDiplome ? 'school' : 'cloud_upload')
-                }}</mat-icon>
+              <mat-icon>
+                {{ chargementDiplome
+                  ? 'hourglass_top'
+                  : (fichierDiplome ? 'school' : 'cloud_upload') }}
+              </mat-icon>
             </div>
+
             <div class="upload-text">
               @if (chargementDiplome) {
-              <span class="upload-title">Téléversement vers Supabase...</span>
-              <span class="upload-hint">Veuillez patienter</span>
+                <span class="upload-title">Téléversement en cours...</span>
+                <span class="upload-hint">Veuillez patienter</span>
               } @else if (fichierDiplome) {
-              <span class="upload-title filename">{{ fichierDiplome.name }}</span>
-              <span class="upload-hint">Stocké avec succès • Remplacer</span>
+                <span class="upload-title filename">{{ fichierDiplome.name }}</span>
+                <span class="upload-hint">Fichier sélectionné · Cliquez pour remplacer</span>
               } @else {
-              <span class="upload-title">Cliquez pour importer <span>votre Diplôme</span></span>
-              <span class="upload-hint">Document PDF uniquement (max. 10MB)</span>
+                <span class="upload-title">Importer votre diplôme</span>
+                <span class="upload-hint">Cliquez ici pour sélectionner un fichier PDF</span>
               }
             </div>
           </div>
+
           @if (fichierDiplome && !chargementDiplome && !chargement) {
-          <button type="button" class="remove-file-btn" aria-label="Supprimer le fichier"
-            (click)="supprimerFichier($event, 'diplomeUrl')">
-            <mat-icon>close</mat-icon>
-          </button>
+            <button
+              type="button"
+              class="remove-file-btn"
+              aria-label="Supprimer le diplôme"
+              (click)="supprimerFichier($event, 'diplomeUrl')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
           }
         </label>
-        @if (registerForm.get("diplomeUrl")?.invalid && registerForm.get("diplomeUrl")?.touched && !chargementDiplome) {
-        <small class="invalid-feedbacks">Le dépôt de votre diplôme au format PDF est obligatoire</small>
+
+        @if (registerForm.get('diplomeUrl')?.invalid
+          && registerForm.get('diplomeUrl')?.touched
+          && !chargementDiplome) {
+          <p class="invalid-feedbacks">Le dépôt de votre diplôme au format PDF est obligatoire</p>
         }
       </div>
 
-      <div class="field-group">
-        <label for="description">Description de vos expertises <span>*</span></label>
-        <div class="input-wrapper textarea-wrapper">
-          <mat-icon>rate_review</mat-icon>
-          <textarea id="description" formControlName="description"
-            placeholder="Présentez brièvement vos expertises majeures d'accompagnement (Finance, Stratégie, Marketing...)"
-            rows="3"></textarea>
-        </div>
-        @if (registerForm.get("description")?.invalid && registerForm.get("description")?.touched) {
-        <small class="invalid-feedbacks">La description est requise (10 caractères min.)</small>
-        }
-      </div>
+      <!-- DESCRIPTION DES EXPERTISES -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description de vos expertises</mat-label>
+        <mat-icon matPrefix>rate_review</mat-icon>
 
-      <button mat-flat-button color="primary" type="submit" class="btn-submit"
-        [disabled]="registerForm.invalid || chargement || chargementCV || chargementDiplome">
-        {{ chargement ? 'Création du compte en cours...' : 'Soumettre ma candidature' }}
+        <textarea
+          matInput
+          id="description"
+          formControlName="description"
+          placeholder="Présentez vos expertises en finance, stratégie, marketing..."
+          rows="4"
+          required
+        ></textarea>
+
+        @if (registerForm.get('description')?.hasError('required')
+          && registerForm.get('description')?.touched) {
+          <mat-error>La description est requise</mat-error>
+        }
+
+        @if (registerForm.get('description')?.hasError('minlength')
+          && registerForm.get('description')?.touched) {
+          <mat-error>Décrivez vos expertises en 10 caractères minimum</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- BOUTON DE SOUMISSION -->
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        class="btn-submit"
+        [disabled]="registerForm.invalid || chargement || chargementCV || chargementDiplome"
+      >
+        <mat-icon>
+          {{ chargement ? 'hourglass_top' : 'send' }}
+        </mat-icon>
+
+        <span>
+          {{ chargement ? 'Création du compte en cours...' : 'Soumettre ma candidature' }}
+        </span>
       </button>
 
     </form>
 
+    <!-- PIED DE PAGE -->
     <div class="login-footer">
       <span>Vous possédez déjà un compte ?</span>
       <a routerLink="/auth/login">Se connecter</a>

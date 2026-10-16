@@ -163,7 +163,7 @@ export class Parcours implements OnInit {
       },
       error: (erreur) => {
         console.error(erreur);
-        this.messageSnakBar.succes("Erreur lors de la sauvegarde sur le serveur.");
+        this.messageSnakBar.erreur("Erreur lors de la sauvegarde sur le serveur.");
       }
     });
   }

@@ -258,7 +258,7 @@
 }
 
 .btn-opp-discover {
-  background: var(--dark) !important;
+  background: var(--primary) !important;
   color: var(--surface) !important;
   font-size: 12px !important;
   font-weight: 600 !important;
@@ -301,109 +301,264 @@
   font-size: 12px !important;
 }
 
+/* =========================
+   MODALE DE POSTULATION
+   ========================= */
+
 .modal-overlay-motivation {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(31, 41, 55, 0.4);
-  backdrop-filter: blur(4px);
-  z-index: 1500;
+  z-index: 4000;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 22px;
+  box-sizing: border-box;
+  background: rgba(31, 41, 55, 0.58);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: motivation-overlay-in 0.2s ease;
 }
 
 .modal-window-motivation {
-  width: 100%;
-  max-width: 500px;
-  background: var(--surface);
-  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  max-height: 80vh;
+  width: 100%;
+  max-width: 690px;
+  max-height: min(850px, 92vh);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 25px 75px rgba(31, 41, 55, 0.24);
+  animation: motivation-window-in 0.22s ease;
 }
 
+/* En-tête de la modale */
+
 .modal-header-motivation {
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 18px;
+  padding: 25px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+}
+
+.modal-titles-motivation {
+  flex: 1;
+  min-width: 0;
 }
 
 .modal-eyebrow-motivation {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--primary-dark);
   font-size: 10px;
-  font-weight: 700;
-  color: var(--secondary-dark);
-  background: var(--secondary-light);
-  padding: 1px 4px;
-  border-radius: 3px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  line-height: 1.6;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
 }
 
 .modal-titles-motivation h2 {
-  margin: 4px 0 0;
-  font-size: 15px;
+  margin: 0;
+  color: var(--dark);
+  font-size: 21px;
   font-weight: 800;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
+.btn-close-motivation {
+  display: flex !important;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px !important;
+  height: 40px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  background: var(--surface) !important;
+  color: var(--text-secondary) !important;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-close-motivation:hover {
+  border-color: var(--error, #DC2626) !important;
+  background: var(--error-light, #FEF2F2) !important;
+  color: var(--error, #DC2626) !important;
+}
+
+/* Corps de la modale */
+
 .modal-body-motivation {
-  padding: 20px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 22px;
+  min-height: 0;
+  padding: 25px 28px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.modal-body-motivation::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body-motivation::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: var(--border);
+}
+
+/* Informations sur l'offre */
+
+.info-block-motivation {
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--background);
 }
 
 .info-block-motivation h3 {
-  margin: 0 0 2px;
-  font-size: 12px;
-  font-weight: 750;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 9px;
+  margin: 0 0 12px;
+  color: var(--dark);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.info-block-motivation h3 mat-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--primary-dark);
+  font-size: 20px;
 }
 
 .info-block-motivation p {
   margin: 0;
-  font-size: 12px;
   color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 
-.form-zone-motivation label {
-  font-size: 12px;
-  font-weight: 700;
-}
+/* Zone de motivation */
 
-.textarea-frame-motivation {
-  padding: 8px;
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-}
-
-.textarea-frame-motivation textarea {
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-size: 12px;
-  outline: none;
-  resize: none;
-}
-
-.modal-footer-motivation {
-  padding: 12px 20px;
-  border-top: 1px solid var(--border);
+.form-zone-motivation {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   gap: 10px;
 }
 
+.form-zone-motivation > label {
+  color: var(--dark);
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.required-star {
+  color: var(--error, #DC2626);
+  font-weight: 800;
+}
+
+.textarea-frame-motivation {
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.textarea-frame-motivation:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.textarea-frame-motivation textarea {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  padding: 13px;
+  box-sizing: border-box;
+  resize: vertical;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.textarea-frame-motivation textarea::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+/* Pied de la modale */
+
+.modal-footer-motivation {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid var(--border);
+  background: var(--background);
+}
+
+.btn-cancel-motivation {
+  min-height: 43px;
+  padding: 0 18px !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-secondary) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+.btn-cancel-motivation:hover {
+  background: var(--border) !important;
+  color: var(--text-primary) !important;
+}
+
 .btn-send-motivation {
+  min-width: 120px;
+  min-height: 43px;
+  padding: 0 23px !important;
+  border-radius: var(--radius-sm) !important;
   background: var(--primary) !important;
   color: var(--surface) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+  transition: background 0.2s ease;
 }
+
+.btn-send-motivation:hover:not(:disabled) {
+  background: var(--primary-dark) !important;
+}
+
+.btn-send-motivation:disabled {
+  background: var(--border) !important;
+  color: var(--text-secondary) !important;
+  cursor: not-allowed;
+}
+
 
 @media (max-width: 1024px) {
   .workspace-split-body {

@@ -8,18 +8,21 @@ import { NotificationService } from '../../../core/services/notification-service
 import { PoteurService } from '../../../core/services/porteur/poteur-service';
 import { SpecialiteService } from '../../../core/services/specialite/specialite-service';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-register-porteur',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterLink,
-    MatIconModule,
-    MatButtonModule,
-    MatSelectModule
-  ],
+ imports: [
+  CommonModule,
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatIconModule,
+  MatButtonModule
+],
   templateUrl: './register-porteur.html',
   styleUrl: './register-porteur.css'
 })

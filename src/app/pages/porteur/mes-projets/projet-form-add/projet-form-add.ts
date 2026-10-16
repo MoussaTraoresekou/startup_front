@@ -12,20 +12,23 @@ import { SecteurReponse } from '../../../../core/model/secteurReponse';
 import { SecteurService } from '../../../../core/services/secteur/secteur-service';
 import { NotificationService } from '../../../../core/services/notification-service';
 import { ProjetRequest } from '../../../../core/model/ProjetRequest';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
   selector: 'app-projet-form-add',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatIconModule
-  ],
+  CommonModule,
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSelectModule,
+  MatIconModule,
+  MatButtonModule,
+  MatProgressSpinnerModule
+
+],
   templateUrl: './projet-form-add.html',
   styleUrl: './projet-form-add.css',
 })

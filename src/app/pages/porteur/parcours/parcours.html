@@ -45,7 +45,7 @@
             <span class="question-text">{{ question.libelle }}</span>
 
             <div class="question-actions-right">
-              @if(etapeSelectionnee()?.StatutEtape!=="VALIDE"){
+              @if(etapeSelectionnee()?.StatutEtape!=="VALIDE" && etapeSelectionnee()?.StatutEtape!=="SOUMIS"){
                      @if (question.reponse_donnee) {
                 <button mat-icon-button class="btn-pencil-edit" title="Modifier la réponse"
                   (click)="$event.stopPropagation(); ouvrirFormulaireSaisieDirecte(question)">
@@ -84,7 +84,7 @@
           </div>
 
           <div class="form-actions-row">
-            @if(etapeSelectionnee()?.StatutEtape=="VALIDE"){
+            @if(etapeSelectionnee()?.StatutEtape=="VALIDE" || etapeSelectionnee()?.StatutEtape=="SOUMIS"){
                <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">retour</button>
             }@else {
                <button mat-button class="btn-cancel-reply" (click)="annulerEdition()">annuler</button>
