@@ -6,12 +6,6 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root' 
 })
-@Component({
-  selector: 'app-secteur-service',
-  imports: [],
-  templateUrl: './secteur-service.html',
-  styleUrl: './secteur-service.css',
-})
 export class SecteurService {
   private http=inject(HttpClient)
   private baseUrl = 'http://localhost:8080/api';

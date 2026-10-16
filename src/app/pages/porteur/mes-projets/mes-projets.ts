@@ -59,7 +59,7 @@ export class MesProjets implements OnInit {
   }
 
   public chargerOffresDeLEcosysteme(): void {
-    this.http.get<OffresResponseDto[]>('http://localhost:8080/api/porteur/offres/ecosysteme').subscribe({
+    this.http.get<OffresResponseDto[]>('http://localhost:8080/api/porteur/offres/ouvertes').subscribe({
       next: (donnees) => this.offresEcosysteme.set(donnees),
       error: (err) => console.error(err)
     });
@@ -89,7 +89,14 @@ export class MesProjets implements OnInit {
         this.fermerLiseuseOffre();
         this.chargerOffresDeLEcosysteme();
       },
-      error: (err) => { this.chargementPostuler = false; console.error(err); }
+      error: (erreur) => { 
+          const messageBackend = erreur.error?.message || "Une erreur est survenue.";
+
+        this.messageSnackBar.erreur(messageBackend);
+                this.chargementPostuler = false; console.error(erreur); 
+
+
+      }
     });
   }
 

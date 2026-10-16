@@ -199,9 +199,15 @@ export class Parcours implements OnInit {
         this.listeEtapes.update(etapes => 
           etapes.map(e => e.id === etapeActive.id ? etapeModifiee : e)
         );
+
         this.chargementSoumission.set(false);
       },
       error: (erreur) => {
+        //console.log("moussa"+erreur())
+  const messageBackend = erreur.error?.message || "Une erreur est survenue lors de la soumission.";
+
+        this.messageSnakBar.erreur(messageBackend);
+
         this.chargementSoumission.set(false);
         console.error(erreur);
       }
@@ -228,7 +234,7 @@ export class Parcours implements OnInit {
       },
       error: (erreur) => {
         console.error(erreur);
-        this.messageSnakBar.succes("Erreur lors du téléchargement.");
+        this.messageSnakBar.erreur("Impossible de télécharger le livrable : vous devez répondre à toutes les questions de l'étape");
       }
     });
   }

@@ -4,4 +4,7 @@ export interface PorteurResponseDto {
   prenom: string;
   telephone: string;
   email: string;
+  specialite: string;
+  biographie?: string;
+  lienPortfolio?: string;
 }

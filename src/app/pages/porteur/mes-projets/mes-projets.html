@@ -1,6 +1,5 @@
 <div class="projects-page-workspace">
 
-  <!-- 👤 RANGÉE INFOS ENTREPRENEUR -->
   <section class="workspace-user-profile-row">
     
     <div class="user-meta-kpi-card">
@@ -29,7 +28,6 @@
 
   </section>
 
-  <!-- 🎛️ CONTENEUR DOUBLE PANNEAU (SPLIT LAYOUT) -->
   <div class="workspace-split-body">
     
     <!-- PANNEAU GAUCHE : VOS PROJETS -->
@@ -40,11 +38,17 @@
           <h2>Mes startups</h2>
         </div>
         
-        <!-- 🚀 LE BOUTON EST REPLACÉ ICI DE MANIÈRE COMPACTE ET DESIGN -->
-        <button mat-flat-button class="btn-panel-header-add" type="button" (click)="creerProjet()">
-          <mat-icon>add</mat-icon>
-          <span>Nouveau</span>
-        </button>
+        <!-- 🚀 LE BOUTON DISPARAÎT MAGIQUEMENT SI LA LIMITE EST ATTEINTE -->
+        @if (projets().length < 2) {
+          <button 
+            mat-flat-button 
+            class="btn-panel-header-add" 
+            type="button" 
+            (click)="creerProjet()">
+            <mat-icon>add</mat-icon>
+            <span>Nouveau</span>
+          </button>
+        }
       </div>
 
       <div class="panel-scrollable-content">
@@ -61,9 +65,17 @@
             <div class="empty-icon-frame"><mat-icon>folder_off</mat-icon></div>
             <h3>Aucune startup enregistrée</h3>
             <p>Donnez vie à vos ambitions en créant votre premier projet.</p>
-            <button mat-stroked-button class="btn-empty-action" type="button" (click)="creerProjet()">
-              <mat-icon>add</mat-icon><span>Créer un projet</span>
-            </button>
+            
+            <!-- 🚀 LE BOUTON D'ACTION DE SECOURS DISPARAÎT AUSSI (SÉCURITÉ) -->
+            @if (projets().length < 2) {
+              <button 
+                mat-stroked-button 
+                class="btn-empty-action" 
+                type="button" 
+                (click)="creerProjet()">
+                <mat-icon>add</mat-icon><span>Créer un projet</span>
+              </button>
+            }
           </div>
         }
       </div>

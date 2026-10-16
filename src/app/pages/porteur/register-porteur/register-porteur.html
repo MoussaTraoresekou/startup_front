@@ -3,7 +3,9 @@
 
     <div class="login-header">
       <a routerLink="/" class="brand-logo">
-        <mat-icon class="brand-icon">rocket_launch</mat-icon>
+        <div class="brand-logo-frame">
+          <img src="/images/logo_startup.png" alt="Logo Entrepreneur360" class="brand-logo-img" />
+        </div>
         <span class="brand-title">Entrepreneur<span>360</span></span>
       </a>
       <h1>Rejoindre l'incubateur</h1>
@@ -60,6 +62,31 @@
         </div>
       </div>
 
+      <div class="form-row">
+        <div class="field-group">
+          <label for="specialiteSelect">Votre Spécialité <span>*</span></label>
+          <div class="input-wrapper">
+            <mat-icon>work</mat-icon>
+            <mat-select id="specialiteSelect" formControlName="specialite_id" placeholder="Sélectionner votre expertise...">
+              @for (specialite of lesSpecialites(); track specialite.id) {
+                <mat-option [value]="specialite.id">{{ specialite.specialite }}</mat-option>
+              }
+            </mat-select>
+          </div>
+          @if (registerForm.get("specialite_id")?.invalid && registerForm.get("specialite_id")?.touched) {
+            <small class="invalid-feedbacks">Veuillez choisir une spécialité</small>
+          }
+        </div>
+
+        <div class="field-group">
+          <label for="lienPortfolio">Lien portfolio / LinkedIn</label>
+          <div class="input-wrapper">
+            <mat-icon>link</mat-icon>
+            <input id="lienPortfolio" type="url" formControlName="lienPortfolio" placeholder="https://..." />
+          </div>
+        </div>
+      </div>
+
       <div class="field-group">
         <label for="password">Mot de passe <span>*</span></label>
         <div class="input-wrapper">
@@ -72,6 +99,13 @@
         @if (registerForm.get("password")?.invalid && registerForm.get("password")?.touched) {
           <small class="invalid-feedbacks">Le mot de passe est requis (6 caractères min.)</small>
         }
+      </div>
+
+      <div class="field-group" style="margin-top: 15px;">
+        <label for="biographie">Biographie / Présentation courte</label>
+        <div class="input-wrapper textarea-wrapper">
+          <textarea id="biographie" formControlName="biographie" rows="3" placeholder="Parlez-nous brièvement de vous et de votre parcours d'entrepreneur..."></textarea>
+        </div>
       </div>
 
       <div class="modal-actions" style="margin-top: 30px;">

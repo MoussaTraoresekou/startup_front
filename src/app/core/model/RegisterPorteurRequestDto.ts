@@ -4,4 +4,9 @@ export interface RegisterPorteurRequestDto {
   telephone: string;
   email: string;
   password: string;
+  specialite: string;
+  biographie?: string;
+  lienPortfolio?: string;
+  specialite_id:number
+
 }

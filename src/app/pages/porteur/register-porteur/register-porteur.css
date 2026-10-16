@@ -27,16 +27,28 @@
 .brand-logo {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
+  justify-content: center;
+  gap: 12px;
   margin-bottom: 24px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.brand-icon {
-  color: var(--primary, #059669);
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+.brand-logo-frame {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.brand-logo-img {
+  width: 114%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-title {
@@ -126,6 +138,23 @@
   outline: none;
 }
 
+/* Intégration harmonieuse de mat-select */
+.input-wrapper mat-select {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1F2937;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+
+/* Supprime les lignes internes natives d'Angular Material */
+::v-deep .input-wrapper .mat-mdc-select-trigger {
+  width: 100%;
+}
+
 .input-wrapper input::placeholder {
   color: #9CA3AF;
 }
@@ -166,6 +195,28 @@
 .btn-submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Style de la zone Biographie (textarea) */
+.input-wrapper.textarea-wrapper {
+  height: auto;
+  padding: 12px 16px;
+}
+
+.input-wrapper.textarea-wrapper textarea {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1F2937;
+  outline: none;
+  resize: vertical;
+  min-height: 70px;
+}
+
+.input-wrapper.textarea-wrapper textarea::placeholder {
+  color: #9CA3AF;
 }
 
 @media (max-width: 600px) {
