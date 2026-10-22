@@ -38,7 +38,7 @@ export const routes: Routes = [
         (m) => m.RegisterPorteur
       ),
   },
-  
+
   {
     path: 'porteur',
     component: EcosystemeLayout,
@@ -67,7 +67,6 @@ export const routes: Routes = [
     ]
   },
 
-  // 🧭 NIVEAU 2 : À l'intérieur d'un projet du Porteur (Sidebar Projet Intérieure)
   {
     path: 'porteur/projets/:id',
     component: MainLayout,
