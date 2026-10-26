@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
 import { AdminService } from '../../../../core/services/admin/admin-service';
 import { NotificationService } from '../../../../core/services/notification-service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-mentor-detail',
@@ -20,11 +21,31 @@ export class MentorDetail {
   private adminService = inject(AdminService);
   private messageSnackbar = inject(NotificationService);
 
-  public ouvrirDocument(url: string): void {
-    if (url) {
-      window.open(url, '_blank');
+ 
+private http = inject(HttpClient);
+
+ouvrirDocument(nomFichier: string): void {
+  const url =
+    `http://localhost:8080/api/admin/documents/${encodeURIComponent(nomFichier)}`;
+
+  this.http.get(url, { responseType: 'blob' }).subscribe({
+    next: (blob) => {
+      const urlBlob = URL.createObjectURL(blob);
+      window.open(urlBlob, '_blank', 'noopener,noreferrer');
+
+      setTimeout(() => URL.revokeObjectURL(urlBlob), 60000);
+    },
+    error: (err) => {
+      console.error('Erreur ouverture document :', err);
+      this.messageSnackbar.erreur(
+        err.status === 401
+          ? 'Session expirée ou jeton JWT absent.'
+          : 'Impossible d’ouvrir le document.'
+      );
     }
-  }
+  });
+}
+
   fermer() {
     this.fermerOnClic.emit();
   }

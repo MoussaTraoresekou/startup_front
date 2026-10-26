@@ -1,13 +1,11 @@
-<div class="modal-overlay" (click)="fermer.emit()">
 
+<div class="modal-overlay" (click)="fermer.emit()">
   <div
     class="modal-card-center"
     [class.wide-mode]="afficherLecteurMedia()"
     (click)="$event.stopPropagation()">
 
-    <!-- En-tête -->
     <div class="panel-header">
-
       <div class="header-title-wrapper">
         <mat-icon class="header-icon">business_center</mat-icon>
         <h2>Fiche technique de la startup</h2>
@@ -19,38 +17,23 @@
         class="btn-close"
         aria-label="Fermer la fenêtre"
         (click)="fermer.emit()">
-
         <mat-icon>close</mat-icon>
       </button>
-
     </div>
 
-    <!-- Contenu -->
     <div class="modal-split-body">
-
       <div class="panel-body">
-
-        <!-- Résumé -->
         <div class="project-summary">
-
           <div class="project-icon-badge">
             <mat-icon>rocket_launch</mat-icon>
           </div>
-
           <h3>{{ projet().titre }}</h3>
-
-          <span class="secteur-pill">
-            {{ projet().secteur }}
-          </span>
-
+          <span class="secteur-pill">{{ projet().secteur }}</span>
         </div>
 
-        <!-- Informations générales -->
         <div class="detail-section info-vertical">
-
           <div class="info-item">
             <mat-icon>person</mat-icon>
-
             <div class="info-text">
               <span>Fondateur / Porteur de projet</span>
               <strong>{{ projet().porteurNomComplet }}</strong>
@@ -59,56 +42,33 @@
 
           <div class="info-item">
             <mat-icon>calendar_today</mat-icon>
-
             <div class="info-text">
               <span>Date de création du dossier</span>
-
-             <strong>
-                {{ projet().date_creation | date:'dd MMMM yyyy' }}
-              </strong>
+              <strong>{{ projet().date_creation | date:'dd MMMM yyyy' }}</strong>
             </div>
           </div>
-
         </div>
 
-        <!-- Offre financière -->
         <div class="detail-section">
-
           <h4>Offre investisseur et partenariat proposé</h4>
-
           <div class="quota-box">
             <mat-icon>monetization_on</mat-icon>
-
-            <p>
-              {{ projet().quota_propose || 'Aucune offre financière spécifiée.' }}
-            </p>
+            <p>{{ projet().quota_propose || 'Aucune offre financière spécifiée.' }}</p>
           </div>
-
         </div>
 
-        <!-- Description -->
         <div class="detail-section">
-
           <h4>Résumé et objectifs du projet</h4>
-
           <div class="description-box">
-            <p>
-              {{ projet().description || 'Aucune description disponible.' }}
-            </p>
+            <p>{{ projet().description || 'Aucune description disponible.' }}</p>
           </div>
-
         </div>
 
-        <!-- Support de présentation -->
         @if (projet().pith_url) {
-
           <div class="detail-section">
-
             <h4>Support de présentation</h4>
-
             <p class="media-description">
-              Consultez le document ou visionnez la vidéo présentée
-              par le porteur de projet.
+              Consultez le document ou visionnez la vidéo présentée par le porteur de projet.
             </p>
 
             <button
@@ -116,7 +76,6 @@
               class="btn-toggle-pdf"
               [attr.aria-expanded]="afficherLecteurMedia()"
               (click)="basculerLecteurMedia()">
-
               <mat-icon>
                 {{
                   afficherLecteurMedia()
@@ -128,7 +87,6 @@
                         : 'attach_file'
                 }}
               </mat-icon>
-
               <span>
                 {{
                   afficherLecteurMedia()
@@ -140,31 +98,21 @@
                         : 'Ouvrir le fichier'
                 }}
               </span>
-
             </button>
-
           </div>
-
         } @else {
-
           <div class="detail-section">
             <h4>Support de présentation</h4>
-
             <div class="no-media-message">
               <mat-icon>insert_drive_file</mat-icon>
               <span>Aucun support de présentation disponible.</span>
             </div>
           </div>
-
         }
-
       </div>
 
-      <!-- Lecteur du support -->
       @if (projet().pith_url && afficherLecteurMedia()) {
-
         <div class="media-viewer-column animate-fade-in">
-
           <div class="media-viewer-header">
             <mat-icon>
               {{
@@ -175,7 +123,6 @@
                     : 'description'
               }}
             </mat-icon>
-
             <h3>
               {{
                 estUneVideo(projet().pith_url)
@@ -187,101 +134,74 @@
             </h3>
           </div>
 
-          <!-- Vidéo -->
           @if (estUneVideo(projet().pith_url)) {
-
             <div class="video-container">
-
               <video
                 [src]="projet().pith_url"
                 controls
                 playsinline
                 preload="metadata">
-
                 Votre navigateur ne prend pas en charge la lecture vidéo.
-
               </video>
-
             </div>
-
-          }
-
-          <!-- PDF -->
-          @else if (estUnPdf(projet().pith_url)) {
-
+          } @else if (estUnPdf(projet().pith_url)) {
             <div class="pdf-container">
+              @if (chargementPdf()) {
+                <p>Chargement du document PDF...</p>
+              } @else if (erreurPdf()) {
+                <div class="no-media-message">
+                  <mat-icon>error_outline</mat-icon>
+                  <span>
+                    Impossible de charger le document.
+                    Vérifiez vos droits d'accès et réessayez.
+                  </span>
+                </div>
 
-              <iframe
-                [src]="chargerUrlSecurisee(projet().pith_url)"
-                title="Pitch Deck de la startup"
-                width="100%"
-                height="600">
-              </iframe>
-
-              <p class="media-fallback-link">
-                Si le PDF ne s'affiche pas,
-                <a
-                  [href]="projet().pith_url"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  ouvrez-le dans un nouvel onglet
-                </a>.
-              </p>
-
+                <button
+                  type="button"
+                  class="btn-open-file"
+                  (click)="basculerLecteurMedia()">
+                  <mat-icon>refresh</mat-icon>
+                  Réessayer
+                </button>
+              } @else if (urlPdfSecurisee(); as pdfUrl) {
+                <iframe
+                  [src]="pdfUrl"
+                  title="Document de présentation du projet"
+                  width="100%"
+                  height="600">
+                </iframe>
+              }
             </div>
-
-          }
-
-          <!-- Autre type de fichier -->
-          @else {
-
+          } @else {
             <div class="document-download">
-
               <mat-icon>description</mat-icon>
-
               <h4>Aperçu indisponible</h4>
-
               <p>
-                Ce format de fichier ne peut pas être affiché
-                directement dans la fenêtre.
+                Ce format de fichier ne peut pas être affiché directement dans la fenêtre.
               </p>
-
               <a
                 [href]="projet().pith_url"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="btn-open-file">
-
                 <mat-icon>open_in_new</mat-icon>
                 Ouvrir le fichier
-
               </a>
-
             </div>
-
           }
-
         </div>
-
       }
-
     </div>
 
-    <!-- Pied de page -->
     <div class="panel-footer-actions">
-
       <button
         type="button"
         class="btn-back-grid"
         (click)="fermer.emit()">
-
         <mat-icon>arrow_back</mat-icon>
         <span>Retour aux demandes</span>
-
       </button>
-
     </div>
-
   </div>
-
 </div>
