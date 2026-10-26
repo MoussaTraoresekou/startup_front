@@ -1,3 +1,4 @@
+
 :host {
   display: block;
   font-family: Inter, Arial, sans-serif;
@@ -255,9 +256,7 @@
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .btn-toggle-pdf:hover {
@@ -320,11 +319,13 @@
   overflow-wrap: anywhere;
 }
 
-/* Lecteur vidéo */
+/* Lecteur vidéo : la miniature est intégrée à la vidéo avec poster */
 .video-container {
   width: 100%;
+  min-width: 0;
   overflow: hidden;
   background: #111827;
+  border: 1px solid #374151;
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(31, 41, 55, 0.12);
 }
@@ -332,10 +333,30 @@
 .video-container video {
   display: block;
   width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
   max-height: 65vh;
-  min-height: 220px;
+  margin: 0;
   background: #111827;
   object-fit: contain;
+  object-position: center;
+}
+
+.video-status {
+  margin: 0;
+  padding: 24px 16px;
+  color: #ffffff;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.pdf-status {
+  color: #4b5563;
+  background: #ffffff;
+  border-radius: 12px;
 }
 
 /* Lecteur PDF */
@@ -416,6 +437,30 @@
 }
 
 .document-download a:hover {
+  background: #065f46;
+}
+
+/* Boutons de chargement et de nouvelle tentative */
+.btn-open-file {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 10px 14px;
+  color: #ffffff;
+  background: #047857;
+  border: 1px solid #047857;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-open-file:hover {
   background: #065f46;
 }
 
@@ -542,7 +587,6 @@
   }
 
   .video-container video {
-    min-height: 180px;
     max-height: 45vh;
   }
 

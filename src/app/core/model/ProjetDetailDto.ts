@@ -6,5 +6,8 @@ export interface ProjetDetailDto {
   quota_propose: string;
   secteur: string;
   porteurNomComplet: string;
-  date_creation:string
+  date_creation?: string;
+  nombreLikes?: number;
+  pith_thumbnail_url: string | null;
+
 }

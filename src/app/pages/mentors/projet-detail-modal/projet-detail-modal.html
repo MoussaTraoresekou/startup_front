@@ -27,6 +27,7 @@
           <div class="project-icon-badge">
             <mat-icon>rocket_launch</mat-icon>
           </div>
+
           <h3>{{ projet().titre }}</h3>
           <span class="secteur-pill">{{ projet().secteur }}</span>
         </div>
@@ -34,6 +35,7 @@
         <div class="detail-section info-vertical">
           <div class="info-item">
             <mat-icon>person</mat-icon>
+
             <div class="info-text">
               <span>Fondateur / Porteur de projet</span>
               <strong>{{ projet().porteurNomComplet }}</strong>
@@ -42,31 +44,41 @@
 
           <div class="info-item">
             <mat-icon>calendar_today</mat-icon>
+
             <div class="info-text">
               <span>Date de création du dossier</span>
-              <strong>{{ projet().date_creation | date:'dd MMMM yyyy' }}</strong>
+              <strong>
+                {{ projet().date_creation | date:'dd MMMM yyyy' }}
+              </strong>
             </div>
           </div>
         </div>
 
         <div class="detail-section">
           <h4>Offre investisseur et partenariat proposé</h4>
+
           <div class="quota-box">
             <mat-icon>monetization_on</mat-icon>
-            <p>{{ projet().quota_propose || 'Aucune offre financière spécifiée.' }}</p>
+            <p>
+              {{ projet().quota_propose || 'Aucune offre financière spécifiée.' }}
+            </p>
           </div>
         </div>
 
         <div class="detail-section">
           <h4>Résumé et objectifs du projet</h4>
+
           <div class="description-box">
-            <p>{{ projet().description || 'Aucune description disponible.' }}</p>
+            <p>
+              {{ projet().description || 'Aucune description disponible.' }}
+            </p>
           </div>
         </div>
 
         @if (projet().pith_url) {
           <div class="detail-section">
             <h4>Support de présentation</h4>
+
             <p class="media-description">
               Consultez le document ou visionnez la vidéo présentée par le porteur de projet.
             </p>
@@ -76,6 +88,7 @@
               class="btn-toggle-pdf"
               [attr.aria-expanded]="afficherLecteurMedia()"
               (click)="basculerLecteurMedia()">
+
               <mat-icon>
                 {{
                   afficherLecteurMedia()
@@ -87,6 +100,7 @@
                         : 'attach_file'
                 }}
               </mat-icon>
+
               <span>
                 {{
                   afficherLecteurMedia()
@@ -103,6 +117,7 @@
         } @else {
           <div class="detail-section">
             <h4>Support de présentation</h4>
+
             <div class="no-media-message">
               <mat-icon>insert_drive_file</mat-icon>
               <span>Aucun support de présentation disponible.</span>
@@ -123,6 +138,7 @@
                     : 'description'
               }}
             </mat-icon>
+
             <h3>
               {{
                 estUneVideo(projet().pith_url)
@@ -136,18 +152,43 @@
 
           @if (estUneVideo(projet().pith_url)) {
             <div class="video-container">
-              <video
-                [src]="projet().pith_url"
-                controls
-                playsinline
-                preload="metadata">
-                Votre navigateur ne prend pas en charge la lecture vidéo.
-              </video>
+              @if (chargementVideo()) {
+                <p class="video-status">
+                  Chargement de la vidéo...
+                </p>
+              } @else if (erreurVideo()) {
+                <div class="no-media-message">
+                  <mat-icon>error_outline</mat-icon>
+                  <span>
+                    Impossible de charger la vidéo.
+                    Vérifiez vos droits d'accès et réessayez.
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  class="btn-open-file"
+                  (click)="reessayerVideo()">
+                  <mat-icon>refresh</mat-icon>
+                  Réessayer
+                </button>
+              } @else if (urlVideo()) {
+                <video
+                  [src]="urlVideo()"
+                  [poster]="urlMiniature() || null"
+                  controls
+                  playsinline
+                  preload="metadata">
+                  Votre navigateur ne prend pas en charge la lecture vidéo.
+                </video>
+              }
             </div>
           } @else if (estUnPdf(projet().pith_url)) {
             <div class="pdf-container">
               @if (chargementPdf()) {
-                <p>Chargement du document PDF...</p>
+                <p class="video-status pdf-status">
+                  Chargement du document PDF...
+                </p>
               } @else if (erreurPdf()) {
                 <div class="no-media-message">
                   <mat-icon>error_outline</mat-icon>
@@ -160,7 +201,7 @@
                 <button
                   type="button"
                   class="btn-open-file"
-                  (click)="basculerLecteurMedia()">
+                  (click)="reessayerPdf()">
                   <mat-icon>refresh</mat-icon>
                   Réessayer
                 </button>
@@ -177,17 +218,10 @@
             <div class="document-download">
               <mat-icon>description</mat-icon>
               <h4>Aperçu indisponible</h4>
+
               <p>
                 Ce format de fichier ne peut pas être affiché directement dans la fenêtre.
               </p>
-              <a
-                [href]="projet().pith_url"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="btn-open-file">
-                <mat-icon>open_in_new</mat-icon>
-                Ouvrir le fichier
-              </a>
             </div>
           }
         </div>
