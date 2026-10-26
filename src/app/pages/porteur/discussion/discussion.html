@@ -1,1 +1,186 @@
-<p>discussion works!</p>
+
+<section class="discussion-page">
+  <header class="discussion-header">
+    <div>
+      <span class="eyebrow">ENTREPRENEUR360</span>
+      <h1>Messagerie</h1>
+      <p>Échangez avec les investisseurs de votre projet.</p>
+    </div>
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="recupererConversations()"
+      [disabled]="chargementConversations()">
+      Actualiser
+    </button>
+  </header>
+
+  @if (erreur()) {
+    <div class="alert-error" role="alert">
+      {{ erreur() }}
+    </div>
+  }
+
+  <div class="chat-layout">
+
+    <!-- Liste des conversations -->
+    <aside class="conversation-panel">
+      <div class="panel-heading">
+        <h2>Conversations</h2>
+        <span class="conversation-count">
+          {{ conversations().length }}
+        </span>
+      </div>
+
+      @if (chargementConversations()) {
+        <div class="empty-state">
+          Chargement des conversations...
+        </div>
+      } @else if (conversations().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">✉</div>
+          <h3>Aucune conversation</h3>
+          <p>
+            Les échanges avec les investisseurs apparaîtront ici
+            lorsqu'une conversation sera disponible.
+          </p>
+        </div>
+      } @else {
+        <div class="conversation-list">
+          @for (conversation of conversations(); track conversation.id) {
+            <button
+              type="button"
+              class="conversation-item"
+              [class.active]="conversationActive()?.id === conversation.id"
+              (click)="selectionnerConversation(conversation)">
+
+              <span class="avatar">
+                {{ nomInterlocuteur(conversation).charAt(0).toUpperCase() }}
+              </span>
+
+              <span class="conversation-info">
+                <strong>
+                  {{ nomInterlocuteur(conversation) }}
+                </strong>
+
+                <span class="project-name">
+                  {{ conversation.projetTitre }}
+                </span>
+
+                <span class="last-message">
+                  {{ conversation.dernierMessage || 'Commencez la discussion' }}
+                </span>
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </aside>
+
+    <!-- Zone de discussion -->
+    <section class="message-panel">
+      @if (conversationActive(); as conversation) {
+
+        <header class="message-header">
+          <div class="avatar">
+            {{ nomInterlocuteur(conversation).charAt(0).toUpperCase() }}
+          </div>
+
+          <div class="message-contact">
+            <h2>{{ nomInterlocuteur(conversation) }}</h2>
+            <p>{{ conversation.projetTitre }}</p>
+          </div>
+
+          <span
+            class="connection-status"
+            [class.connecting]="connexionEnCours()">
+            <span class="status-dot"></span>
+            {{ connexionEnCours() ? 'Connexion...' : 'Messagerie ouverte' }}
+          </span>
+        </header>
+
+        <!-- Historique des messages -->
+        <div class="messages-area" #zoneMessages>
+          @if (chargementMessages()) {
+            <div class="empty-state">
+              Chargement des messages...
+            </div>
+          } @else if (messages().length === 0) {
+            <div class="empty-state">
+              <div class="empty-icon">💬</div>
+              <h3>Votre conversation commence ici</h3>
+              <p>Envoyez un premier message à cet investisseur.</p>
+            </div>
+          } @else {
+            @for (message of messages(); track message.id) {
+              <div
+                class="message-row"
+                [class.my-message-row]="estMonMessage(message)">
+
+                <div
+                  class="message-bubble"
+                  [class.my-message]="estMonMessage(message)">
+
+                  @if (!estMonMessage(message)) {
+                    <span class="sender-name">
+                      {{ message.expediteurNom }}
+                    </span>
+                  }
+
+                  <p>{{ message.contenu }}</p>
+
+                  <time>
+                    {{ message.dateEnvoi | date:'dd/MM/yyyy HH:mm' }}
+                  </time>
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Formulaire d'envoi -->
+        <form class="message-form" (ngSubmit)="envoyerMessage()">
+          <label class="sr-only" for="message">
+            Votre message
+          </label>
+
+          <textarea
+            id="message"
+            name="message"
+            [ngModel]="contenu()"
+            (ngModelChange)="contenu.set($event); reinitialiserErreur()"
+            placeholder="Écrivez votre message..."
+            rows="1"
+            maxlength="5000"
+            [disabled]="chargementMessages() || connexionEnCours()"
+            required>
+          </textarea>
+
+          <button
+            type="submit"
+            class="send-button"
+            [disabled]="!contenu().trim() || chargementMessages() || connexionEnCours()">
+            Envoyer
+            <span aria-hidden="true">➤</span>
+          </button>
+        </form>
+
+        @if (erreurEnvoi()) {
+          <p class="send-error" role="alert">
+            {{ erreurEnvoi() }}
+          </p>
+        }
+
+      } @else {
+        <div class="empty-state chat-placeholder">
+          <div class="empty-icon">💬</div>
+          <h3>Sélectionnez une conversation</h3>
+          <p>
+            Choisissez un investisseur pour afficher vos échanges.
+          </p>
+        </div>
+      }
+    </section>
+  </div>
+</section>
