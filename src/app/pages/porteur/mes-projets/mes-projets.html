@@ -13,15 +13,15 @@
     <div class="user-meta-kpi-card">
       <div class="kpi-icon-frame dark-frame"><mat-icon>psychology</mat-icon></div>
       <div class="kpi-meta-text">
-        <span class="kpi-string-value">Angular</span>
-        <span class="kpi-text-label">Mon expertise</span>
+        <span class="kpi-string-value">{{acceilAfiche()?.specialite}}</span>
+        <span class="kpi-text-label">Specialite</span>
       </div>
     </div>
 
     <div class="user-meta-kpi-card">
       <div class="kpi-icon-frame orange-frame"><mat-icon>assignment_ind</mat-icon></div>
       <div class="kpi-meta-text">
-        <span class="kpi-digit-value">2</span>
+        <span class="kpi-digit-value">{{acceilAfiche()?.nbrProjetRejoint}}</span>
         <span class="kpi-text-label">Projets tiers rejoints</span>
       </div>
     </div>

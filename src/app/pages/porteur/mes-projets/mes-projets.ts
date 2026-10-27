@@ -14,6 +14,8 @@ import { ProjetService } from '../../../core/services/projet-service';
 import { ProjetResponse } from '../../../core/model/ProjetResponse';
 import { OffresResponseDto } from '../../../core/model/OffresResponseDto';
 import { NotificationService } from '../../../core/services/notification-service';
+import { AccueilPorteurDto } from '../../../core/model/acceuiformentor';
+import { PoteurService } from '../../../core/services/porteur/poteur-service';
 
 @Component({
   selector: 'app-mes-projets',
@@ -33,6 +35,9 @@ export class MesProjets implements OnInit {
   projets = signal<ProjetResponse[]>([]);
   offresEcosysteme = signal<OffresResponseDto[]>([]);
   offreSelectionnee = signal<OffresResponseDto | null>(null);
+  private porteurService=inject(PoteurService)
+  acceilAfiche = signal<AccueilPorteurDto | null>(null);
+
   
   motivationTexte: string = '';
   formulaireVisible = false;
@@ -41,6 +46,15 @@ export class MesProjets implements OnInit {
   ngOnInit(): void {
     this.chargerProjet("", "");
     this.chargerOffresDeLEcosysteme();
+    this.porteurService.getAcceuilInfo().subscribe({
+             next:(donnee)=>{
+                    this.acceilAfiche.set(donnee)
+
+             },
+             error:(error)=>{
+                  console.log(error)
+             }
+    })
   }
 
   public chargerProjet(secteur: string, titre: string): void {

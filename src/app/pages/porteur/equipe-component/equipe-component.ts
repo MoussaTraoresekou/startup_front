@@ -24,6 +24,7 @@ import { PoteurService } from '../../../core/services/porteur/poteur-service';
 import { OffresRequestDto } from '../../../core/model/OffresRequestDto';
 import { SpecialiteService } from '../../../core/services/specialite/specialite-service';
 import { SpecialiteResponse } from '../../../core/model/specialiteResponse';
+import { AccueilPorteurDto } from '../../../core/model/acceuiformentor';
 
 @Component({
   selector: 'app-equipe',
@@ -50,6 +51,8 @@ export class EquipeComponent implements OnInit {
   private messageSnackBar = inject(NotificationService);
   private porteurService = inject(PoteurService);
   private specialiteService = inject(SpecialiteService);
+  acceilAfiche = signal<AccueilPorteurDto | null>(null);
+
 
   projetId!: number;
 
@@ -85,6 +88,14 @@ export class EquipeComponent implements OnInit {
 
     this.recupererEquipeEtCandidatures();
     this.recupererSpecialites();
+    this.porteurService.getAcceuilInfo().subscribe({
+         next:(donnee)=>{
+                  this.acceilAfiche.set(donnee)
+         },
+         error:(erreur)=>{
+
+         }
+    })
   }
 
   private recupererSpecialites(): void {
