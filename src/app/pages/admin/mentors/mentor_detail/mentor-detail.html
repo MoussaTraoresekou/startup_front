@@ -1,25 +1,45 @@
+
 <div class="mentor-detail-panel">
-    <div class="panel-header">
+  <div class="panel-header">
     <div class="header-title-wrapper">
       <mat-icon class="header-icon">account_circle</mat-icon>
       <h2>Dossier Candidature</h2>
     </div>
+
     <button mat-icon-button class="btn-close" (click)="fermer()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
+
   <div class="panel-body">
-        <div class="detail-section profile-summary">
+    <!-- PROFIL DU MENTOR -->
+    <div class="detail-section profile-summary">
       <div class="big-avatar">
         {{ mentor().prenom ? mentor().prenom.charAt(0).toUpperCase() : '' }}{{ mentor().nom ? mentor().nom.charAt(0).toUpperCase() : '' }}
       </div>
-      <h3 class="mentor-name">{{ mentor().prenom }} {{ mentor().nom }}</h3>
-      <span class="status-badge" [class]="mentor().statu">
-        {{ mentor().statu === 'EN_ATTENTE' ? 'En attente' : mentor().statu === 'ACCEPTEE' ? 'Validé' : 'Refusé' }}
+
+      <h3 class="mentor-name">
+        {{ mentor().prenom }} {{ mentor().nom }}
+      </h3>
+
+      <span
+        class="status-badge"
+        [class]="mentor().statu"
+      >
+        {{
+          mentor().statu === 'EN_ATTENTE'
+            ? 'En attente'
+            : mentor().statu === 'ACCEPTEE'
+              ? 'Validé'
+              : 'Refusé'
+        }}
       </span>
     </div>
+
+    <!-- COORDONNÉES -->
     <div class="detail-section info-grid">
       <h4>Coordonnées de l'expert</h4>
+
       <div class="info-item">
         <mat-icon>email</mat-icon>
         <div class="info-text">
@@ -27,6 +47,7 @@
           <strong>{{ mentor().email }}</strong>
         </div>
       </div>
+
       <div class="info-item">
         <mat-icon>phone</mat-icon>
         <div class="info-text">
@@ -39,55 +60,106 @@
         <mat-icon>calendar_today</mat-icon>
         <div class="info-text">
           <span>Date de postulation</span>
-          <strong>{{ mentor().dateCreation | date:'dd MMMM yyyy' }}</strong>
+          <strong>
+            {{ mentor().dateCreation | date:'dd MMMM yyyy' }}
+          </strong>
         </div>
       </div>
     </div>
+
+    <!-- PIÈCES JUSTIFICATIVES -->
     <div class="detail-section documents-section">
       <h4>Pièces justificatives (Format PDF)</h4>
-            <div class="doc-card" [class.disabled]="!mentor().cv_url" (click)="ouvrirDocument(mentor().cv_url)">
+
+      <!-- CURRICULUM VITAE -->
+      <div
+        class="doc-card"
+        [class.disabled]="!mentor().cv_url"
+        [attr.role]="mentor().cv_url ? 'button' : null"
+        [attr.tabindex]="mentor().cv_url ? 0 : -1"
+        (click)="mentor().cv_url && ouvrirDocument(mentor().cv_url)"
+        (keydown.enter)="mentor().cv_url && ouvrirDocument(mentor().cv_url)"
+      >
         <div class="doc-card-left">
           <div class="doc-icon-box cv-color">
             <mat-icon>description</mat-icon>
           </div>
+
           <div class="doc-meta">
             <strong>Curriculum Vitae (CV)</strong>
-            <span>Consulter le parcours professionnel</span>
+            <span>
+              {{
+                mentor().cv_url
+                  ? 'Consulter le parcours professionnel'
+                  : 'CV non disponible'
+              }}
+            </span>
           </div>
         </div>
+
         <mat-icon class="arrow-icon">open_in_new</mat-icon>
       </div>
-      <div class="doc-card" [class.disabled]="!mentor().diplome_url" (click)="ouvrirDocument(mentor().diplome_url)">
+
+      <!-- DIPLÔME -->
+      <div
+        class="doc-card"
+        [class.disabled]="!mentor().diplome_url"
+        [attr.role]="mentor().diplome_url ? 'button' : null"
+        [attr.tabindex]="mentor().diplome_url ? 0 : -1"
+        (click)="mentor().diplome_url && ouvrirDocument(mentor().diplome_url)"
+        (keydown.enter)="mentor().diplome_url && ouvrirDocument(mentor().diplome_url)"
+      >
         <div class="doc-card-left">
           <div class="doc-icon-box degree-color">
             <mat-icon>school</mat-icon>
           </div>
+
           <div class="doc-meta">
             <strong>Diplôme certifié</strong>
-            <span>Vérifier le plus haut niveau d'études</span>
+            <span>
+              {{
+                mentor().diplome_url
+                  ? 'Vérifier le plus haut niveau d’études'
+                  : 'Diplôme non disponible'
+              }}
+            </span>
           </div>
         </div>
+
         <mat-icon class="arrow-icon">open_in_new</mat-icon>
       </div>
     </div>
 
+    <!-- EXPERTISE -->
     <div class="detail-section bio-section">
       <h4>Expertise & Domaines d'intervention</h4>
+
       <div class="bio-text-box">
-        <p>« {{ mentor().description || 'Aucune description fournie.' }} »</p>
+        <p>
+          « {{ mentor().description || 'Aucune description fournie.' }} »
+        </p>
       </div>
     </div>
-
   </div>
-  
-    <div class="panel-footer-actions">
-      <button class="btn-reject" (click)="refuserMentor(mentor().id)">
-        <mat-icon>block</mat-icon> Refuser la candidature
-      </button>
-      <button class="btn-approve" (click)="accepterMentore(mentor().id)">
-        <mat-icon>check_circle</mat-icon> Approuver l'expert
-      </button>
-    </div>
-  
 
+  <!-- ACTIONS ADMINISTRATEUR -->
+  <div class="panel-footer-actions">
+    <button
+      type="button"
+      class="btn-reject"
+      (click)="refuserMentor(mentor().id)"
+    >
+      <mat-icon>block</mat-icon>
+      Refuser la candidature
+    </button>
+
+    <button
+      type="button"
+      class="btn-approve"
+      (click)="accepterMentore(mentor().id)"
+    >
+      <mat-icon>check_circle</mat-icon>
+      Approuver l'expert
+    </button>
+  </div>
 </div>

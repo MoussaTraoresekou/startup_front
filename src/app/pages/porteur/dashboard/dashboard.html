@@ -1,0 +1,520 @@
+<div class="dashboard-page">
+
+  <!-- États de chargement et d'erreur -->
+  @if (chargement()) {
+    <div class="dashboard-message">
+      <mat-icon>hourglass_top</mat-icon>
+      <p>Chargement du tableau de bord...</p>
+    </div>
+  } @else if (erreur()) {
+    <div class="dashboard-message dashboard-error">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ erreur() }}</p>
+    </div>
+  } @else if (dasbordPorteur(); as dashboard) {
+
+    <!-- En-tête -->
+    <header class="dashboard-header">
+
+      <div class="project-identity">
+
+        <div class="project-identity-details">
+
+          <span class="project-eyebrow">MON PROJET</span>
+
+          <h2>{{ dashboard.titre }}</h2>
+
+          @if (dashboard.secteur) {
+            <span class="project-sector">
+              <mat-icon>local_shipping</mat-icon>
+              {{ dashboard.secteur }}
+            </span>
+          }
+
+        </div>
+
+        <a
+          routerLink="/me/parcours"
+          class="project-open-link"
+          aria-label="Consulter le parcours du projet"
+        >
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+
+      </div>
+
+    </header>
+
+    <!-- Indicateurs clés -->
+    <section
+      class="kpi-grid"
+      aria-label="Résumé du projet"
+    >
+
+      <!-- Investisseurs intéressés -->
+      <article class="kpi-card">
+
+        <div class="kpi-icon interest-icon">
+          <mat-icon>favorite</mat-icon>
+        </div>
+
+        <div class="kpi-content">
+
+          <span class="kpi-label">
+            Investisseurs intéressés
+          </span>
+
+          <div class="kpi-value">
+            {{ dashboard.investisseursInteresses }}
+          </div>
+
+          <p class="kpi-description">
+            Investisseurs ayant aimé le projet
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Membres actifs -->
+      <article class="kpi-card">
+
+        <div class="kpi-icon team-icon">
+          <mat-icon>groups</mat-icon>
+        </div>
+
+        <div class="kpi-content">
+
+          <span class="kpi-label">
+            Membres actifs
+          </span>
+
+          <div class="kpi-value">
+            {{ dashboard.membresActifs }}
+          </div>
+
+          <p class="kpi-description">
+            Membres de votre équipe
+          </p>
+
+          <a
+            routerLink="/me/equipe"
+            class="kpi-action"
+          >
+            Gérer l'équipe
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+
+        </div>
+
+      </article>
+
+      <!-- Étapes validées -->
+      <article class="kpi-card">
+
+        <div class="kpi-icon validated-icon">
+          <mat-icon>task_alt</mat-icon>
+        </div>
+
+        <div class="kpi-content">
+
+          <span class="kpi-label">
+            Étapes validées
+          </span>
+
+          <div class="kpi-value">
+            {{ dashboard.etapesValidees }}
+          </div>
+
+          <p class="kpi-description">
+            Étapes au statut validé
+          </p>
+
+        </div>
+
+      </article>
+
+      <!-- Étapes en cours -->
+      <article class="kpi-card">
+
+        <div class="kpi-icon progress-icon">
+          <mat-icon>pending_actions</mat-icon>
+        </div>
+
+        <div class="kpi-content">
+
+          <span class="kpi-label">
+            Étapes en cours
+          </span>
+
+          <div class="kpi-value">
+            {{ dashboard.etapesEnCours }}
+          </div>
+
+          <p class="kpi-description">
+            Étapes actuellement en cours
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+    <!-- Contenu principal -->
+    <section class="dashboard-content">
+
+      <!-- Suivi des étapes -->
+      <div class="panel stages-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <span class="section-eyebrow">
+              SUIVI DU PROJET
+            </span>
+
+            <h2>Mes étapes</h2>
+
+            <p class="panel-description">
+              Consultez le statut de chaque étape de votre projet.
+            </p>
+
+          </div>
+
+          <a
+            routerLink="/me/parcours"
+            class="text-link"
+          >
+            Voir le parcours
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+
+        </div>
+
+        <div class="stage-list">
+
+          @for (etape of dashboard.etapes; track etape.id) {
+
+            <article class="stage-row">
+
+              <!-- Icône selon le statut -->
+              <div
+                class="stage-icon"
+                [class.stage-icon-valid]="etape.statut === 'VALIDE'"
+                [class.stage-icon-progress]="etape.statut === 'EN_COUR'"
+                [class.stage-icon-pending]="
+                  etape.statut !== 'VALIDE'
+                  && etape.statut !== 'EN_COUR'
+                "
+              >
+
+                <mat-icon>
+                  {{
+                    etape.statut === 'VALIDE'
+                      ? 'check_circle'
+                      : etape.statut === 'EN_COUR'
+                        ? 'pending_actions'
+                        : 'description'
+                  }}
+                </mat-icon>
+
+              </div>
+
+              <!-- Informations de l'étape -->
+              <div class="stage-information">
+
+                <h3>{{ etape.nom }}</h3>
+
+                @if (etape.statut === 'VALIDE' && etape.dateValidation) {
+
+                  <span class="stage-date">
+                    <mat-icon>calendar_today</mat-icon>
+                    Validée le {{ etape.dateValidation }}
+                  </span>
+
+                } @else if (etape.dateSoumission) {
+
+                  <span class="stage-date">
+                    <mat-icon>calendar_today</mat-icon>
+                    Date de soumission :
+                    {{ etape.dateSoumission }}
+                  </span>
+
+                }
+
+                @if (etape.commentaireMentor) {
+
+                  <p class="stage-comment">
+                    {{ etape.commentaireMentor }}
+                  </p>
+
+                }
+
+              </div>
+
+              <!-- Statut -->
+              <span
+                class="status-badge"
+                [class.status-valid]="etape.statut === 'VALIDE'"
+                [class.status-progress]="etape.statut === 'EN_COUR'"
+                [class.status-pending]="
+                  etape.statut !== 'VALIDE'
+                  && etape.statut !== 'EN_COUR'
+                "
+              >
+
+                <span class="status-dot"></span>
+
+                {{
+                  etape.statut === 'VALIDE'
+                    ? 'Validée'
+                    : etape.statut === 'EN_COUR'
+                      ? 'En cours'
+                      : etape.statut === 'EN_ATTENTE'
+                        ? 'En attente'
+                        : etape.statut === 'A_REVOIR'
+                          ? 'À revoir'
+                          : etape.statut ?? 'Non renseigné'
+                }}
+
+              </span>
+
+            </article>
+
+          } @empty {
+
+            <div class="empty-state">
+
+              <mat-icon>description</mat-icon>
+
+              <h3>Aucune étape enregistrée</h3>
+
+              <p>
+                Les étapes de votre projet apparaîtront ici
+                lorsqu'elles seront enregistrées.
+              </p>
+
+            </div>
+
+          }
+
+        </div>
+
+        <div class="stages-footer">
+
+          <mat-icon>info_outline</mat-icon>
+
+          <p>
+            Chaque étape possède son propre statut.
+            Plusieurs étapes peuvent être en cours simultanément.
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- Colonne latérale -->
+      <aside class="right-section">
+
+        <!-- Dernier retour du mentor -->
+        <div class="panel mentor-panel">
+
+          <div class="panel-header compact-header">
+
+            <div class="mentor-heading-icon">
+              <mat-icon>forum</mat-icon>
+            </div>
+
+            <div>
+
+              <h2>Retour du mentor</h2>
+
+              <p class="panel-description">
+                Dernier commentaire reçu
+              </p>
+
+            </div>
+
+          </div>
+
+          @if (dashboard.dernierCommentaireMentor; as retour) {
+
+            <div class="mentor-feedback">
+
+              <span class="feedback-quote">“</span>
+
+              <p>{{ retour.commentaire }}</p>
+
+              <div class="feedback-footer">
+
+                <span class="feedback-status">
+
+                  <mat-icon>check_circle</mat-icon>
+
+                  @if (retour.etape) {
+                    {{ retour.etape }}
+                  } @else {
+                    Commentaire du mentor
+                  }
+
+                </span>
+
+                @if (retour.date) {
+
+                  <span class="feedback-date">
+                    {{ retour.date }}
+                  </span>
+
+                }
+
+              </div>
+
+            </div>
+
+            <a
+              routerLink="/me/parcours"
+              class="panel-action"
+            >
+              Consulter les étapes
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+
+          } @else {
+
+            <div class="mentor-empty">
+
+              <mat-icon>chat_bubble_outline</mat-icon>
+
+              <p>
+                Aucun commentaire du mentor pour le moment.
+              </p>
+
+            </div>
+
+          }
+
+        </div>
+
+        <!-- Équipe du projet -->
+        <div class="panel team-panel">
+
+          <div class="panel-header team-panel-header">
+
+            <div>
+
+              <span class="section-eyebrow">
+                COLLABORATION
+              </span>
+
+              <h2>Équipe du projet</h2>
+
+              <p class="panel-description">
+                Les membres actifs de votre équipe.
+              </p>
+
+            </div>
+
+            <div class="team-count">
+
+              <mat-icon>groups</mat-icon>
+
+              <span>{{ dashboard.membresActifs }}</span>
+
+            </div>
+
+          </div>
+
+          @for (membre of dashboard.equipe; track membre.id) {
+
+            <div class="team-member">
+
+              <div
+                class="member-avatar"
+                [class.member-avatar-green]="membre.role === 'PORTEUR'"
+                [class.member-avatar-orange]="membre.role !== 'PORTEUR'"
+              >
+
+                <mat-icon>
+                  {{ membre.role === 'PORTEUR' ? 'person' : 'person_outline' }}
+                </mat-icon>
+
+              </div>
+
+              <div class="member-information">
+
+                <strong>
+                  {{ membre.prenom }} {{ membre.nom }}
+                </strong>
+
+                <span>
+                  {{
+                    membre.role === 'PORTEUR'
+                      ? 'Porteur du projet'
+                      : membre.role === 'COLLABORATEUR'
+                        ? 'Collaborateur'
+                        : membre.role ?? 'Membre'
+                  }}
+                </span>
+
+              </div>
+
+              <span
+                class="member-role"
+                [class.owner-role]="membre.role === 'PORTEUR'"
+                [class.collaborator-role]="membre.role !== 'PORTEUR'"
+              >
+
+                {{
+                  membre.role === 'PORTEUR'
+                    ? 'Porteur'
+                    : membre.role === 'COLLABORATEUR'
+                      ? 'Collaborateur'
+                      : membre.role ?? 'Membre'
+                }}
+
+              </span>
+
+            </div>
+
+          } @empty {
+
+            <div class="team-empty">
+
+              <mat-icon>group_off</mat-icon>
+
+              <p>
+                Aucun membre actif enregistré dans l'équipe.
+              </p>
+
+            </div>
+
+          }
+
+          <div class="team-panel-footer">
+
+            <span>
+              <mat-icon>check_circle</mat-icon>
+              {{ dashboard.membresActifs }} membre(s) actif(s)
+            </span>
+
+            <a
+              routerLink="/me/equipe"
+              aria-label="Gérer l'équipe"
+            >
+              Gérer
+              <mat-icon>arrow_forward</mat-icon>
+            </a>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  }
+
+</div>

@@ -215,27 +215,79 @@ export class Parcours implements OnInit {
   }
     
   public telechargerLeDocument(): void {
-    const etapeActive = this.etapeSelectionnee();
-    if (!etapeActive || !etapeActive.id) {
-      this.messageSnakBar.succes("Impossible de télécharger : l'étape n'est pas initialisée.");
-      return;
-    }
-    this.telechargerFichier_service.telechargerLivrableFichier(etapeActive.id).subscribe({
+  const etapeActive = this.etapeSelectionnee();
+
+  if (!etapeActive || !etapeActive.id) {
+    this.messageSnakBar.erreur(
+      "Impossible de télécharger : l'étape n'est pas initialisée."
+    );
+    return;
+  }
+
+  this.telechargerFichier_service
+    .telechargerLivrableFichier(etapeActive.id)
+    .subscribe({
       next: (blobBinaire: Blob) => {
-        const urlFichierEnMemoire = window.URL.createObjectURL(blobBinaire);
+        // Vérifier que le fichier reçu n'est pas vide.
+        if (blobBinaire.size === 0) {
+          this.messageSnakBar.erreur(
+            "Le document généré est vide."
+          );
+          return;
+        }
+
+        // Créer une URL temporaire pour le document Word.
+        const urlFichierEnMemoire =
+          window.URL.createObjectURL(blobBinaire);
+
         const lienInvisible = document.createElement('a');
+
         lienInvisible.href = urlFichierEnMemoire;
-        lienInvisible.download = `Livrable_Projet_Etape_${etapeActive.id}.txt`;
+
+        // IMPORTANT : extension Word et non TXT.
+        lienInvisible.download =
+          `Livrable_Projet_Etape_${etapeActive.id}.docx`;
+
         document.body.appendChild(lienInvisible);
         lienInvisible.click();
         document.body.removeChild(lienInvisible);
-        window.URL.revokeObjectURL(urlFichierEnMemoire);
-        this.messageSnakBar.succes("Le livrable a été téléchargé avec succès !");
+
+        // Laisser au navigateur le temps de démarrer le téléchargement.
+        window.setTimeout(() => {
+          window.URL.revokeObjectURL(urlFichierEnMemoire);
+        }, 1000);
+
+        this.messageSnakBar.succes(
+          "Le livrable Word a été téléchargé avec succès !"
+        );
       },
+
       error: (erreur) => {
-        console.error(erreur);
-        this.messageSnakBar.erreur("Impossible de télécharger le livrable : vous devez répondre à toutes les questions de l'étape");
+        console.error(
+          "Erreur lors du téléchargement du livrable :",
+          erreur
+        );
+
+        const statutHttp = erreur.status;
+
+        if (statutHttp === 401) {
+          this.messageSnakBar.erreur(
+            "Votre session a expiré. Veuillez vous reconnecter."
+          );
+        } else if (statutHttp === 403) {
+          this.messageSnakBar.erreur(
+            "Vous n'êtes pas autorisé à télécharger ce livrable."
+          );
+        } else if (statutHttp === 404) {
+          this.messageSnakBar.erreur(
+            "L'étape ou le livrable demandé est introuvable."
+          );
+        } else {
+          this.messageSnakBar.erreur(
+            "Impossible de télécharger le livrable. Vérifiez les réponses de l'étape ou réessayez."
+          );
+        }
       }
     });
-  }
+}
 }

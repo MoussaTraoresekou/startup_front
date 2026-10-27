@@ -9,6 +9,8 @@ import { PorteurResponseDto } from '../../model/PorteurResponseDto';
 import { MembreEquipeDto } from '../../model/MembreEquipeDto';
 import { OffresResponseDto } from '../../model/OffresResponseDto';
 import { OffresRequestDto } from '../../model/OffresRequestDto';
+import { AccueilPorteurDto } from '../../model/acceuiformentor';
+import { DashboardPorteur } from '../../model/dashboard-porteur';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +46,15 @@ export class PoteurService {
     return this.http.post<OffresResponseDto>(`${this.baseUrl}/offres/publier`,offre)
 
   }
+  getAcceuilInfo(){
+        return this.http.get<AccueilPorteurDto>(`${this.baseUrl}/acceil_info`)
+  }
+
+obtenirDashboard(projetId: number) {
+  return this.http.get<DashboardPorteur>(
+    `${this.baseUrl}/projets/${projetId}/dashboard`
+  );
+}
 
 
 }

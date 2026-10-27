@@ -1,1 +1,629 @@
-<p>taches works!</p>
+
+<section class="tasks-page">
+  <!-- En-tête -->
+  <header class="page-header">
+    <div class="page-heading">
+      <span class="eyebrow">ESPACE PROJET</span>
+      <h1>Gestion des tâches</h1>
+      <p>Organisez le travail de votre équipe et suivez les livrables.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn-primary"
+      (click)="ouvrirFormulaire()"
+    >
+      <span class="plus-icon">+</span>
+      Nouvelle tâche
+    </button>
+  </header>
+
+  <!-- Résumé des tâches -->
+  <section class="summary-grid" aria-label="Résumé des tâches">
+    <button
+      type="button"
+      class="summary-card"
+      [class.summary-active]="filtreActif() === 'TOUTES'"
+      (click)="changerFiltre('TOUTES')"
+    >
+      <span class="summary-label">Toutes les tâches</span>
+      <strong>{{ nombreTotal() }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card"
+      [class.summary-active]="filtreActif() === 'A_FAIRE'"
+      (click)="changerFiltre('A_FAIRE')"
+    >
+      <span class="summary-label">À faire</span>
+      <strong>{{ nombreAFaire() }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card"
+      [class.summary-active]="filtreActif() === 'SOUMIS'"
+      (click)="changerFiltre('SOUMIS')"
+    >
+      <span class="summary-label">À vérifier</span>
+      <strong>{{ nombreASoumettre() }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card"
+      [class.summary-active]="filtreActif() === 'A_CORRIGER'"
+      (click)="changerFiltre('A_CORRIGER')"
+    >
+      <span class="summary-label">À corriger</span>
+      <strong>{{ nombreARevoir() }}</strong>
+    </button>
+
+    <button
+      type="button"
+      class="summary-card"
+      [class.summary-active]="filtreActif() === 'VALIDEE'"
+      (click)="changerFiltre('VALIDEE')"
+    >
+      <span class="summary-label">Validées</span>
+      <strong>{{ nombreValidees() }}</strong>
+    </button>
+  </section>
+
+  <!-- Liste et détail -->
+  <div class="tasks-layout">
+
+    <!-- Liste des tâches -->
+    <section class="tasks-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>Liste des tâches</h2>
+          <p>Sélectionnez une tâche pour consulter son détail.</p>
+        </div>
+
+        <span class="total-count">
+          {{ tachesFiltrees().length }}
+        </span>
+      </div>
+
+      <!-- Filtres -->
+      <div class="filter-bar" aria-label="Filtrer les tâches">
+        <button
+          type="button"
+          [class.filter-active]="filtreActif() === 'TOUTES'"
+          (click)="changerFiltre('TOUTES')"
+        >
+          Toutes
+        </button>
+
+        <button
+          type="button"
+          [class.filter-active]="filtreActif() === 'A_FAIRE'"
+          (click)="changerFiltre('A_FAIRE')"
+        >
+          À faire
+        </button>
+
+        <button
+          type="button"
+          [class.filter-active]="filtreActif() === 'SOUMIS'"
+          (click)="changerFiltre('SOUMIS')"
+        >
+          À vérifier
+        </button>
+
+        <button
+          type="button"
+          [class.filter-active]="filtreActif() === 'A_CORRIGER'"
+          (click)="changerFiltre('A_CORRIGER')"
+        >
+          À corriger
+        </button>
+
+        <button
+          type="button"
+          [class.filter-active]="filtreActif() === 'VALIDEE'"
+          (click)="changerFiltre('VALIDEE')"
+        >
+          Validées
+        </button>
+      </div>
+
+      <!-- Chargement -->
+      @if (chargement()) {
+        <div class="state-panel">
+          <span class="loading-indicator"></span>
+          <p>Chargement des tâches...</p>
+        </div>
+      }
+
+      <!-- Liste vide -->
+      @else if (tachesFiltrees().length === 0) {
+        <div class="state-panel">
+          <div class="empty-mark">—</div>
+
+          <h3>Aucune tâche à afficher</h3>
+
+          <p>
+            @if (filtreActif() === 'TOUTES') {
+              Les tâches de ce projet apparaîtront ici.
+            } @else {
+              Aucune tâche ne correspond à ce filtre.
+            }
+          </p>
+
+          @if (filtreActif() === 'TOUTES') {
+            <button
+              type="button"
+              class="btn-primary btn-small"
+              (click)="ouvrirFormulaire()"
+            >
+              Créer une tâche
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Liste -->
+      @else {
+        <div class="task-list">
+          @for (tache of tachesFiltrees(); track tache.id) {
+            <button
+              type="button"
+              class="task-card"
+              [class.task-card-selected]="tacheSelectionnee()?.id === tache.id"
+              [attr.aria-pressed]="tacheSelectionnee()?.id === tache.id"
+              (click)="selectionnerTache(tache)"
+            >
+              <span class="task-mark" aria-hidden="true"></span>
+
+              <span class="task-content">
+                <span class="task-card-heading">
+                  <span class="task-title">
+                    {{ tache.titre }}
+                  </span>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="classeStatut(tache.statut)"
+                  >
+                    {{ afficherStatut(tache.statut) }}
+                  </span>
+                </span>
+
+                <span class="task-description-preview">
+                  {{
+                    tache.description ||
+                    'Aucune description renseignée.'
+                  }}
+                </span>
+
+                <span class="task-meta">
+                  <span>
+                    {{ tache.membreResponsablePrenom }}
+                    {{ tache.membreResponsableNom }}
+                  </span>
+
+                  <span class="meta-separator">·</span>
+
+                  <span>
+                    Échéance :
+                    {{ formaterDate(tache.dateEcheance) }}
+                  </span>
+                </span>
+              </span>
+            </button>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Détail de la tâche sélectionnée -->
+    <section class="detail-panel">
+      @if (tacheSelectionnee(); as tache) {
+
+        <div class="detail-header">
+          <div class="detail-heading-content">
+            <span class="eyebrow">DÉTAIL DE LA TÂCHE</span>
+            <h2>{{ tache.titre }}</h2>
+          </div>
+
+          <span
+            class="status-badge status-large"
+            [ngClass]="classeStatut(tache.statut)"
+          >
+            {{ afficherStatut(tache.statut) }}
+          </span>
+        </div>
+
+        <!-- Informations principales -->
+        <div class="detail-meta-grid">
+          <div class="detail-meta-item">
+            <span class="meta-label">Responsable</span>
+
+            <strong>
+              {{ tache.membreResponsablePrenom }}
+              {{ tache.membreResponsableNom }}
+            </strong>
+          </div>
+
+          <div class="detail-meta-item">
+            <span class="meta-label">Échéance</span>
+            <strong>
+              {{ formaterDate(tache.dateEcheance) }}
+            </strong>
+          </div>
+
+          <div class="detail-meta-item">
+            <span class="meta-label">Créée le</span>
+            <strong>
+              {{ formaterDate(tache.dateCreation) }}
+            </strong>
+          </div>
+
+          <div class="detail-meta-item">
+            <span class="meta-label">Dernière soumission</span>
+            <strong>
+              {{ formaterDate(tache.dateSoumission) }}
+            </strong>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="detail-section">
+          <h3>Description</h3>
+
+          <p class="detail-description">
+            {{
+              tache.description ||
+              'Aucune description renseignée.'
+            }}
+          </p>
+        </div>
+
+        <!-- Rendu / Livrable -->
+        <div class="detail-section">
+          <div class="section-heading">
+            <h3>Rendu / Livrable</h3>
+
+            @if (tache.dateSoumission) {
+              <span class="section-date">
+                Soumis le {{ formaterDate(tache.dateSoumission) }}
+              </span>
+            }
+          </div>
+
+          @if (tache.renduDescription || tache.renduUrl) {
+
+            @if (tache.renduDescription) {
+              <p class="render-description">
+                {{ tache.renduDescription }}
+              </p>
+            }
+
+            @if (tache.renduUrl) {
+              <a
+                class="render-link"
+                [href]="tache.renduUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="document-mark">DOC</span>
+
+                <span class="render-link-content">
+                  <strong>Consulter le livrable</strong>
+                  <span>
+                    Ouvrir le document ou le lien soumis
+                  </span>
+                </span>
+
+                <span class="external-mark">↗</span>
+              </a>
+            }
+
+          } @else {
+            <div class="render-empty">
+              <span class="render-empty-title">
+                Aucun rendu soumis
+              </span>
+
+              <p>
+                Le livrable apparaîtra ici lorsque le responsable
+                aura soumis son travail.
+              </p>
+            </div>
+          }
+        </div>
+
+        <!-- Commentaire d'une vérification précédente -->
+        @if (tache.commentaireVerification) {
+          <div class="review-comment">
+            <span class="meta-label">
+              Commentaire de vérification
+            </span>
+
+            <p>{{ tache.commentaireVerification }}</p>
+
+            @if (tache.dateVerification) {
+              <span class="section-date">
+                Vérifié le
+                {{ formaterDate(tache.dateVerification) }}
+              </span>
+            }
+          </div>
+        }
+
+        <!-- Vérification du rendu -->
+        @if (tache.statut === 'SOUMIS') {
+          <div class="review-section">
+            <label for="commentaireVerification">
+              Commentaire de vérification
+
+              <span class="optional-label">
+                (obligatoire pour une correction)
+              </span>
+            </label>
+
+            <textarea
+              id="commentaireVerification"
+              name="commentaireVerification"
+              [(ngModel)]="commentaireVerification"
+              rows="3"
+              placeholder="Précisez les éléments à corriger, si nécessaire..."
+              [disabled]="enregistrement()"
+            ></textarea>
+
+            <div class="action-buttons">
+              <button
+                type="button"
+                class="btn-correction"
+                [disabled]="enregistrement()"
+                (click)="verifierRendu('A_CORRIGER')"
+              >
+                Demander une correction
+              </button>
+
+              <button
+                type="button"
+                class="btn-primary"
+                [disabled]="enregistrement()"
+                (click)="verifierRendu('VALIDEE')"
+              >
+                {{
+                  enregistrement()
+                    ? 'Enregistrement...'
+                    : 'Valider le rendu'
+                }}
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Statut validé -->
+        @else if (tache.statut === 'VALIDEE') {
+          <div class="final-status">
+            <span class="final-status-mark">✓</span>
+
+            <div>
+              <strong>Rendu validé</strong>
+              <p>Cette tâche a été validée.</p>
+            </div>
+          </div>
+        }
+
+        <!-- Statut à corriger -->
+        @else if (tache.statut === 'A_CORRIGER') {
+          <div class="final-status correction-status">
+            <span class="final-status-mark">!</span>
+
+            <div>
+              <strong>Corrections attendues</strong>
+
+              <p>
+                Le responsable doit soumettre une nouvelle version
+                du rendu.
+              </p>
+            </div>
+          </div>
+        }
+
+        <!-- Statut à faire -->
+        @else {
+          <div class="waiting-status">
+            Le rendu sera disponible ici après sa soumission.
+          </div>
+        }
+
+      } @else if (!chargement()) {
+
+        <div class="state-panel detail-empty">
+          <div class="empty-mark">—</div>
+
+          <h3>Sélectionnez une tâche</h3>
+
+          <p>
+            Choisissez une tâche dans la liste pour consulter
+            ses informations.
+          </p>
+        </div>
+
+      }
+    </section>
+  </div>
+</section>
+
+<!-- Fenêtre de création d'une tâche -->
+@if (formulaireOuvert()) {
+  <div
+    class="modal-backdrop"
+    (click)="fermerFormulaire()"
+  >
+    <section
+      class="task-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="taskModalTitle"
+      (click)="$event.stopPropagation()"
+    >
+      <!-- En-tête du formulaire -->
+      <header class="modal-header">
+        <div>
+          <span class="eyebrow">ESPACE PROJET</span>
+          <h2 id="taskModalTitle">Nouvelle tâche</h2>
+          <p>
+            Définissez le travail à réaliser et son responsable.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          aria-label="Fermer"
+          [disabled]="enregistrement()"
+          (click)="fermerFormulaire()"
+        >
+          ×
+        </button>
+      </header>
+
+      <form
+        #taskForm="ngForm"
+        (ngSubmit)="creerTache()"
+      >
+        <!-- Titre -->
+        <div class="form-field">
+          <label for="titre">
+            Titre de la tâche <span>*</span>
+          </label>
+
+          <input
+            id="titre"
+            name="titre"
+            type="text"
+            [(ngModel)]="nouvelleTache.titre"
+            required
+            maxlength="150"
+            placeholder="Ex. Préparer l'étude de marché"
+            [disabled]="enregistrement()"
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="form-field">
+          <label for="description">
+            Description <span>*</span>
+          </label>
+
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="nouvelleTache.description"
+            rows="4"
+            required
+            placeholder="Décrivez le travail attendu..."
+            [disabled]="enregistrement()"
+          ></textarea>
+        </div>
+
+        <!-- Échéance -->
+        <div class="form-field">
+          <label for="dateEcheance">
+            Date d'échéance
+          </label>
+
+          <input
+            id="dateEcheance"
+            name="dateEcheance"
+            type="date"
+            [(ngModel)]="nouvelleTache.dateEcheance"
+            [disabled]="enregistrement()"
+          />
+        </div>
+
+        <!-- Responsable choisi dans l'équipe -->
+        <div class="form-field">
+          <label for="membreResponsableId">
+            Membre responsable <span>*</span>
+          </label>
+
+          <select
+            id="membreResponsableId"
+            name="membreResponsableId"
+            [(ngModel)]="nouvelleTache.membreResponsableId"
+            required
+            [disabled]="
+              chargementMembres() ||
+              enregistrement() ||
+              membresEquipe().length === 0
+            "
+          >
+            <option [ngValue]="null">
+              @if (chargementMembres()) {
+                Chargement des membres...
+              } @else if (membresEquipe().length === 0) {
+                Aucun membre disponible
+              } @else {
+                Sélectionner un membre
+              }
+            </option>
+
+            @for (membre of membresEquipe(); track membre.id) {
+              <option [ngValue]="membre.id">
+                {{ membre.prenom }} {{ membre.nom }}
+                @if (membre.fonction) {
+                  — {{ membre.fonction }}
+                }
+              </option>
+            }
+          </select>
+
+          <p class="field-hint">
+            Sélectionnez un membre de l'équipe du projet pour lui
+            attribuer cette tâche.
+          </p>
+
+          @if (
+            !chargementMembres() &&
+            membresEquipe().length === 0
+          ) {
+            <p class="field-hint">
+              Aucun membre n'a été récupéré. Vérifiez que l'équipe
+              du projet contient des membres et que le chargement
+              fonctionne.
+            </p>
+          }
+        </div>
+
+        <!-- Actions -->
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="btn-cancel"
+            [disabled]="enregistrement()"
+            (click)="fermerFormulaire()"
+          >
+            Annuler
+          </button>
+
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="
+              !taskForm.valid ||
+              enregistrement() ||
+              chargementMembres() ||
+              membresEquipe().length === 0
+            "
+          >
+            {{
+              enregistrement()
+                ? 'Création...'
+                : 'Créer la tâche'
+            }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+}

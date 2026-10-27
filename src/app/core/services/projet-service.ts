@@ -1,14 +1,13 @@
+
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProjetResponse } from '../model/ProjetResponse';
-import { ProjetRequest } from '../model/ProjetRequest';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjetService {
-  
 
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/api/porteur';
@@ -16,7 +15,11 @@ export class ProjetService {
   getProjetsDuPorteur(): Observable<ProjetResponse[]> {
     return this.http.get<ProjetResponse[]>(`${this.baseUrl}/projets`);
   }
-  ajouterProjet(projet:ProjetRequest){
-     return this.http.post<ProjetResponse>(`${this.baseUrl}/projet`,projet);
+
+  ajouterProjet(formulaire: FormData): Observable<ProjetResponse> {
+    return this.http.post<ProjetResponse>(
+      `${this.baseUrl}/projet`,
+      formulaire
+    );
   }
 }

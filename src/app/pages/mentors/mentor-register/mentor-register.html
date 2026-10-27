@@ -8,8 +8,7 @@
           <img
             src="/images/logo_startup.png"
             alt="Logo Entrepreneur360"
-            class="brand-logo-img"
-          />
+            class="brand-logo-img" />
         </div>
 
         <span class="brand-title">
@@ -25,8 +24,7 @@
     <form
       [formGroup]="registerForm"
       (ngSubmit)="onSubmit()"
-      class="project-form"
-    >
+      class="project-form">
 
       <!-- PRÉNOM ET NOM -->
       <div class="form-row">
@@ -42,17 +40,16 @@
             formControlName="prenom"
             placeholder="Ex. Moussa"
             autocomplete="given-name"
-            required
-          />
+            required />
 
           @if (registerForm.get('prenom')?.hasError('required')
-            && registerForm.get('prenom')?.touched) {
-            <mat-error>Le prénom est requis</mat-error>
+          && registerForm.get('prenom')?.touched) {
+          <mat-error>Le prénom est requis</mat-error>
           }
 
           @if (registerForm.get('prenom')?.hasError('minlength')
-            && registerForm.get('prenom')?.touched) {
-            <mat-error>Le prénom doit contenir au moins 2 caractères</mat-error>
+          && registerForm.get('prenom')?.touched) {
+          <mat-error>Le prénom doit contenir au moins 2 caractères</mat-error>
           }
         </mat-form-field>
 
@@ -67,17 +64,16 @@
             formControlName="nom"
             placeholder="Ex. Traoré"
             autocomplete="family-name"
-            required
-          />
+            required />
 
           @if (registerForm.get('nom')?.hasError('required')
-            && registerForm.get('nom')?.touched) {
-            <mat-error>Le nom est requis</mat-error>
+          && registerForm.get('nom')?.touched) {
+          <mat-error>Le nom est requis</mat-error>
           }
 
           @if (registerForm.get('nom')?.hasError('minlength')
-            && registerForm.get('nom')?.touched) {
-            <mat-error>Le nom doit contenir au moins 2 caractères</mat-error>
+          && registerForm.get('nom')?.touched) {
+          <mat-error>Le nom doit contenir au moins 2 caractères</mat-error>
           }
         </mat-form-field>
 
@@ -92,18 +88,17 @@
           id="secteurProjet"
           formControlName="secteur"
           placeholder="Sélectionner un secteur"
-          required
-        >
+          required>
           @for (secteur of listeSecteur(); track secteur.id) {
-            <mat-option [value]="secteur.id">
-              {{ secteur.secteur }}
-            </mat-option>
+          <mat-option [value]="secteur.id">
+            {{ secteur.secteur }}
+          </mat-option>
           }
         </mat-select>
 
         @if (registerForm.get('secteur')?.hasError('required')
-          && registerForm.get('secteur')?.touched) {
-          <mat-error>Veuillez sélectionner un secteur</mat-error>
+        && registerForm.get('secteur')?.touched) {
+        <mat-error>Veuillez sélectionner un secteur</mat-error>
         }
       </mat-form-field>
 
@@ -121,17 +116,16 @@
             formControlName="email"
             placeholder="mentor@exemple.com"
             autocomplete="email"
-            required
-          />
+            required />
 
           @if (registerForm.get('email')?.hasError('required')
-            && registerForm.get('email')?.touched) {
-            <mat-error>L'adresse e-mail est requise</mat-error>
+          && registerForm.get('email')?.touched) {
+          <mat-error>L'adresse e-mail est requise</mat-error>
           }
 
           @if (registerForm.get('email')?.hasError('email')
-            && registerForm.get('email')?.touched) {
-            <mat-error>Veuillez saisir une adresse e-mail valide</mat-error>
+          && registerForm.get('email')?.touched) {
+          <mat-error>Veuillez saisir une adresse e-mail valide</mat-error>
           }
         </mat-form-field>
 
@@ -146,12 +140,11 @@
             formControlName="telephone"
             placeholder="Ex. +223 66 59 45 81"
             autocomplete="tel"
-            required
-          />
+            required />
 
           @if (registerForm.get('telephone')?.hasError('required')
-            && registerForm.get('telephone')?.touched) {
-            <mat-error>Le numéro de téléphone est requis</mat-error>
+          && registerForm.get('telephone')?.touched) {
+          <mat-error>Le numéro de téléphone est requis</mat-error>
           }
         </mat-form-field>
 
@@ -169,8 +162,7 @@
           formControlName="motDePass"
           placeholder="Au moins 6 caractères"
           autocomplete="new-password"
-          required
-        />
+          required />
 
         <button
           mat-icon-button
@@ -178,23 +170,25 @@
           type="button"
           class="toggle-password-btn"
           aria-label="Afficher ou masquer le mot de passe"
-          (click)="hidePassword = !hidePassword"
-        >
+          (click)="hidePassword = !hidePassword">
           <mat-icon>
             {{ hidePassword ? 'visibility_off' : 'visibility' }}
           </mat-icon>
         </button>
 
         @if (registerForm.get('motDePass')?.hasError('required')
-          && registerForm.get('motDePass')?.touched) {
-          <mat-error>Le mot de passe est requis</mat-error>
+        && registerForm.get('motDePass')?.touched) {
+        <mat-error>Le mot de passe est requis</mat-error>
         }
 
         @if (registerForm.get('motDePass')?.hasError('minlength')
-          && registerForm.get('motDePass')?.touched) {
-          <mat-error>Le mot de passe doit contenir au moins 6 caractères</mat-error>
+        && registerForm.get('motDePass')?.touched) {
+        <mat-error>Le mot de passe doit contenir au moins 6
+          caractères</mat-error>
         }
       </mat-form-field>
+
+      <!-- CURRICULUM VITAE -->
 
       <!-- CURRICULUM VITAE -->
       <div class="field-group">
@@ -208,57 +202,54 @@
           type="file"
           accept=".pdf,application/pdf"
           class="hidden-file-input"
-          [disabled]="chargementCV || chargement"
-          (change)="onFileSelected($event, 'cvUrl')"
-        />
+          [disabled]="chargement"
+          (change)="onFileSelected($event, 'cvUrl')" />
 
         <label
           for="cvFile"
           class="file-upload-zone"
-          [class.has-file]="fichierCV"
-          [class.is-loading]="chargementCV"
-        >
+          [class.has-file]="fichierCV">
           <div class="upload-content">
             <div class="upload-icon">
               <mat-icon>
-                {{ chargementCV
-                  ? 'hourglass_top'
-                  : (fichierCV ? 'description' : 'cloud_upload') }}
+                {{ fichierCV ? 'description' : 'cloud_upload' }}
               </mat-icon>
             </div>
 
             <div class="upload-text">
-              @if (chargementCV) {
-                <span class="upload-title">Téléversement en cours...</span>
-                <span class="upload-hint">Veuillez patienter</span>
-              } @else if (fichierCV) {
-                <span class="upload-title filename">{{ fichierCV.name }}</span>
-                <span class="upload-hint">Fichier sélectionné · Cliquez pour remplacer</span>
+              @if (fichierCV) {
+              <span class="upload-title filename">{{ fichierCV.name }}</span>
+              <span class="upload-hint">
+                Fichier sélectionné · Cliquez pour remplacer
+              </span>
               } @else {
-                <span class="upload-title">Importer votre CV</span>
-                <span class="upload-hint">Cliquez ici pour sélectionner un fichier PDF</span>
+              <span class="upload-title">Importer votre CV</span>
+              <span class="upload-hint">
+                Cliquez ici pour sélectionner un fichier PDF
+              </span>
               }
             </div>
           </div>
 
-          @if (fichierCV && !chargementCV && !chargement) {
-            <button
-              type="button"
-              class="remove-file-btn"
-              aria-label="Supprimer le CV"
-              (click)="supprimerFichier($event, 'cvUrl')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
+          @if (fichierCV && !chargement) {
+          <button
+            type="button"
+            class="remove-file-btn"
+            aria-label="Supprimer le CV"
+            (click)="supprimerFichier($event, 'cvUrl')">
+            <mat-icon>close</mat-icon>
+          </button>
           }
         </label>
 
-        @if (registerForm.get('cvUrl')?.invalid
-          && registerForm.get('cvUrl')?.touched
-          && !chargementCV) {
-          <p class="invalid-feedbacks">Le dépôt de votre CV au format PDF est obligatoire</p>
+        @if (!fichierCV && registerForm.touched) {
+        <p class="invalid-feedbacks">
+          Le dépôt de votre CV au format PDF est obligatoire.
+        </p>
         }
       </div>
+
+      <!-- DIPLÔME -->
 
       <!-- DIPLÔME -->
       <div class="field-group">
@@ -272,55 +263,52 @@
           type="file"
           accept=".pdf,application/pdf"
           class="hidden-file-input"
-          [disabled]="chargementDiplome || chargement"
-          (change)="onFileSelected($event, 'diplomeUrl')"
-        />
+          [disabled]="chargement"
+          (change)="onFileSelected($event, 'diplomeUrl')" />
 
         <label
           for="diplomeFile"
           class="file-upload-zone"
-          [class.has-file]="fichierDiplome"
-          [class.is-loading]="chargementDiplome"
-        >
+          [class.has-file]="fichierDiplome">
           <div class="upload-content">
             <div class="upload-icon">
               <mat-icon>
-                {{ chargementDiplome
-                  ? 'hourglass_top'
-                  : (fichierDiplome ? 'school' : 'cloud_upload') }}
+                {{ fichierDiplome ? 'school' : 'cloud_upload' }}
               </mat-icon>
             </div>
 
             <div class="upload-text">
-              @if (chargementDiplome) {
-                <span class="upload-title">Téléversement en cours...</span>
-                <span class="upload-hint">Veuillez patienter</span>
-              } @else if (fichierDiplome) {
-                <span class="upload-title filename">{{ fichierDiplome.name }}</span>
-                <span class="upload-hint">Fichier sélectionné · Cliquez pour remplacer</span>
+              @if (fichierDiplome) {
+              <span class="upload-title filename">
+                {{ fichierDiplome.name }}
+              </span>
+              <span class="upload-hint">
+                Fichier sélectionné · Cliquez pour remplacer
+              </span>
               } @else {
-                <span class="upload-title">Importer votre diplôme</span>
-                <span class="upload-hint">Cliquez ici pour sélectionner un fichier PDF</span>
+              <span class="upload-title">Importer votre diplôme</span>
+              <span class="upload-hint">
+                Cliquez ici pour sélectionner un fichier PDF
+              </span>
               }
             </div>
           </div>
 
-          @if (fichierDiplome && !chargementDiplome && !chargement) {
-            <button
-              type="button"
-              class="remove-file-btn"
-              aria-label="Supprimer le diplôme"
-              (click)="supprimerFichier($event, 'diplomeUrl')"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
+          @if (fichierDiplome && !chargement) {
+          <button
+            type="button"
+            class="remove-file-btn"
+            aria-label="Supprimer le diplôme"
+            (click)="supprimerFichier($event, 'diplomeUrl')">
+            <mat-icon>close</mat-icon>
+          </button>
           }
         </label>
 
-        @if (registerForm.get('diplomeUrl')?.invalid
-          && registerForm.get('diplomeUrl')?.touched
-          && !chargementDiplome) {
-          <p class="invalid-feedbacks">Le dépôt de votre diplôme au format PDF est obligatoire</p>
+        @if (!fichierDiplome && registerForm.touched) {
+        <p class="invalid-feedbacks">
+          Le dépôt de votre diplôme au format PDF est obligatoire.
+        </p>
         }
       </div>
 
@@ -335,17 +323,16 @@
           formControlName="description"
           placeholder="Présentez vos expertises en finance, stratégie, marketing..."
           rows="4"
-          required
-        ></textarea>
+          required></textarea>
 
         @if (registerForm.get('description')?.hasError('required')
-          && registerForm.get('description')?.touched) {
-          <mat-error>La description est requise</mat-error>
+        && registerForm.get('description')?.touched) {
+        <mat-error>La description est requise</mat-error>
         }
 
         @if (registerForm.get('description')?.hasError('minlength')
-          && registerForm.get('description')?.touched) {
-          <mat-error>Décrivez vos expertises en 10 caractères minimum</mat-error>
+        && registerForm.get('description')?.touched) {
+        <mat-error>Décrivez vos expertises en 10 caractères minimum</mat-error>
         }
       </mat-form-field>
 
@@ -355,14 +342,14 @@
         color="primary"
         type="submit"
         class="btn-submit"
-        [disabled]="registerForm.invalid || chargement || chargementCV || chargementDiplome"
-      >
+        [disabled]="registerForm.invalid || chargement || !fichierCV || !fichierDiplome">
         <mat-icon>
           {{ chargement ? 'hourglass_top' : 'send' }}
         </mat-icon>
 
         <span>
-          {{ chargement ? 'Création du compte en cours...' : 'Soumettre ma candidature' }}
+          {{ chargement ? 'Création du compte en cours...' :
+          'Soumettre ma candidature' }}
         </span>
       </button>
 
