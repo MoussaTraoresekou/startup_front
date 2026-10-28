@@ -46,6 +46,7 @@ export class Taches implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly tacheService = inject(TacheService);
   private readonly porteurService = inject(PoteurService);
+  chargementRenduId = signal<number | null>(null);
 
   messageSnakBar = inject(NotificationService);
 
@@ -525,4 +526,78 @@ export class Taches implements OnInit {
       year: 'numeric'
     }).format(valeur);
   }
+  // ==================== CONSULTATION DU RENDU ====================
+
+consulterRendu(tache: Tache): void {
+  const nomFichier = tache.renduUrl?.trim();
+
+  if (!nomFichier) {
+    this.messageSnakBar.erreur(
+      'Aucun fichier de rendu n’est disponible pour cette tâche.'
+    );
+    return;
+  }
+
+  if (this.chargementRenduId() !== null) {
+    return;
+  }
+
+  // Ouvrir la fenêtre pendant le clic de l'utilisateur
+  // pour éviter le blocage des fenêtres contextuelles.
+  const fenetre = window.open('about:blank', '_blank');
+
+  if (!fenetre) {
+    this.messageSnakBar.erreur(
+      'Le navigateur a bloqué l’ouverture du fichier. Autorisez les fenêtres contextuelles puis réessayez.'
+    );
+    return;
+  }
+
+  this.chargementRenduId.set(tache.id);
+
+  this.porteurService
+    .obtenirFichierRendu(nomFichier)
+    .subscribe({
+      next: (fichier: Blob) => {
+        const urlFichier = URL.createObjectURL(fichier);
+
+        fenetre.location.href = urlFichier;
+
+        // Libérer l'URL temporaire après le chargement du document.
+        window.setTimeout(() => {
+          URL.revokeObjectURL(urlFichier);
+        }, 300000);
+
+        this.chargementRenduId.set(null);
+      },
+
+      error: (erreur) => {
+        console.error(
+          'Erreur lors de la consultation du rendu :',
+          erreur
+        );
+
+        fenetre.close();
+        this.chargementRenduId.set(null);
+
+        if (erreur.status === 401) {
+          this.messageSnakBar.erreur(
+            'Votre session a expiré. Veuillez vous reconnecter.'
+          );
+        } else if (erreur.status === 403) {
+          this.messageSnakBar.erreur(
+            'Vous n’êtes pas autorisé à consulter ce rendu.'
+          );
+        } else if (erreur.status === 404) {
+          this.messageSnakBar.erreur(
+            'Le fichier est introuvable sur le serveur.'
+          );
+        } else {
+          this.messageSnakBar.erreur(
+            'Impossible d’ouvrir le rendu. Vérifiez que le serveur fonctionne et réessayez.'
+          );
+        }
+      }
+    });
+}
 }
