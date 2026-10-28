@@ -40,15 +40,7 @@
       <strong>{{ nombreAFaire() }}</strong>
     </button>
 
-    <button
-      type="button"
-      class="summary-card"
-      [class.summary-active]="filtreActif() === 'SOUMIS'"
-      (click)="changerFiltre('SOUMIS')"
-    >
-      <span class="summary-label">À vérifier</span>
-      <strong>{{ nombreASoumettre() }}</strong>
-    </button>
+    
 
     <button
       type="button"
@@ -104,15 +96,6 @@
         >
           À faire
         </button>
-
-        <button
-          type="button"
-          [class.filter-active]="filtreActif() === 'SOUMIS'"
-          (click)="changerFiltre('SOUMIS')"
-        >
-          À vérifier
-        </button>
-
         <button
           type="button"
           [class.filter-active]="filtreActif() === 'A_CORRIGER'"
@@ -141,7 +124,6 @@
       <!-- Liste vide -->
       @else if (tachesFiltrees().length === 0) {
         <div class="state-panel">
-          <div class="empty-mark">—</div>
 
           <h3>Aucune tâche à afficher</h3>
 
@@ -445,8 +427,6 @@
       } @else if (!chargement()) {
 
         <div class="state-panel detail-empty">
-          <div class="empty-mark">—</div>
-
           <h3>Sélectionnez une tâche</h3>
 
           <p>

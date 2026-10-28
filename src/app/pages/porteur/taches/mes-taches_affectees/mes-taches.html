@@ -517,19 +517,7 @@
             Aucune tâche ne correspond à votre recherche ou à vos filtres.
           </p>
 
-          @if (
-            recherche() ||
-            projetSelectionne() !== null ||
-            filtreStatut() !== 'TOUTES'
-          ) {
-            <button
-              type="button"
-              class="reset-filters"
-              (click)="reinitialiserFiltres()"
-            >
-              Réinitialiser les filtres
-            </button>
-          }
+         
 
         </div>
       }
