@@ -254,3 +254,25 @@
   .brand-icon { width: 42px; height: 42px; }
   .nav-item { min-height: 38px; padding-top: 7px; padding-bottom: 7px; }
 }
+
+.workspace-central-viewport {
+  flex: 1;
+  min-width: 0;
+  width: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.workspace-page-content {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 0;
+  box-sizing: border-box;
+}

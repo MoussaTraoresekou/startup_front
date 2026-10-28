@@ -64,6 +64,13 @@ export const routes: Routes = [
             './pages/mentors/notifications/notifications-component/notifications-component'
           ).then((m) => m.NotificationsComponent),
       },
+      {
+        path: 'taches',
+        loadComponent: () =>
+          import(
+            './pages/porteur/taches/mes-taches_affectees/mes-taches'
+          ).then((m) => m.MesTaches),
+      },
     ]
   },
 

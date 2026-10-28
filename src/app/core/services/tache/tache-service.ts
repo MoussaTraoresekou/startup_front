@@ -41,19 +41,6 @@ export class TacheService {
   }
 
   /**
-   * Soumettre le rendu d'une tâche.
-   */
-  soumettreRendu(
-    tacheId: number,
-    dto: TacheRendu
-  ): Observable<Tache> {
-    return this.http.put<Tache>(
-      `${this.baseUrl}/${tacheId}/soumettre`,
-      dto
-    );
-  }
-
-  /**
    * Vérifier le rendu d'une tâche.
    */
   verifierRendu(

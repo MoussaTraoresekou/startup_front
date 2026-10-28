@@ -1,0 +1,547 @@
+<div class="tasks-page">
+
+  <!-- EN-TÊTE -->
+  <header class="tasks-header">
+    <div>
+      <h1>Mes tâches</h1>
+      <p>
+        Retrouvez les tâches qui vous sont affectées dans vos différents projets.
+      </p>
+    </div>
+
+    <div class="tasks-total">
+      <mat-icon>assignment</mat-icon>
+      <span>{{ taches().length }} tâche(s)</span>
+    </div>
+  </header>
+
+  <!-- MESSAGE DE SUCCÈS -->
+  @if (messageSucces()) {
+    <div class="task-feedback task-feedback-success" role="status">
+      <mat-icon>check_circle</mat-icon>
+      <span>{{ messageSucces() }}</span>
+    </div>
+  }
+
+  <!-- ERREUR DE CONSULTATION DU FICHIER -->
+  @if (erreurFichier()) {
+    <div class="task-feedback task-feedback-error" role="alert">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ erreurFichier() }}</span>
+    </div>
+  }
+
+  <!-- INDICATEURS -->
+  <section class="task-stats">
+
+    <article class="task-stat-card">
+      <div class="stat-icon stat-orange">
+        <mat-icon>assignment_late</mat-icon>
+      </div>
+      <div>
+        <span>À faire</span>
+        <strong>{{ nombreAFaire() }}</strong>
+      </div>
+    </article>
+
+    <article class="task-stat-card">
+      <div class="stat-icon stat-blue">
+        <mat-icon>upload_file</mat-icon>
+      </div>
+      <div>
+        <span>Rendus soumis</span>
+        <strong>{{ nombreSoumises() }}</strong>
+      </div>
+    </article>
+
+    <article class="task-stat-card">
+      <div class="stat-icon stat-orange">
+        <mat-icon>edit_note</mat-icon>
+      </div>
+      <div>
+        <span>À corriger</span>
+        <strong>{{ nombreACorriger() }}</strong>
+      </div>
+    </article>
+
+    <article class="task-stat-card">
+      <div class="stat-icon stat-green">
+        <mat-icon>task_alt</mat-icon>
+      </div>
+      <div>
+        <span>Validées</span>
+        <strong>{{ nombreValidees() }}</strong>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- RECHERCHE ET FILTRE PAR PROJET -->
+  <section class="tasks-toolbar">
+
+    <label class="search-box">
+      <mat-icon>search</mat-icon>
+
+      <input
+        type="search"
+        placeholder="Rechercher une tâche ou un projet..."
+        [value]="recherche()"
+        (input)="changerRecherche($event)"
+      />
+    </label>
+
+    <label class="project-filter">
+      <span>Projet :</span>
+
+      <select
+        [value]="projetSelectionne() ?? ''"
+        (change)="changerProjet($event)"
+      >
+        <option value="">Tous les projets</option>
+
+        @for (projet of projets(); track projet.id) {
+          <option [value]="projet.id">
+            {{ projet.titre }}
+          </option>
+        }
+      </select>
+    </label>
+
+  </section>
+
+  <!-- FILTRES PAR STATUT -->
+  <nav class="status-filters" aria-label="Filtrer les tâches par statut">
+
+    <button
+      type="button"
+      [class.active]="filtreStatut() === 'TOUTES'"
+      (click)="changerFiltre('TOUTES')"
+    >
+      Toutes
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtreStatut() === 'A_FAIRE'"
+      (click)="changerFiltre('A_FAIRE')"
+    >
+      À faire
+      <span>{{ nombreAFaire() }}</span>
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtreStatut() === 'SOUMIS'"
+      (click)="changerFiltre('SOUMIS')"
+    >
+      Rendus soumis
+      <span>{{ nombreSoumises() }}</span>
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtreStatut() === 'A_CORRIGER'"
+      (click)="changerFiltre('A_CORRIGER')"
+    >
+      À corriger
+      <span>{{ nombreACorriger() }}</span>
+    </button>
+
+    <button
+      type="button"
+      [class.active]="filtreStatut() === 'VALIDEE'"
+      (click)="changerFiltre('VALIDEE')"
+    >
+      Validées
+      <span>{{ nombreValidees() }}</span>
+    </button>
+
+  </nav>
+
+  <!-- CHARGEMENT, ERREUR OU LISTE -->
+  @if (chargement()) {
+
+    <div class="tasks-message">
+      <mat-icon>hourglass_top</mat-icon>
+      <p>Chargement de vos tâches...</p>
+    </div>
+
+  } @else if (erreur()) {
+
+    <div class="tasks-message tasks-error">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ erreur() }}</p>
+    </div>
+
+  } @else {
+
+    <!-- LISTE DES TÂCHES -->
+    <section class="tasks-list" aria-label="Liste de mes tâches">
+
+      @for (tache of tachesFiltrees(); track tache.id) {
+
+        <article class="task-card">
+
+          <!-- PROJET ET STATUT -->
+          <div class="task-card-top">
+
+            <div class="task-project">
+              <mat-icon>folder_open</mat-icon>
+              <span>{{ tache.projetTitre }}</span>
+            </div>
+
+            <span
+              class="task-status"
+              [class.status-a-faire]="tache.statut === 'A_FAIRE'"
+              [class.status-soumis]="tache.statut === 'SOUMIS'"
+              [class.status-correction]="tache.statut === 'A_CORRIGER'"
+              [class.status-validee]="tache.statut === 'VALIDEE'"
+            >
+              <span class="status-dot"></span>
+              {{ libelleStatut(tache.statut) }}
+            </span>
+
+          </div>
+
+          <!-- INFORMATIONS DE LA TÂCHE -->
+          <div class="task-main">
+            <h2>{{ tache.titre }}</h2>
+
+            @if (tache.description) {
+              <p class="task-description">
+                {{ tache.description }}
+              </p>
+            }
+          </div>
+
+          <!-- ÉCHÉANCE -->
+          <div class="task-deadline">
+            <mat-icon>calendar_today</mat-icon>
+
+            <span>Échéance :</span>
+
+            <strong [class.deadline-late]="estEnRetard(tache)">
+              {{ formaterDate(tache.dateEcheance) }}
+            </strong>
+
+            @if (estEnRetard(tache)) {
+              <span class="late-label">En retard</span>
+            }
+          </div>
+
+          <!-- RENDU DÉJÀ ENREGISTRÉ -->
+          @if (tache.renduDescription || tache.renduUrl) {
+
+            <div class="task-submission">
+
+              @if (tache.renduDescription) {
+                <span class="detail-label">
+                  <mat-icon>description</mat-icon>
+                  Description du rendu
+                </span>
+
+                <p>{{ tache.renduDescription }}</p>
+              }
+
+              @if (tache.renduUrl) {
+                <button
+                  type="button"
+                  class="render-link"
+                  [disabled]="chargementFichierId() === tache.id"
+                  (click)="consulterRendu(tache)"
+                >
+                  <mat-icon>open_in_new</mat-icon>
+
+                  {{
+                    chargementFichierId() === tache.id
+                      ? 'Ouverture du fichier...'
+                      : 'Consulter le rendu'
+                  }}
+                </button>
+              }
+
+            </div>
+          }
+
+          <!-- COMMENTAIRE DU PORTEUR -->
+          @if (
+            tache.statut === 'A_CORRIGER' &&
+            tache.commentaireVerification
+          ) {
+            <div class="correction-comment">
+
+              <div class="correction-title">
+                <mat-icon>edit_note</mat-icon>
+                Commentaire du porteur
+              </div>
+
+              <p>{{ tache.commentaireVerification }}</p>
+
+            </div>
+          }
+
+          <!-- DATE DE SOUMISSION -->
+          @if (tache.dateSoumission) {
+            <div class="submission-date">
+              Rendu soumis le
+              {{ formaterDate(tache.dateSoumission.slice(0, 10)) }}
+            </div>
+          }
+
+          <!-- ACTION DE SOUMISSION -->
+          @if (
+            tache.statut === 'A_FAIRE' ||
+            tache.statut === 'A_CORRIGER'
+          ) {
+
+            <div class="task-render-actions">
+
+              <button
+                type="button"
+                class="submit-render-toggle"
+                [disabled]="soumissionEnCoursId() !== null"
+                (click)="ouvrirFormulaire(tache.id)"
+              >
+                <mat-icon>
+                  {{
+                    formulaireOuvertId() === tache.id
+                      ? 'close'
+                      : 'upload_file'
+                  }}
+                </mat-icon>
+
+                {{
+                  formulaireOuvertId() === tache.id
+                    ? 'Fermer le formulaire'
+                    : tache.statut === 'A_CORRIGER'
+                      ? 'Soumettre une nouvelle version'
+                      : 'Soumettre le rendu'
+                }}
+              </button>
+
+              <!-- FORMULAIRE -->
+              @if (formulaireOuvertId() === tache.id) {
+
+                <div class="render-form">
+
+                  <div class="render-form-header">
+                    <h3>Soumettre mon travail</h3>
+
+                    <p>
+                      Ajoutez une description et sélectionnez le fichier
+                      à transmettre au porteur du projet.
+                    </p>
+                  </div>
+
+                  <!-- DESCRIPTION -->
+                  <div class="field-group">
+                    <label
+                      class="upload-label"
+                      [for]="'description-rendu-' + tache.id"
+                    >
+                      Description du rendu
+                      <span class="required-mark">*</span>
+                    </label>
+
+                    <textarea
+                      [id]="'description-rendu-' + tache.id"
+                      class="render-textarea"
+                      rows="4"
+                      placeholder="Décrivez le travail réalisé..."
+                      [value]="descriptionRendu()"
+                      (input)="changerDescriptionRendu($event)"
+                      [disabled]="soumissionEnCoursId() === tache.id"
+                    ></textarea>
+
+                    <p class="field-hint">
+                      Expliquez brièvement le contenu du document transmis.
+                    </p>
+                  </div>
+
+                  <!-- FICHIER À TÉLÉVERSER -->
+                  <div class="field-group">
+
+                    <label
+                      class="upload-label"
+                      [for]="'fichier-rendu-' + tache.id"
+                    >
+                      Fichier du rendu
+                      <span class="required-mark">*</span>
+                    </label>
+
+                    <p class="upload-description">
+                      Formats PDF ou MP4, 50 Mo maximum
+                    </p>
+
+                    <input
+                      [id]="'fichier-rendu-' + tache.id"
+                      type="file"
+                      accept=".pdf,.mp4,application/pdf,video/mp4"
+                      class="hidden-file-input"
+                      [disabled]="soumissionEnCoursId() === tache.id"
+                      (change)="selectionnerFichier($event)"
+                    />
+
+                    <label
+                      [for]="'fichier-rendu-' + tache.id"
+                      class="file-upload-zone"
+                      [class.has-file]="fichierSelectionne() !== null"
+                      [class.is-loading]="soumissionEnCoursId() === tache.id"
+                    >
+
+                      <div class="upload-content">
+
+                        <div class="upload-icon">
+                          <mat-icon>
+                            {{
+                              fichierSelectionne()
+                                ? iconeFichier(fichierSelectionne()!)
+                                : 'cloud_upload'
+                            }}
+                          </mat-icon>
+                        </div>
+
+                        <div class="upload-text">
+
+                          @if (fichierSelectionne()) {
+
+                            <span class="upload-title filename">
+                              {{ fichierSelectionne()!.name }}
+                            </span>
+
+                            <span class="upload-hint">
+                              {{ tailleFichier(fichierSelectionne()!.size) }}
+                              · Cliquez pour remplacer
+                            </span>
+
+                          } @else {
+
+                            <span class="upload-title">
+                              Importer votre rendu
+                            </span>
+
+                            <span class="upload-hint">
+                              Cliquez ici pour sélectionner un fichier PDF ou MP4
+                            </span>
+
+                          }
+
+                        </div>
+
+                      </div>
+
+                      @if (
+                        fichierSelectionne() &&
+                        soumissionEnCoursId() !== tache.id
+                      ) {
+                        <button
+                          type="button"
+                          class="remove-file-btn"
+                          aria-label="Supprimer le fichier sélectionné"
+                          (click)="retirerFichier($event)"
+                        >
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      }
+
+                    </label>
+                  </div>
+
+                  <!-- ERREUR DU FORMULAIRE -->
+                  @if (erreurSoumission()) {
+                    <div class="render-form-error" role="alert">
+                      <mat-icon>error_outline</mat-icon>
+                      <span>{{ erreurSoumission() }}</span>
+                    </div>
+                  }
+
+                  <!-- ACTIONS -->
+                  <div class="render-form-actions">
+
+                    <button
+                      type="button"
+                      class="cancel-render"
+                      [disabled]="soumissionEnCoursId() === tache.id"
+                      (click)="fermerFormulaire()"
+                    >
+                      Annuler
+                    </button>
+
+                    <button
+                      type="button"
+                      class="confirm-render"
+                      [disabled]="
+                        soumissionEnCoursId() === tache.id ||
+                        !fichierSelectionne() ||
+                        !descriptionRendu().trim()
+                      "
+                      (click)="envoyerRendu(tache)"
+                    >
+                      <mat-icon>
+                        {{
+                          soumissionEnCoursId() === tache.id
+                            ? 'hourglass_top'
+                            : 'send'
+                        }}
+                      </mat-icon>
+
+                      {{
+                        soumissionEnCoursId() === tache.id
+                          ? 'Envoi en cours...'
+                          : 'Envoyer le rendu'
+                      }}
+                    </button>
+
+                  </div>
+
+                </div>
+              }
+
+            </div>
+          }
+
+        </article>
+
+      } @empty {
+
+        <!-- AUCUN RÉSULTAT -->
+        <div class="tasks-empty">
+
+          <div class="empty-icon">
+            <mat-icon>assignment</mat-icon>
+          </div>
+
+          <h2>Aucune tâche trouvée</h2>
+
+          <p>
+            Aucune tâche ne correspond à votre recherche ou à vos filtres.
+          </p>
+
+          @if (
+            recherche() ||
+            projetSelectionne() !== null ||
+            filtreStatut() !== 'TOUTES'
+          ) {
+            <button
+              type="button"
+              class="reset-filters"
+              (click)="reinitialiserFiltres()"
+            >
+              Réinitialiser les filtres
+            </button>
+          }
+
+        </div>
+      }
+
+    </section>
+
+    <!-- PIED DE LISTE -->
+    <div class="tasks-footer">
+      {{ tachesFiltrees().length }}
+      tâche(s) affichée(s) sur {{ taches().length }}.
+    </div>
+
+  }
+
+</div>
