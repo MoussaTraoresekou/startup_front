@@ -1,94 +1,122 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { NotificationService } from '../../../core/services/notification-service';
+import { Router } from '@angular/router';
+
+import { MentorResponseDto } from '../../../core/model/MentorResponseDto';
+import { AdminService } from '../../../core/services/admin/admin-service';
+import { MentorDetail } from '../mentors/mentor_detail/mentor-detail';
 
 interface AdminKpi {
   titre: string;
-  valeur: number;
-  evolution: string;
-  estPositif: boolean;
+  valeur: number | string;
   icone: string;
-  couleurClasse: string;
 }
 
-interface ProjetsParEtape {
-  etape: string;
-  quantite: number;
-  pourcentage: number;
-  couleurHex: string;
-}
-
-interface DemandeValidation {
+interface ProjetSansMentor {
   id: number;
-  nomComplet: string;
-  roleDemande: string;
-  dateDemande: string;
+  titre: string;
+  porteur: string;
+  dateCreation?: string | null;
 }
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MentorDetail],
   templateUrl: './admin-dashboard.html',
-  styleUrls: ['./admin-dashboard.css']
+  styleUrl: './admin-dashboard.css'
 })
 export class AdminDashboard implements OnInit {
-  private messageSnakBar = inject(NotificationService);
+  private readonly adminService = inject(AdminService);
+  private readonly router = inject(Router);
 
-  // Signaux pour stocker les blocs du tableau de bord
-  kpis = signal<AdminKpi[]>([]);
-  repartitionProjets = signal<ProjetsParEtape[]>([]);
-  demandesValidation = signal<DemandeValidation[]>([]);
+  // Les chiffres restent indisponibles tant que les endpoints réels
+  // correspondants n'ont pas été confirmés. Aucun chiffre fictif n'est affiché.
+  totalUtilisateurs = signal<number | string>('—');
+  totalProjets = signal<number | string>('—');
+  projetsEnCours = signal<number | string>('—');
+
+  // Liste reçue depuis le service existant des mentors.
+  listeMentors = signal<MentorResponseDto[]>([]);
+
+  mentorsEnAttente = computed(() =>
+    this.listeMentors().filter(mentor => mentor.statu === 'EN_ATTENTE')
+  );
+
+  mentorsApercu = computed(() => this.mentorsEnAttente().slice(0, 3));
+
+  totalMentorsValides = computed(() =>
+    this.listeMentors().filter(mentor => mentor.statu === 'ACCEPTEE').length
+  );
+
+  nombreMentorsEnAttente = computed(() => this.mentorsEnAttente().length);
+
+  kpis = computed<AdminKpi[]>(() => [
+    {
+      titre: 'Nombre total d’utilisateurs',
+      valeur: this.totalUtilisateurs(),
+      icone: 'people'
+    },
+    {
+      titre: 'Mentors validés',
+      valeur: this.totalMentorsValides(),
+      icone: 'verified_user'
+    },
+    {
+      titre: 'Nombre total de projets',
+      valeur: this.totalProjets(),
+      icone: 'folder_open'
+    },
+    {
+      titre: 'Projets en cours',
+      valeur: this.projetsEnCours(),
+      icone: 'pending_actions'
+    }
+  ]);
+
+  // Candidatures de mentors
+  chargementMentors = signal(false);
+  erreurMentors = signal<string | null>(null);
+  mentorSelectionne = signal<MentorResponseDto | null>(null);
+
+  chargerDemandesMentors(): void {
+    this.chargementMentors.set(true);
+    this.erreurMentors.set(null);
+
+    this.adminService.getAllMentor().subscribe({
+      next: (donnees: MentorResponseDto[]) => {
+        this.listeMentors.set(donnees ?? []);
+        this.chargementMentors.set(false);
+      },
+      error: (erreur) => {
+        console.error('Erreur lors du chargement des mentors :', erreur);
+        this.erreurMentors.set(
+          'Impossible de charger les candidatures des mentors.'
+        );
+        this.chargementMentors.set(false);
+      }
+    });
+  }
+
+  selectionnerMentor(mentor: MentorResponseDto): void {
+    this.mentorSelectionne.set(mentor);
+  }
+
+  fermerModal(): void {
+    this.mentorSelectionne.set(null);
+  }
+
+  // À alimenter lorsque le service et l'endpoint des projets sans mentor
+  // auront été confirmés. Aucun endpoint n'est inventé ici.
+  projetsSansMentor = signal<ProjetSansMentor[]>([]);
+
+  voirTousLesMentors(): void {
+    // Vérifier cette URL si la route déclarée dans le projet est différente.
+    this.router.navigate(['/admin/mentor']);
+  }
 
   ngOnInit(): void {
-    this.chargerDonneesDashboard();
-  }
-
-  /**
-   * Simule ou récupère les indicateurs analytiques du backend Spring Boot
-   */
-  private chargerDonneesDashboard(): void {
-    // 1. Les 4 Cartes KPI du haut
-    this.kpis.set([
-      { titre: 'Total projets', valeur: 124, evolution: '+12% ce mois', estPositif: true, icone: 'business_center', couleurClasse: 'blue' },
-      { titre: 'Projets en cours', valeur: 56, evolution: '+8% cette semaine', estPositif: true, icone: 'trending_up', couleurClasse: 'orange' },
-      { titre: 'Utilisateurs actifs', valeur: 320, evolution: '+15% ce mois', estPositif: true, icone: 'people', couleurClasse: 'fuchsia' },
-      { titre: 'Mentors validés', valeur: 42, evolution: '-2% ce mois', estPositif: false, icone: 'school', couleurClasse: 'green' }
-    ]);
-
-    // 2. Les données de répartition par étape (Donut Chart)
-    this.repartitionProjets.set([
-      { etape: 'Idéation', quantite: 28, pourcentage: 22.6, couleurHex: '#1A73E8' },
-      { etape: 'Business Plan', quantite: 34, pourcentage: 27.4, couleurHex: '#F59E0B' },
-      { etape: 'Formalisation', quantite: 45, pourcentage: 36.3, couleurHex: '#059669' },
-      { etape: 'Lancement', quantite: 17, pourcentage: 13.7, couleurHex: '#EC4899' }
-    ]);
-
-    // 3. Les demandes urgentes en attente de validation
-    this.demandesValidation.set([
-      { id: 101, nomComplet: 'Abdoulaye Tounkara', roleDemande: 'Mentor / Formation', dateDemande: 'Il y a 2h' },
-      { id: 102, nomComplet: 'Moussa Diarra', roleDemande: 'Porteur / Startup', dateDemande: 'Il y a 1 jour' },
-      { id: 103, nomComplet: 'Aïssata Maïga', roleDemande: 'Mentor / Finance', dateDemande: 'Il y a 3 jours' }
-    ]);
-  }
-
-  /**
-   * Traitement d'approbation d'un nouvel utilisateur par l'admin
-   */
-  public approuverDemande(id: number, nom: string): void {
-    this.demandesValidation.update(demandes => demandes.filter(d => d.id !== id));
-    this.messageSnakBar.succes(`Le compte de ${nom} a été approuvé avec succès !`);
-  }
-
-  /**
-   * Traitement de rejet d'une demande
-   */
-  public rejeterDemande(id: number, nom: string): void {
-    this.demandesValidation.update(demandes => demandes.filter(d => d.id !== id));
-    this.messageSnakBar.succes(`La demande de ${nom} a été refusée.`);
+    this.chargerDemandesMentors();
   }
 }
-
-AdminDashboard
