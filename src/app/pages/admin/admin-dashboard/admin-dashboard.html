@@ -1,107 +1,204 @@
 <div class="admin-dashboard">
-  
-  <!-- ENTÊTE DE BIENVENUE -->
+
+  <!-- En-tête -->
   <header class="dashboard-header">
-    <div class="welcome-block">
-      <h1>Tableau de bord de supervision</h1>
-      <p>Consultez l'état d'avancement des startups et gérez les validations de l'incubateur.</p>
+    <div class="header-copy">
+      <h1>Tableau de bord</h1>
+      <p>Vue d’ensemble des utilisateurs, des projets et du mentorat.</p>
     </div>
   </header>
 
-  <!-- GRILLE DES 4 CARTES KPI DU HAUT -->
-  <div class="kpi-grid">
+  <!-- Les quatre indicateurs généraux -->
+  <section class="kpi-grid" aria-label="Statistiques générales">
     @for (kpi of kpis(); track kpi.titre) {
-      <div class="card kpi-card">
-        <div class="kpi-content">
+      <article class="kpi-card">
+        <div class="kpi-heading">
           <span class="kpi-title">{{ kpi.titre }}</span>
-          <strong class="kpi-value">{{ kpi.valeur }}</strong>
-          <span class="kpi-badge" [class.positive]="kpi.estPositif" [class.negative]="!kpi.estPositif">
-            <mat-icon>{{ kpi.estPositif ? 'trending_up' : 'trending_down' }}</mat-icon>
-            {{ kpi.evolution }}
+          <span class="kpi-icon" aria-hidden="true">
+            <mat-icon>{{ kpi.icone }}</mat-icon>
           </span>
         </div>
-        <div class="kpi-icon-box" [class]="kpi.couleurClasse">
-          <mat-icon>{{ kpi.icone }}</mat-icon>
-        </div>
-      </div>
+
+        <strong class="kpi-value">{{ kpi.valeur }}</strong>
+      </article>
     }
-  </div>
+  </section>
 
-  <!-- PANNEAU DES GRAPHIQUES ET ACTIONS -->
-  <div class="dashboard-center-grid">
-    
-    <!-- BLOC GAUCHE : REPARTITION DES PROJETS -->
-    <div class="card chart-card">
-      <div class="card-header-flex">
-        <h3>Répartition des projets par étape</h3>
-        <span class="sub-label">Statistiques globales</span>
-      </div>
+  <!-- Panneaux principaux -->
+  <section class="dashboard-center-grid">
 
-      <div class="chart-container-layout">
-        <!-- Donut Chart simulé en CSS pur avec les cercles superposés -->
-        <div class="donut-chart-simulation">
-          <div class="donut-center">
-            <strong>124</strong>
-            <span>Startups</span>
-          </div>
+    <!-- Candidatures de mentors en attente -->
+    <article class="dashboard-card requests-card">
+      <header class="card-header">
+        <div class="card-title">
+          <h2>Mentors en attente de validation</h2>
+          <p>Les trois premières candidatures en attente.</p>
         </div>
 
-        <!-- LEGENDE ET POURCENTAGES -->
-        <div class="chart-legend-list">
-          @for (item of repartitionProjets(); track item.etape) {
-            <div class="legend-item">
-              <div class="legend-left">
-                <span class="color-dot" [style.background-color]="item.couleurHex"></span>
-                <span class="legend-name">{{ item.etape }}</span>
-              </div>
-              <div class="legend-right">
-                <strong>{{ item.quantite }}</strong>
-                <span class="percentage">({{ item.pourcentage }}%)</span>
-              </div>
-            </div>
+        <span
+          class="count-pill"
+          [attr.aria-label]="nombreMentorsEnAttente() + ' candidatures en attente'"
+        >
+          {{ nombreMentorsEnAttente() }}
+        </span>
+      </header>
+
+      <!-- Chargement des candidatures -->
+      @if (chargementMentors()) {
+        <div class="state-message" role="status">
+          <mat-icon aria-hidden="true" class="state-icon">hourglass_empty</mat-icon>
+          <p>Chargement des candidatures…</p>
+        </div>
+      }
+
+      <!-- Erreur de chargement -->
+      @else if (erreurMentors()) {
+        <div class="state-message state-error" role="alert">
+          <p>{{ erreurMentors() }}</p>
+          <button
+            type="button"
+            class="text-button"
+            (click)="chargerDemandesMentors()"
+          >
+            <mat-icon aria-hidden="true">refresh</mat-icon>
+            Réessayer
+          </button>
+        </div>
+      }
+
+      <!-- Aucune candidature en attente -->
+      @else if (mentorsApercu().length === 0) {
+        <div class="state-message">
+          <mat-icon aria-hidden="true" class="state-icon">inbox</mat-icon>
+          <p>Aucune candidature de mentor en attente.</p>
+        </div>
+      }
+
+      <!-- Liste limitée aux trois premières candidatures -->
+      @else {
+        <div class="requests-list">
+          @for (mentor of mentorsApercu(); track mentor.id) {
+            <button
+              type="button"
+              class="request-item"
+              (click)="selectionnerMentor(mentor)"
+              [attr.aria-label]="
+                'Consulter le dossier de '
+                + mentor.prenom
+                + ' '
+                + mentor.nom
+              "
+            >
+              <span class="avatar" aria-hidden="true">
+                {{ (mentor.prenom || '').charAt(0) }}{{ (mentor.nom || '').charAt(0) }}
+              </span>
+
+              <span class="request-main">
+                <strong>{{ mentor.prenom }} {{ mentor.nom }}</strong>
+                <span class="request-sector">
+                  {{ mentor.secteur || 'Secteur non renseigné' }}
+                </span>
+                <span class="request-date">
+                  @if (mentor.dateCreation) {
+                    Inscription le {{ mentor.dateCreation | date:'dd/MM/yyyy' }}
+                  } @else {
+                    Date d’inscription non renseignée
+                  }
+                </span>
+              </span>
+
+              <span class="request-action-text">
+                Consulter
+                <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+              </span>
+            </button>
           }
         </div>
-      </div>
-    </div>
+      }
 
-    <!-- BLOC DROIT : LES DEMANDES EN ATTENTE DE VALIDATION -->
-    <div class="card requests-card">
-      <div class="card-header-flex">
-        <h3>Demandes en attente de validation</h3>
-        <span class="badge-count">{{ demandesValidation().length }} urgentes</span>
-      </div>
+      <!-- Accès à la page complète des mentors -->
+      <footer class="panel-footer">
+        <button
+          type="button"
+          class="text-button"
+          (click)="voirTousLesMentors()"
+        >
+          Voir tous les mentors
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+        </button>
+      </footer>
+    </article>
 
-      <div class="requests-list">
-        @for (demande of demandesValidation(); track demande.id) {
-          <div class="request-item">
-            <div class="request-user-info">
-              <div class="user-avatar-placeholder">
-                <mat-icon>person</mat-icon>
+    <!-- Projets en attente d'un mentor -->
+    <article class="dashboard-card projects-card">
+      <header class="card-header">
+        <div class="card-title">
+          <h2>Projets en attente d’un mentor</h2>
+          <p>Projets qui n’ont pas encore de mentor associé.</p>
+        </div>
+
+        <span
+          class="count-pill"
+          [attr.aria-label]="projetsSansMentor().length + ' projets'"
+        >
+          {{ projetsSansMentor().length }}
+        </span>
+      </header>
+
+      <!-- Liste en attente du raccordement au backend -->
+      @if (projetsSansMentor().length === 0) {
+        <div class="state-message">
+          <mat-icon aria-hidden="true" class="state-icon">assignment</mat-icon>
+          <p>
+            La liste des projets apparaîtra ici après le raccordement
+            au service backend correspondant.
+          </p>
+        </div>
+      } @else {
+        <div class="projects-list">
+          @for (projet of projetsSansMentor(); track projet.id) {
+            <article class="project-item">
+              <div class="project-heading">
+                <h3>{{ projet.titre }}</h3>
+                <span class="project-status">En attente d’un mentor</span>
               </div>
-              <div class="user-meta-text">
-                <strong>{{ demande.nomComplet }}</strong>
-                <span>{{ demande.roleDemande }} • <small>{{ demande.dateDemande }}</small></span>
-              </div>
-            </div>
-            
-            <div class="request-actions">
-              <button mat-icon-button class="btn-action-refuse" title="Refuser" (click)="rejeterDemande(demande.id, demande.nomComplet)">
-                <mat-icon>close</mat-icon>
-              </button>
-              <button mat-icon-button class="btn-action-accept" title="Approuver" (click)="approuverDemande(demande.id, demande.nomComplet)">
-                <mat-icon>check</mat-icon>
-              </button>
-            </div>
-          </div>
-        } @empty {
-          <div class="empty-requests-fallback">
-            <mat-icon>verified_user</mat-icon>
-            <p>Aucune demande d'inscription en attente. Tout est à jour !</p>
-          </div>
-        }
-      </div>
-    </div>
 
-  </div>
+              <p class="project-meta">
+                <span>Porteur : {{ projet.porteur || 'Non renseigné' }}</span>
+                @if (projet.dateCreation) {
+                  <span>Créé le {{ projet.dateCreation | date:'dd/MM/yyyy' }}</span>
+                }
+              </p>
+            </article>
+          }
+        </div>
+      }
+    </article>
+
+  </section>
+
+  <!-- Modale réutilisant le composant MentorDetail existant -->
+  @if (mentorSelectionne(); as mentor) {
+    <div class="modal-overlay" (click)="fermerModal()">
+      <section
+        class="modal-card-center"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-label]="
+          'Dossier de candidature de '
+          + mentor.prenom
+          + ' '
+          + mentor.nom
+        "
+        (click)="$event.stopPropagation()"
+      >
+        <app-mentor-detail
+          [mentor]="mentor"
+          (mettreAjourOnclik)="chargerDemandesMentors()"
+          (fermerOnClic)="fermerModal()"
+        />
+      </section>
+    </div>
+  }
 
 </div>
