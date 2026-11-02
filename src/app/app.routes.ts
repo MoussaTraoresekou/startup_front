@@ -4,6 +4,7 @@ import { roleGuard } from './core/guard/role-ghard-guard';
 import { MainLayout } from './layout/main-layout/main-layout';
 import { AccueilGlobal } from './shared/acceil-global/acceil-global';
 import { EcosystemeLayout } from './pages/porteur/ecosysteme-layout/ecosysteme-layout';
+import { PageNotFound } from './pages/page-not-found/page-not-found';
 
 export const routes: Routes = [
   {
@@ -327,5 +328,11 @@ export const routes: Routes = [
           ).then((m) => m.NotificationsComponent),
       },
     ],
+    
   },
+  {
+  path: '**',
+  component: PageNotFound
+}
 ];
+

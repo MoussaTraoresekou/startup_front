@@ -116,4 +116,7 @@ export class AuthService {
   getPNom(): string | null {
     return localStorage.getItem('prenom');
   }
+  getEmail(): string | null {
+  return localStorage.getItem('email');
+}
 }

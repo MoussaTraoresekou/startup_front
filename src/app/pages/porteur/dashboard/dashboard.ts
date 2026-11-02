@@ -42,7 +42,7 @@ export class Dashboard {
 
     if (!idParam || !Number.isInteger(id) || id <= 0) {
       this.erreur.set(
-        'Impossible de récupérer l’identifiant du projet.'
+        'projet non trouvé'
       );
       this.chargement.set(false);
       return;

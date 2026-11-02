@@ -1,1 +1,129 @@
-<p>profil works!</p>
+<div class="profil-container">
+
+  <!-- En-tête -->
+  <div class="page-header">
+    <div>
+      <h1>Mon profil</h1>
+      <p>Consultez les informations de votre compte Entrepreneur360.</p>
+    </div>
+  </div>
+
+  <!-- Carte principale -->
+  <div class="profil-card">
+
+    <div class="profil-banner"></div>
+
+    <div class="profil-content">
+
+      <!-- Identité -->
+      <div class="profil-identity">
+
+        <div class="avatar">
+          {{ initiales }}
+        </div>
+
+        <div class="identity-info">
+          <h2>{{ nomComplet || 'Utilisateur' }}</h2>
+
+          <span class="role-badge">
+            {{ roleLibelle }}
+          </span>
+        </div>
+
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Informations personnelles -->
+      <div class="section-title">
+        <h3>Informations personnelles</h3>
+        <p>Vos informations enregistrées sur la plateforme.</p>
+      </div>
+
+      <div class="info-grid">
+
+        <div class="info-item">
+          <div class="info-icon">
+            <mat-icon>person</mat-icon>
+          </div>
+
+          <div>
+            <span class="info-label">Prénom</span>
+            <p>{{ prenom || 'Non renseigné' }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <mat-icon>person_outline</mat-icon>
+          </div>
+
+          <div>
+            <span class="info-label">Nom</span>
+            <p>{{ nom || 'Non renseigné' }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <mat-icon>email</mat-icon>
+          </div>
+
+          <div>
+            <span class="info-label">Adresse e-mail</span>
+            <p>{{ email || 'Non renseignée' }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <mat-icon>badge</mat-icon>
+          </div>
+
+          <div>
+            <span class="info-label">Rôle</span>
+            <p>{{ roleLibelle }}</p>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <mat-icon>fingerprint</mat-icon>
+          </div>
+
+          <div>
+            <span class="info-label">Identifiant utilisateur</span>
+            <p>#{{ userId }}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Sécurité -->
+      <div class="security-section">
+
+        <div class="security-icon">
+          <mat-icon>verified_user</mat-icon>
+        </div>
+
+        <div>
+          <h3>Compte sécurisé</h3>
+          <p>
+            Votre session est active. Vos informations sont accessibles
+            uniquement depuis votre espace utilisateur.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="profil-footer">
+    <span>Entrepreneur360</span>
+    <span>Votre projet, étape par étape</span>
+  </div>
+
+</div>

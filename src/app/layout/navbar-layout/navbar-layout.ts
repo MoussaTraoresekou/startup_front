@@ -42,6 +42,6 @@ export class NavbarLayout implements OnInit, OnDestroy {
   logout(): void {
     this.sseService.fermerConnexion();
     this.authService.logout();
-    this.router.navigate(['/login']);
+      this.router.navigate(['/auth/login']);
   }
 }
