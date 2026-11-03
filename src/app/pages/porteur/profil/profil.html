@@ -1,129 +1,250 @@
-<div class="profil-container">
+
+<div class="profil-page">
 
   <!-- En-tête -->
-  <div class="page-header">
+  <header class="page-header">
     <div>
+      <span class="page-eyebrow">MON ESPACE</span>
       <h1>Mon profil</h1>
-      <p>Consultez les informations de votre compte Entrepreneur360.</p>
+      <p>Consultez et gérez vos informations personnelles.</p>
     </div>
-  </div>
 
-  <!-- Carte principale -->
-  <div class="profil-card">
+    @if (profil() && !modeModification()) {
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="activerModification()">
+        <mat-icon>edit</mat-icon>
+        Modifier le profil
+      </button>
+    }
+  </header>
 
-    <div class="profil-banner"></div>
+  <!-- Chargement -->
+  @if (chargement()) {
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement du profil...</p>
+    </div>
+  }
 
-    <div class="profil-content">
+  <!-- Erreur de chargement -->
+  @if (!chargement() && messageErreur() && !profil()) {
+    <div class="alert alert-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ messageErreur() }}</span>
+      <button type="button" (click)="chargerProfil()">
+        Réessayer
+      </button>
+    </div>
+  }
 
-      <!-- Identité -->
-      <div class="profil-identity">
+  <!-- Contenu du profil -->
+  @if (!chargement() && profil(); as utilisateur) {
 
+    <!-- Identité -->
+    <section class="identity-card">
+
+      <div class="identity-main">
         <div class="avatar">
-          {{ initiales }}
+          {{ initiales() }}
         </div>
 
         <div class="identity-info">
-          <h2>{{ nomComplet || 'Utilisateur' }}</h2>
+          <h2>{{ nomComplet() }}</h2>
 
           <span class="role-badge">
-            {{ roleLibelle }}
+            {{ roleLibelle() }}
           </span>
-        </div>
 
+          <p>{{ utilisateur.email }}</p>
+        </div>
       </div>
 
-      <div class="section-divider"></div>
-
-      <!-- Informations personnelles -->
-      <div class="section-title">
-        <h3>Informations personnelles</h3>
-        <p>Vos informations enregistrées sur la plateforme.</p>
+      <div class="identity-date">
+        <span>Membre depuis</span>
+        <strong>{{ utilisateur.dateCreation }}</strong>
       </div>
 
-      <div class="info-grid">
+    </section>
 
-        <div class="info-item">
-          <div class="info-icon">
-            <mat-icon>person</mat-icon>
-          </div>
-
-          <div>
-            <span class="info-label">Prénom</span>
-            <p>{{ prenom || 'Non renseigné' }}</p>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon">
-            <mat-icon>person_outline</mat-icon>
-          </div>
-
-          <div>
-            <span class="info-label">Nom</span>
-            <p>{{ nom || 'Non renseigné' }}</p>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon">
-            <mat-icon>email</mat-icon>
-          </div>
-
-          <div>
-            <span class="info-label">Adresse e-mail</span>
-            <p>{{ email || 'Non renseignée' }}</p>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon">
-            <mat-icon>badge</mat-icon>
-          </div>
-
-          <div>
-            <span class="info-label">Rôle</span>
-            <p>{{ roleLibelle }}</p>
-          </div>
-        </div>
-
-        <div class="info-item">
-          <div class="info-icon">
-            <mat-icon>fingerprint</mat-icon>
-          </div>
-
-          <div>
-            <span class="info-label">Identifiant utilisateur</span>
-            <p>#{{ userId }}</p>
-          </div>
-        </div>
-
+    <!-- Messages de retour -->
+    @if (messageSucces()) {
+      <div class="alert alert-success">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ messageSucces() }}</span>
       </div>
+    }
 
-      <div class="section-divider"></div>
+    @if (messageErreur() && profil()) {
+      <div class="alert alert-error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ messageErreur() }}</span>
+      </div>
+    }
 
-      <!-- Sécurité -->
-      <div class="security-section">
+    <!-- Informations personnelles -->
+    <section class="profile-card">
 
-        <div class="security-icon">
-          <mat-icon>verified_user</mat-icon>
-        </div>
-
+      <div class="section-header">
         <div>
-          <h3>Compte sécurisé</h3>
-          <p>
-            Votre session est active. Vos informations sont accessibles
-            uniquement depuis votre espace utilisateur.
-          </p>
+          <h2>Informations personnelles</h2>
+          <p>Vos coordonnées et informations personnelles.</p>
         </div>
 
+        @if (!modeModification()) {
+          <span class="section-status">
+            <mat-icon>person</mat-icon>
+            Mon profil
+          </span>
+        }
       </div>
 
-    </div>
-  </div>
+      <div class="section-divider"></div>
 
-  <div class="profil-footer">
-    <span>Entrepreneur360</span>
-    <span>Votre projet, étape par étape</span>
-  </div>
+      <!-- Mode consultation -->
+      @if (!modeModification()) {
+
+        <div class="information-grid">
+
+          <div class="information-item">
+            <span class="field-label">Nom</span>
+
+            <div class="field-value">
+              <mat-icon>person_outline</mat-icon>
+              <span>{{ utilisateur.nom }}</span>
+            </div>
+          </div>
+
+          <div class="information-item">
+            <span class="field-label">Prénom</span>
+
+            <div class="field-value">
+              <mat-icon>person_outline</mat-icon>
+              <span>{{ utilisateur.prenom }}</span>
+            </div>
+          </div>
+
+          <div class="information-item">
+            <span class="field-label">Adresse e-mail</span>
+
+            <div class="field-value">
+              <mat-icon>mail_outline</mat-icon>
+              <span>{{ utilisateur.email }}</span>
+            </div>
+          </div>
+
+          <div class="information-item">
+            <span class="field-label">Téléphone</span>
+
+            <div class="field-value">
+              <mat-icon>phone</mat-icon>
+              <span>
+                {{ utilisateur.telephone || 'Non renseigné' }}
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      } @else {
+
+        <!-- Mode modification -->
+        <form
+          class="profile-form"
+          (ngSubmit)="modifierProfil()">
+
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="nom">
+                Nom <span>*</span>
+              </label>
+
+              <input
+                id="nom"
+                type="text"
+                name="nom"
+                placeholder="Votre nom"
+                [ngModel]="formulaire().nom"
+                (ngModelChange)="modifierChamp('nom', $event)"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="prenom">
+                Prénom <span>*</span>
+              </label>
+
+              <input
+                id="prenom"
+                type="text"
+                name="prenom"
+                placeholder="Votre prénom"
+                [ngModel]="formulaire().prenom"
+                (ngModelChange)="modifierChamp('prenom', $event)"
+                required>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Adresse e-mail</label>
+
+              <input
+                id="email"
+                type="email"
+                name="email"
+                [value]="utilisateur.email"
+                disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="telephone">Téléphone</label>
+
+              <input
+                id="telephone"
+                type="tel"
+                name="telephone"
+                placeholder="Votre numéro de téléphone"
+                [ngModel]="formulaire().telephone"
+                (ngModelChange)="modifierChamp('telephone', $event)">
+            </div>
+
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+
+            <button
+              type="button"
+              class="btn-secondary"
+              (click)="annulerModification()"
+              [disabled]="enregistrement()">
+              Annuler
+            </button>
+
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="enregistrement()">
+
+              @if (enregistrement()) {
+                <span class="button-spinner"></span>
+                Enregistrement...
+              } @else {
+                <mat-icon>save</mat-icon>
+                Enregistrer les modifications
+              }
+
+            </button>
+
+          </div>
+
+        </form>
+
+      }
+
+    </section>
+
+  }
 
 </div>

@@ -1,15 +1,17 @@
-
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 import { LoginRequest } from '../model/LoginRequest';
 import { LoginResponse } from '../model/LoginResponse';
+import { ProfilUpdateDto } from '../model/profil-update.dto';
+import { ProfilResponseDto } from '../model/profil-response.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/api';
 
@@ -21,6 +23,10 @@ export class AuthService {
     'prenom',
     'email'
   ];
+
+  // =========================
+  // AUTHENTIFICATION
+  // =========================
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http
@@ -43,7 +49,6 @@ export class AuthService {
   }
 
   logout(): void {
-    // Supprimer uniquement les données liées à la session.
     this.clesSession.forEach(cle => localStorage.removeItem(cle));
   }
 
@@ -66,7 +71,6 @@ export class AuthService {
         return true;
       }
 
-      // Décoder le payload du JWT.
       const payloadBase64 = parties[1]
         .replace(/-/g, '+')
         .replace(/_/g, '/');
@@ -82,12 +86,51 @@ export class AuthService {
         return true;
       }
 
-      // exp est exprimé en secondes.
       return payload.exp * 1000 <= Date.now();
+
     } catch {
       return true;
     }
   }
+
+  // =========================
+  // GESTION DU PROFIL
+  // =========================
+
+  getProfil(): Observable<ProfilResponseDto> {
+    return this.http.get<ProfilResponseDto>(
+      `${this.baseUrl}/user/profil`
+    );
+  }
+
+  modifierProfil(
+    donnees: ProfilUpdateDto
+  ): Observable<ProfilResponseDto> {
+
+    return this.http
+      .put<ProfilResponseDto>(
+        `${this.baseUrl}/user/profil`,
+        donnees
+      )
+      .pipe(
+        tap((profil: ProfilResponseDto) => {
+          this.synchroniserSession(profil);
+        })
+      );
+  }
+
+  /**
+   * Actualise les informations personnelles
+   * dans localStorage après modification du profil.
+   */
+  private synchroniserSession(profil: ProfilResponseDto): void {
+    localStorage.setItem('nom', profil.nom);
+    localStorage.setItem('prenom', profil.prenom);
+  }
+
+  // =========================
+  // INFORMATIONS UTILISATEUR
+  // =========================
 
   getRole(): string | null {
     return localStorage.getItem('role');
@@ -116,7 +159,8 @@ export class AuthService {
   getPNom(): string | null {
     return localStorage.getItem('prenom');
   }
+
   getEmail(): string | null {
-  return localStorage.getItem('email');
-}
+    return localStorage.getItem('email');
+  }
 }

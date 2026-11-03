@@ -72,6 +72,13 @@ export const routes: Routes = [
             './pages/porteur/taches/mes-taches_affectees/mes-taches'
           ).then((m) => m.MesTaches),
       },
+      {
+        path: 'profil',
+        loadComponent: () =>
+          import('./pages/porteur/profil/profil').then(
+            (m) => m.Profil
+          ),
+      },
     ]
   },
 
