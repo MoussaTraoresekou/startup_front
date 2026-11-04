@@ -36,12 +36,6 @@
                     edit
                 </mat-icon>
             </button>
-            <button mat-icon-button type="button" title="Supprimer"
-                (click)="$event.stopPropagation(); supprimerProjet(projet().id)">
-                <mat-icon class="delete-icon">
-                    delete
-                </mat-icon>
-            </button>
         </div>
         <button mat-stroked-button class="btn-open" type="button" (click)="ouvrirProjet(projet())">
             Ouvrir

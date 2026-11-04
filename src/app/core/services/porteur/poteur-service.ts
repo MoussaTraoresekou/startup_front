@@ -13,6 +13,7 @@ import { OffresRequestDto } from '../../model/OffresRequestDto';
 import { AccueilPorteurDto } from '../../model/acceuiformentor';
 import { DashboardPorteur } from '../../model/dashboard-porteur';
 import { Tache } from '../../model/tache';
+import { ProjetResponse } from '../../model/ProjetResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -152,4 +153,13 @@ export class PoteurService {
       }
     );
   }
+  modifierProjet(
+  projetId: number,
+  formulaire: FormData
+): Observable<ProjetResponse> {
+  return this.http.put<ProjetResponse>(
+    `${this.baseUrl}/projets/${projetId}`,
+    formulaire
+  );
+}
 }

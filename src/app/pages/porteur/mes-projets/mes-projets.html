@@ -56,8 +56,10 @@
           <div class="projects-vertical-stack">
             @for (item of projets(); track item.id) {
               <article class="project-card-wrapper">
-                <app-projet-card [projet]="item"></app-projet-card>
-              </article>
+<app-projet-card
+  [projet]="item"
+  (editOnclic)="modifierProjet($event)"
+></app-projet-card>              </article>
             }
           </div>
         } @else {
@@ -165,4 +167,11 @@
 
 @if (formulaireVisible) {
   <app-projet-form-add (fermerClic)="fermerModal($event)" (ajoutReussiMisAjourClic)="AjoutEffectuer()" />
+}
+@if (projetAModifier(); as projetSelectionne) {
+  <app-projet-form-edit
+    [projet]="projetSelectionne"
+    (fermerClic)="fermerEdition()"
+    (modificationReussie)="modificationEffectuee()"
+  />
 }

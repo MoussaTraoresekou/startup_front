@@ -1,1 +1,151 @@
-<p>projet-form-edit works!</p>
+<div class="modal-overlay">
+  <div class="project-card">
+
+    <div class="modal-header">
+      <div>
+        <h2>Modifier le projet</h2>
+        <p>Actualisez les informations de votre projet.</p>
+      </div>
+
+      <button
+        mat-icon-button
+        type="button"
+        title="Fermer"
+        (click)="fermer()"
+        [disabled]="chargement()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    @if (messageErreur()) {
+      <div class="error-message">
+        {{ messageErreur() }}
+      </div>
+    }
+
+    <form [formGroup]="projectForm" (ngSubmit)="modifierProjet()">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom du projet</mat-label>
+        <input matInput formControlName="nom">
+
+        @if (projectForm.get('nom')?.hasError('required')
+          && projectForm.get('nom')?.touched) {
+          <mat-error>Le nom du projet est obligatoire.</mat-error>
+        }
+
+        @if (projectForm.get('nom')?.hasError('minlength')) {
+          <mat-error>Le nom doit contenir au moins 3 caractères.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Secteur d'activité</mat-label>
+
+        <mat-select formControlName="secteur">
+          @for (secteur of listeSecteurs(); track secteur.id) {
+            <mat-option [value]="secteur.id.toString()">
+              {{ secteur.secteur }}
+            </mat-option>
+          }
+        </mat-select>
+
+        @if (projectForm.get('secteur')?.hasError('required')
+          && projectForm.get('secteur')?.touched) {
+          <mat-error>Veuillez sélectionner un secteur.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Quota proposé</mat-label>
+        <input matInput formControlName="quota">
+
+        @if (projectForm.get('quota')?.hasError('required')
+          && projectForm.get('quota')?.touched) {
+          <mat-error>Le quota proposé est obligatoire.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description du projet</mat-label>
+        <textarea
+          matInput
+          rows="5"
+          formControlName="description">
+        </textarea>
+
+        @if (projectForm.get('description')?.hasError('required')
+          && projectForm.get('description')?.touched) {
+          <mat-error>La description est obligatoire.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="pitch-section">
+        <h3>Présentation du projet</h3>
+
+        @if (projet().pith_url) {
+          <p class="current-file">
+            <mat-icon>attach_file</mat-icon>
+            Pitch actuel : {{ projet().pith_url }}
+          </p>
+        } @else {
+          <p>Aucun fichier de présentation actuellement.</p>
+        }
+
+        <label for="fichierPitchEdit" class="file-label">
+          <mat-icon>upload_file</mat-icon>
+          Remplacer le fichier de présentation
+        </label>
+
+        <input
+          #fichierInput
+          id="fichierPitchEdit"
+          type="file"
+          accept=".pdf,.mp4,application/pdf,video/mp4"
+          (change)="selectionnerFichier($event)"
+          hidden>
+
+        @if (fichierPitch()) {
+          <div class="selected-file">
+            <span>{{ fichierPitch()?.name }}</span>
+
+            <button
+              mat-icon-button
+              type="button"
+              title="Annuler le remplacement"
+              (click)="retirerNouveauFichier(fichierInput)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        }
+
+        <p class="file-help">Formats acceptés : PDF et MP4. Taille maximale : 50 Mo.</p>
+      </div>
+
+      <div class="modal-actions">
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="fermer()"
+          [disabled]="chargement()">
+          Annuler
+        </button>
+
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          [disabled]="chargement() || chargementSecteurs()">
+
+          @if (chargement()) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <mat-icon>save</mat-icon>
+            Enregistrer les modifications
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

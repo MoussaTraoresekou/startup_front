@@ -20,14 +20,24 @@ import { PoteurService } from '../../../core/services/porteur/poteur-service';
 @Component({
   selector: 'app-mes-projets',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatButtonModule, ProjetFormAdd, ProjetCard],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatButtonModule,
+    ProjetFormAdd,
+    ProjetCard,
+    ProjetFormEdit
+  ],
   templateUrl: './mes-projets.html',
-  styleUrl: './mes-projets.css'
+  styleUrl: './mes-projets.css',
 })
 export class MesProjets implements OnInit {
   private projetService = inject(ProjetService);
+  projetAModifier = signal<ProjetResponse | null>(null);
   private http = inject(HttpClient);
-    // À ajouter à côté de votre signal projets = signal<...>([]);
+  // À ajouter à côté de votre signal projets = signal<...>([]);
   disponible = signal<boolean>(true);
 
   messageSnackBar = inject(NotificationService);
@@ -35,48 +45,51 @@ export class MesProjets implements OnInit {
   projets = signal<ProjetResponse[]>([]);
   offresEcosysteme = signal<OffresResponseDto[]>([]);
   offreSelectionnee = signal<OffresResponseDto | null>(null);
-  private porteurService=inject(PoteurService)
+  private porteurService = inject(PoteurService);
   acceilAfiche = signal<AccueilPorteurDto | null>(null);
 
-  
   motivationTexte: string = '';
   formulaireVisible = false;
   chargementPostuler = false;
 
   ngOnInit(): void {
-    this.chargerProjet("", "");
+    this.chargerProjet('', '');
     this.chargerOffresDeLEcosysteme();
     this.porteurService.getAcceuilInfo().subscribe({
-             next:(donnee)=>{
-                    this.acceilAfiche.set(donnee)
-
-             },
-             error:(error)=>{
-                  console.log(error)
-             }
-    })
+      next: (donnee) => {
+        this.acceilAfiche.set(donnee);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   public chargerProjet(secteur: string, titre: string): void {
     this.projetService.getProjetsDuPorteur().subscribe({
       next: (response) => {
-        if (secteur === "" || titre === "") {
+        if (secteur === '' || titre === '') {
           this.projets.set(response);
         } else {
-          this.projets.set(response.filter((projet) =>
-            projet.secteur.toLowerCase().includes(secteur.toLowerCase()) || 
-            projet.secteur.toLowerCase().includes(titre.toLowerCase())
-          ));
+          this.projets.set(
+            response.filter(
+              (projet) =>
+                projet.secteur.toLowerCase().includes(secteur.toLowerCase()) ||
+                projet.secteur.toLowerCase().includes(titre.toLowerCase()),
+            ),
+          );
         }
-      }
+      },
     });
   }
 
   public chargerOffresDeLEcosysteme(): void {
-    this.http.get<OffresResponseDto[]>('http://localhost:8080/api/porteur/offres/ouvertes').subscribe({
-      next: (donnees) => this.offresEcosysteme.set(donnees),
-      error: (err) => console.error(err)
-    });
+    this.http
+      .get<OffresResponseDto[]>('http://localhost:8080/api/porteur/offres/ouvertes')
+      .subscribe({
+        next: (donnees) => this.offresEcosysteme.set(donnees),
+        error: (err) => console.error(err),
+      });
   }
 
   public ouvrirLiseuseOffre(offre: OffresResponseDto): void {
@@ -103,18 +116,41 @@ export class MesProjets implements OnInit {
         this.fermerLiseuseOffre();
         this.chargerOffresDeLEcosysteme();
       },
-      error: (erreur) => { 
-          const messageBackend = erreur.error?.message || "Une erreur est survenue.";
+      error: (erreur) => {
+        const messageBackend = erreur.error?.message || 'Une erreur est survenue.';
 
         this.messageSnackBar.erreur(messageBackend);
-                this.chargementPostuler = false; console.error(erreur); 
-
-
-      }
+        this.chargementPostuler = false;
+        console.error(erreur);
+      },
     });
   }
 
-  public creerProjet(): void { this.formulaireVisible = true; }
-  public fermerModal(val: boolean): void { this.formulaireVisible = val; }
-  public AjoutEffectuer(): void { this.formulaireVisible = false; this.chargerProjet("", ""); }
+  public creerProjet(): void {
+    this.formulaireVisible = true;
+  }
+  public fermerModal(val: boolean): void {
+    this.formulaireVisible = val;
+  }
+  public AjoutEffectuer(): void {
+    this.formulaireVisible = false;
+    this.chargerProjet('', '');
+  }
+  modifierProjet(id: number): void {
+    const projet = this.projets().find((p) => p.id === id);
+
+    if (projet) {
+      this.projetAModifier.set(projet);
+    }
+  }
+
+  fermerEdition(): void {
+    this.projetAModifier.set(null);
+  }
+
+  modificationEffectuee(): void {
+    this.projetAModifier.set(null);
+    this.chargerProjet('', '');
+    this.messageSnackBar.succes('Projet modifié avec succès.');
+  }
 }
